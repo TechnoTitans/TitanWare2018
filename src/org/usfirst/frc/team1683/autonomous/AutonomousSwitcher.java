@@ -5,7 +5,6 @@ import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class AutonomousSwitcher {
@@ -16,16 +15,13 @@ public class AutonomousSwitcher {
 	BuiltInAccel accel;
 	Gyro gyro;
 
-	public boolean isCompetitionTime;
-
 	// Creates buttons for co driver to pick autonomous
 	public AutonomousSwitcher(TankDrive tankDrive) {
-		isCompetitionTime = DriverStation.getInstance().isFMSAttached();
 		chooser = new SendableChooser();
 
-		addAuto("Do Nothing", new DoNothing(tankDrive), true);
-		addAuto("Square Auto", new SquareAuto(tankDrive), false);
-
+		addAuto("Do Nothing", new DoNothing(tankDrive));
+		addAuto("Square Auto", new SquareAuto(tankDrive));
+		addAuto("Drive Straight", new DriveStraight(tankDrive));
 		SmartDashboard.putData("Auto", chooser);
 	}
 
@@ -35,10 +31,8 @@ public class AutonomousSwitcher {
 	}
 
 	// Adds auto to chooser only if it is for competition
-	public void addAuto(String name, Autonomous auto, boolean forCompetition) {
-		if (!(isCompetitionTime && !forCompetition)) {
-			chooser.addObject(name, auto);
-		}
+	public void addAuto(String name, Autonomous auto) {
+		chooser.addObject(name, auto);
 	}
 
 	public void getSelected() {

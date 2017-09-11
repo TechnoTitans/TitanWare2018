@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1683.autonomous;
 
-import org.usfirst.frc.team1683.driveTrain.TankDrive;
+import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 public abstract class Autonomous {
 	public static final double GYRO_ANGLE_TOLERANCE = 15.0;
 
-	protected TankDrive tankDrive;
+	protected DriveTrain tankDrive;
 	protected Encoder leftEncoder;
 	protected Encoder rightEncoder;
 
@@ -18,16 +18,16 @@ public abstract class Autonomous {
 	public State presentState = State.INIT_CASE;
 	public State nextState;
 
-	public Autonomous(TankDrive tankDrive) {
-		this.tankDrive = tankDrive;
-		leftEncoder = tankDrive.getLeftEncoder();
-		rightEncoder = tankDrive.getRightEncoder();
+	public Autonomous(DriveTrain driveTrain) {
+		this.tankDrive = driveTrain;
+		leftEncoder = driveTrain.getLeftEncoder();
+		rightEncoder = driveTrain.getRightEncoder();
 		resetAuto();
 	}
 
 	// Different states the autonomous could take
 	public static enum State {
-		INIT_CASE, END_CASE, WAIT;
+		INIT_CASE, END_CASE, WAIT, DRIVE_FORWARD;
 	}
 
 	public boolean isAtEndCase() {

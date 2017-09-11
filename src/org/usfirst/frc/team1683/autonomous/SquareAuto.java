@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1683.autonomous;
 
+import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
-import org.usfirst.frc.team1683.driveTrain.TankDrive;
 
 /*
  * 
@@ -14,7 +14,7 @@ public class SquareAuto extends Autonomous {
 			new PathPoint(-50, 0) };
 	private Path path;
 
-	public SquareAuto(TankDrive tankDrive) {
+	public SquareAuto(DriveTrain tankDrive) {
 		super(tankDrive);
 		path = new Path(tankDrive, points, 0.3, 0.3);
 	}
