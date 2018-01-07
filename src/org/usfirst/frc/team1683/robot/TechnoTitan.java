@@ -5,7 +5,6 @@ import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
-import org.usfirst.frc.team1683.driveTrain.FollowPath;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.motor.MotorGroup;
@@ -74,32 +73,19 @@ public class TechnoTitan extends IterativeRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 	
-	FollowPath advancedPath;
 	@Override
 	public void autonomousInit() {
-//		waitAuto.reset();
-//		waitAuto.start();
-//		
-//		drive.stop();
-//		autoSwitch.getSelected();
-//		gyro.reset();
-//		followPath = new FollowPath(drive);
-		advancedPath = new FollowPath(drive);
+		drive.stop();
+		autoSwitch.getSelected();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-//		if (waitAuto.get() > 0.2)
-//			autoSwitch.run();
-//		followPath.run();
-		advancedPath.run();
+		autoSwitch.run();
 	} 
 
 	@Override
-	public void teleopInit() {
-		waitTeleop.reset();
-		waitTeleop.start();
-		
+	public void teleopInit() {		
 		drive.stop();
 	}
 

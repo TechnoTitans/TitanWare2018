@@ -4,7 +4,6 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
-import org.usfirst.frc.team1683.vision.PiVisionReader;
 
 /**
  * Handles all joystick inputs
@@ -12,31 +11,21 @@ import org.usfirst.frc.team1683.vision.PiVisionReader;
 public class Controls {
 	public static boolean[] toggle = new boolean[11];
 	public static boolean[][] joystickCheckToggle = new boolean[3][11];
-
 	DriveTrain drive;
-	PiVisionReader piReader;
-
+	
 	private boolean frontMode = true;
 
 	private double rSpeed;
 	private double lSpeed;
 	private double maxPower = 1.0;
 
-	private final double MAX_JOYSTICK_SPEED = 0.5;
-	private final double SECOND_JOYSTICK_SPEED = 0.35;
+	private final double MAX_JOYSTICK_SPEED = 0.5; //TODO
+	private final double SECOND_JOYSTICK_SPEED = 0.35; //TODO
 
 	private InputFilter rightFilter, leftFilter;
 
-	private double p = 0.74;
-	private double i = 0.0;
-	private double d = 0.0;
-
 	public Controls(DriveTrain drive) {
 		this.drive = drive;
-		SmartDashboard.prefDouble("ap", p);
-		SmartDashboard.prefDouble("ai", i);
-		SmartDashboard.prefDouble("ad", d);
-
 		rightFilter = new InputFilter(0.86);
 		leftFilter = new InputFilter(0.86);
 	}
