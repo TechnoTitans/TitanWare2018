@@ -2,8 +2,8 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.motor.MotorGroup;
+import org.usfirst.frc.team1683.motor.TalonSRX;
 
-import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 public class PIDLoop extends PIDSubsystem {

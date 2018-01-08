@@ -77,10 +77,10 @@ public class MotorGroup extends ArrayList<Motor> {
 	public void set(double speed) {
 		for (Motor motor : this) {
 			if (singleMotorDisabled && this.get(0) == motor) {
-				((TalonSRX) motor).coast();
+				motor.coast();
 			}
 			else {
-				((TalonSRX) motor).set(speed);
+				motor.set(speed);
 			}
 		}
 	}
@@ -100,11 +100,17 @@ public class MotorGroup extends ArrayList<Motor> {
 	}
 
 	/**
-	 * Stops group.
+	 * Brakes group.
 	 */
-	public void stop() {
+	public void brake() {
 		for (Motor motor : this) {
-			motor.stop();
+			motor.brake();
+		}
+	}
+	
+	public void coast() {
+		for (Motor motor : this) {
+			motor.coast();
 		}
 	}
 
@@ -135,16 +141,6 @@ public class MotorGroup extends ArrayList<Motor> {
 		return encoder;
 	}
 
-	public void enableBrakeMode(boolean enabled) {
-		for (Motor motor : this) {
-			if (motor instanceof TalonSRX) {
-				((TalonSRX) motor).enableBrakeMode(enabled);
-			}
-		}
-	}
-
-	// TODO: probably want to find a better way to use antidrift than this
-	// way.
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -54,25 +54,18 @@ public class TankDrive implements DriveTrain {
 
 	@Override
 	public void stop() {
-		left.enableBrakeMode(true);
-		right.enableBrakeMode(true);
-		left.stop();
-		right.stop();
+		left.brake();
+		right.brake();
 	}
 
 	@Override
 	public void coast() {
-		left.enableBrakeMode(false);
-		right.enableBrakeMode(false);
-		left.stop();
-		right.stop();
+		left.coast();
+		right.coast();
 	}
 
 	@Override
 	public void driveMode(double leftSpeed, double rightSpeed) {
-		left.enableBrakeMode(false);
-		right.enableBrakeMode(false);
-
 		left.set(leftSpeed);
 		right.set(rightSpeed);
 	}
