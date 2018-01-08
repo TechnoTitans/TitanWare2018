@@ -31,7 +31,7 @@ public class Controls {
 	}
 
 	public void run() {
-		SmartDashboard.sendData("Drive Power", maxPower, true);
+		SmartDashboard.sendData("Drive Power", maxPower);
 		if (frontMode) {
 			lSpeed = -maxPower * DriverSetup.leftStick.getRawAxis(DriverSetup.YAxis);
 			rSpeed = -maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);

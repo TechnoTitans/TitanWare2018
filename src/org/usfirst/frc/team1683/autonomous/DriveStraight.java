@@ -40,8 +40,8 @@ public class DriveStraight extends Autonomous{
 			default:
 				break;
 		}
-		SmartDashboard.sendData("Auto State", presentState.toString(), true);
-		SmartDashboard.sendData("Auto Timer", timer.get(), true);
+		SmartDashboard.sendData("Auto State", presentState.toString());
+		SmartDashboard.sendData("Auto Timer", timer.get());
 		presentState = nextState;
 	}
 }

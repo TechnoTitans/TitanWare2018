@@ -38,17 +38,15 @@ public class FollowPath {
 	}
 
 	public void run() {
-		SmartDashboard.sendData("CurrentlyRunning", index, true);
-		SmartDashboard.sendData(index + " CalDistance1", calDistTravel()[0], true);
-		SmartDashboard.sendData(index + " CalDistance2", calDistTravel()[1], true);
-		SmartDashboard.sendData(index + " Speed1", lastCurve ? SPEED : calDistTravel()[0] / calDistTravel()[1] * SPEED,
-				true);
-		SmartDashboard.sendData(index + " Speed2", lastCurve ? calDistTravel()[1] / calDistTravel()[0] * SPEED : SPEED,
-				true);
-		SmartDashboard.sendData(index + " CurveDirection", lastCurve, true);
-		SmartDashboard.sendData(index + " Radius", calRadius(currPoint, nexPoint, lastSlope), true);
+		SmartDashboard.sendData("CurrentlyRunning", index);
+		SmartDashboard.sendData(index + " CalDistance1", calDistTravel()[0]);
+		SmartDashboard.sendData(index + " CalDistance2", calDistTravel()[1]);
+		SmartDashboard.sendData(index + " Speed1", lastCurve ? SPEED : calDistTravel()[0] / calDistTravel()[1] * SPEED);
+		SmartDashboard.sendData(index + " Speed2", lastCurve ? calDistTravel()[1] / calDistTravel()[0] * SPEED : SPEED);
+		SmartDashboard.sendData(index + " CurveDirection", lastCurve);
+		SmartDashboard.sendData(index + " Radius", calRadius(currPoint, nexPoint, lastSlope));
 		SmartDashboard.sendData(index + " Angle",
-				PathPoint.getAngleTwoPoints(currPoint, nexPoint, calRadius(currPoint, nexPoint, lastSlope)), true);
+				PathPoint.getAngleTwoPoints(currPoint, nexPoint, calRadius(currPoint, nexPoint, lastSlope)));
 		if (index <= pathPoints.size() - 2) {
 			mover.runIteration();
 			if (mover.areAllFinished()) {

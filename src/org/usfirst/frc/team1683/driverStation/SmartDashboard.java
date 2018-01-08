@@ -1,16 +1,15 @@
 package org.usfirst.frc.team1683.driverStation;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 
 public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDashboard {
-	private static boolean isCompetitionTime;
-
+	static Boolean flashValue;
+	static Timer flashTimer;
 	public SmartDashboard() {
-		isCompetitionTime = DriverStation.getInstance().isFMSAttached();
-		// checks if fms is connected to send debugging values
+		flashValue = true;
+		flashTimer = new Timer();
 	}
-
 	/**
 	 * Sends the value to SmartDashboard
 	 *
@@ -21,12 +20,10 @@ public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDa
 	 * @param isForDriver
 	 *            true if you want to driver to see this value
 	 */
-	public static void sendData(String key, double val, boolean isForDriver) {
-		if (!(isCompetitionTime && !isForDriver)) {
-			try {
-				edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber(key, val);
-			} catch (IllegalArgumentException e) {
-			}
+	public static void sendData(String key, double val) {
+		try {
+			edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber(key, val);
+		} catch (IllegalArgumentException e) {
 		}
 	}
 
@@ -40,12 +37,10 @@ public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDa
 	 * @param isForDriver
 	 *            true if you want to driver to see this value
 	 */
-	public static void sendData(String key, int val, boolean isForDriver) {
-		if (!(isCompetitionTime && !isForDriver)) {
-			try {
-				edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber(key, val);
-			} catch (IllegalArgumentException e) {
-			}
+	public static void sendData(String key, int val) {
+		try {
+			edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putNumber(key, val);
+		} catch (IllegalArgumentException e) {
 		}
 	}
 
@@ -59,12 +54,26 @@ public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDa
 	 * @param isForDriver
 	 *            true if you want to driver to see this value
 	 */
-	public static void sendData(String key, String val, boolean isForDriver) {
-		if (!(isCompetitionTime && !isForDriver)) {
-			try {
-				edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putString(key, val);
-			} catch (IllegalArgumentException e) {
-			}
+	public static void sendData(String key, String val) {
+		try {
+			edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putString(key, val);
+		} catch (IllegalArgumentException e) {
+		}
+	}
+	
+	/**
+	 * Flashing green and red message
+	 * Boolean only
+	 */
+	public static void flash(String key, double pause) {
+		flashTimer.start();
+		if (flashTimer.get() > pause) {
+			flashValue = !flashValue;
+			flashTimer.reset();
+		}
+		try {
+			edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putBoolean(key, flashValue);
+		} catch (IllegalArgumentException e) {
 		}
 	}
 
@@ -78,12 +87,10 @@ public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDa
 	 * @param isForDriver
 	 *            true if you want to driver to see this value
 	 */
-	public static void sendData(String key, boolean val, boolean isForDriver) {
-		if (!(isCompetitionTime && !isForDriver)) {
-			try {
-				edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putBoolean(key, val);
-			} catch (IllegalArgumentException e) {
-			}
+	public static void sendData(String key, boolean val) {
+		try {
+			edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putBoolean(key, val);
+		} catch (IllegalArgumentException e) {
 		}
 	}
 
