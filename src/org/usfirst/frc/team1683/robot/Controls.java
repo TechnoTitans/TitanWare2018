@@ -5,6 +5,8 @@ import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
 /**
  * Handles all joystick inputs
  */
@@ -23,15 +25,29 @@ public class Controls {
 	private final double SECOND_JOYSTICK_SPEED = 0.35; //TODO
 
 	private InputFilter rightFilter, leftFilter;
-
-	public Controls(DriveTrain drive) {
+	private PowerDistributionPanel pdp;
+	
+	public Controls(DriveTrain drive, PowerDistributionPanel pdp) {
 		this.drive = drive;
 		rightFilter = new InputFilter(0.86);
 		leftFilter = new InputFilter(0.86);
+		
+		this.pdp = pdp;
 	}
 
 	public void run() {
 		SmartDashboard.sendData("Drive Power", maxPower);
+		
+		// brownout protection
+		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
+		if(pdp.getVoltage() < 7.2) {
+			SmartDashboard.flash("Brownout Protection", 0.8);
+			drive.enableBrownoutProtection();
+		}
+		else {
+			drive.disableBrownoutProtection();
+		}
+		
 		if (frontMode) {
 			lSpeed = -maxPower * DriverSetup.leftStick.getRawAxis(DriverSetup.YAxis);
 			rSpeed = -maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);

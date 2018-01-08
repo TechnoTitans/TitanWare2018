@@ -14,6 +14,7 @@ public class MotorGroup extends ArrayList<Motor> {
 	private Encoder encoder;
 
 	private AntiDrift antiDrift;
+	private boolean singleMotorDisabled;
 
 	/**
 	 * Basically a list of motors.
@@ -32,6 +33,7 @@ public class MotorGroup extends ArrayList<Motor> {
 			}
 			super.add(motor);
 		}
+		singleMotorDisabled = false;
 	}
 
 	public ArrayList<Motor> getMotor() {
@@ -53,16 +55,33 @@ public class MotorGroup extends ArrayList<Motor> {
 			super.add(motor);
 		}
 	}
+	
+	// brownout protection
+	public void enableBrownoutProtection() {
+		singleMotorDisabled = true;
+	}
+	
+	// disable brownout protection
+	public void disableBrownoutProtection() {
+		singleMotorDisabled = false;
+	}
 
 	/**
 	 * Set collective speed of motors.
+	 *
+	 * During brownout protection, disable first motor.
 	 *
 	 * @param speed
 	 *            Speed from 0 to 1.
 	 */
 	public void set(double speed) {
 		for (Motor motor : this) {
-			((TalonSRX) motor).set(speed);
+			if (singleMotorDisabled && this.get(0) == motor) {
+				((TalonSRX) motor).coast();
+			}
+			else {
+				((TalonSRX) motor).set(speed);
+			}
 		}
 	}
 
@@ -73,6 +92,9 @@ public class MotorGroup extends ArrayList<Motor> {
 		double speed = 0;
 		for (Motor motor : this) {
 			speed += motor.get();
+		}
+		if (singleMotorDisabled) {
+			return speed / (this.size() - 1);
 		}
 		return speed / this.size();
 	}

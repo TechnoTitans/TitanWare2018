@@ -37,4 +37,8 @@ public interface DriveTrain {
 	public void setLeft(double speed);
 
 	public void setRight(double speed);
+	
+	public void enableBrownoutProtection();
+	
+	public void disableBrownoutProtection();
 }

@@ -102,6 +102,18 @@ public class TankDrive implements DriveTrain {
 	public MotorGroup getRightGroup() {
 		return right;
 	}
+	
+	@Override
+	public void enableBrownoutProtection() {
+		left.enableBrownoutProtection();
+		right.enableBrownoutProtection();
+	}
+	
+	@Override
+	public void disableBrownoutProtection() {
+		left.disableBrownoutProtection();
+		right.disableBrownoutProtection();
+	}
 
 	// public void enableAntiDrift() {
 	/// left.enableAntiDrift(antiDrift);

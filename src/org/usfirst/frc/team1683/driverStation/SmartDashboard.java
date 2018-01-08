@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 
 public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDashboard {
-	static Boolean flashValue;
-	static Timer flashTimer;
+	private static Boolean flashValue;
+	private static Timer flashTimer;
 	public SmartDashboard() {
 		flashValue = true;
 		flashTimer = new Timer();

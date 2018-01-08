@@ -15,6 +15,7 @@ import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -42,6 +43,7 @@ public class TechnoTitan extends IterativeRobot {
 
 	MotorGroup leftGroup;
 	MotorGroup rightGroup;
+	PowerDistributionPanel pdp;
 
 	boolean teleopReady = false;
 
@@ -68,8 +70,9 @@ public class TechnoTitan extends IterativeRobot {
 		rightGroup.enableAntiDrift(right);
 
 		autoSwitch = new AutonomousSwitcher(drive);
+		pdp = new PowerDistributionPanel();
 		
-		controls = new Controls(drive);
+		controls = new Controls(drive, pdp);
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 	
