@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class AutonomousSwitcher {
 	public Autonomous autoSelected;
 
-	public SendableChooser chooser;
+	public SendableChooser<Autonomous> chooser;
 
 	BuiltInAccel accel;
 	Gyro gyro;
 
 	// Creates buttons for co driver to pick autonomous
 	public AutonomousSwitcher(TankDrive tankDrive) {
-		chooser = new SendableChooser();
+		chooser = new SendableChooser<Autonomous>();
 
 		addAuto("Do Nothing", new DoNothing(tankDrive));
 		addAuto("Square Auto", new SquareAuto(tankDrive));
