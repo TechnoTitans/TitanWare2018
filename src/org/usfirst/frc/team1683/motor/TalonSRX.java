@@ -16,6 +16,10 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	private Encoder encoder;
 	AntiDrift anti;
 	Gyro gyro;
+	public static final int CURRENT_LIMIT = 41;
+	public static final int CURRENT_LIMIT_THRESHOLD = 41;
+	public static final int LIMIT_TIMEOUT = 200; //ms
+
 
 	/**
 	 * Constructor for a TalonSRX motor
@@ -133,4 +137,17 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	public void stop() {
 		set(0);
 	}
+
+	public void setupCurrentLimiting(int ampLimit, int peakAmpThreshold, int limitTimeout) {
+		this.configContinuousCurrentLimit(CURRENT_LIMIT, 0);
+		this.configPeakCurrentLimit(CURRENT_LIMIT_THRESHOLD, 0);
+		this.configPeakCurrentDuration(LIMIT_TIMEOUT, 0);
+		this.enableCurrentLimit(true);
+	}
+
+	public void disableCurrentLimiting() {
+	    this.enableCurrentLimit(false);
+    }
+
+
 }
