@@ -87,7 +87,7 @@ public class DriveTrainTurner {
 		return normalizeAngle(a - b);
 	}
 
-	public double getSpeed() {
+	public double getPercentSpeed() {
 		return speed;
 	}
 

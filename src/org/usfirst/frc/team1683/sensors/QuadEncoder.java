@@ -31,15 +31,17 @@ public class QuadEncoder implements Encoder {
 	public double getDistance() {
 		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius;
 	}
-
+	
 	/**
-	 * Just calls talonSRX.getSpeed()
-	 * 
-	 * @return The speed of the talon in RPM
+	 * Gets speed of the TalonSRX in RPM
 	 */
+	// speed = enc counts / 100 ms
+	// (speed * 60 secs)
+	// --------------------------------------
+	// 4096 encoder counts * 100 milliseconds
 	@Override
 	public double getSpeed() {
-		return talonSRX.getSpeed();
+		return (talonSRX.getSelectedSensorVelocity(0) * 60) / (4096 * 0.1);
 	}
 
 	@Override

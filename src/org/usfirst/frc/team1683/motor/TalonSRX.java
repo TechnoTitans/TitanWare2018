@@ -74,19 +74,7 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	public void set(double speed) {
 		super.set(ControlMode.PercentOutput, speed);
 	}
-
-	/**
-	 * Gets speed of the TalonSRX in RPM
-	 */
-	// speed = enc counts / 100 ms
-	// (speed * 60 secs)
-	// --------------------------------------
-	// 4096 encoder counts * 100 milliseconds
-
-	public double getSpeed() {
-		return (super.getSelectedSensorVelocity(0) * 60) / (4096 * 0.1);
-	}
-
+	
 	@Override
 	public void brake() {
 		this.set(0);
@@ -125,9 +113,17 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	}
 
 	@Override
-	public double get() {
+	public double getPercentSpeed() {
 		return super.getMotorOutputPercent();
 	}
+	
+	@Override
+	public double getSpeed() {
+		if (hasEncoder())
+			return 0;
+		return encoder.getSpeed();
+	}
+
 	
 	public double getError() {
 		return super.getClosedLoopError(0);

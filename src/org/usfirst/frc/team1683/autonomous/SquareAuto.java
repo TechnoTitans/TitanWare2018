@@ -6,7 +6,7 @@ import org.usfirst.frc.team1683.driveTrain.PathPoint;
 
 /*
  * 
- * Square autonomous for testing gyro not for competition
+ * Square autonomous for testing gyro, not for competition
  * 
  */
 public class SquareAuto extends Autonomous {

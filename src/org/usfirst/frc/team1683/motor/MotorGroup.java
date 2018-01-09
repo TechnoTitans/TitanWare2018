@@ -56,12 +56,12 @@ public class MotorGroup extends ArrayList<Motor> {
 			super.add(motor);
 		}
 	}
-	
+
 	// brownout protection
 	public void enableBrownoutProtection() {
 		singleMotorDisabled = true;
 	}
-	
+
 	// disable brownout protection
 	public void disableBrownoutProtection() {
 		singleMotorDisabled = false;
@@ -79,25 +79,25 @@ public class MotorGroup extends ArrayList<Motor> {
 		for (Motor motor : this) {
 			if (singleMotorDisabled && this.get(0) == motor) {
 				motor.coast();
-			}
-			else {
+			} else {
 				motor.set(speed);
 			}
 		}
 	}
 
 	/**
-	 * Gets collective (average) speed of motors
+	 * Gets collective (average) speed of motors in RPM
 	 */
 	public double getSpeed() {
 		double speed = 0;
+		double counter = 0;
 		for (Motor motor : this) {
-			speed += motor.get();
+			if (motor.hasEncoder()) {
+				speed += motor.getSpeed();
+				counter += 1;
+			}
 		}
-		if (singleMotorDisabled) {
-			return speed / (this.size() - 1);
-		}
-		return speed / this.size();
+		return speed / counter;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class MotorGroup extends ArrayList<Motor> {
 			motor.brake();
 		}
 	}
-	
+
 	public void coast() {
 		for (Motor motor : this) {
 			motor.coast();
@@ -171,27 +171,26 @@ public class MotorGroup extends ArrayList<Motor> {
 
 	public void enableCurrentLimiting(int ampLimit, int peakAmpThreshold, int limitTimeout) {
 
-        this.forEach(motor -> {
-            if (motor instanceof TalonSRX) {
-                TalonSRX talon = (TalonSRX) motor;
-                talon.setupCurrentLimiting(ampLimit, peakAmpThreshold, limitTimeout);
-            }
-        });
-        currentLimited = true;
+		this.forEach(motor -> {
+			if (motor instanceof TalonSRX) {
+				TalonSRX talon = (TalonSRX) motor;
+				talon.setupCurrentLimiting(ampLimit, peakAmpThreshold, limitTimeout);
+			}
+		});
+		currentLimited = true;
 	}
 
-    public void disableCurrentLimiting() {
-	    this.forEach(motor -> {
-            if (motor instanceof TalonSRX) {
-                TalonSRX talon = (TalonSRX) motor;
-                talon.disableCurrentLimiting();
-            }
-        });
-    }
+	public void disableCurrentLimiting() {
+		this.forEach(motor -> {
+			if (motor instanceof TalonSRX) {
+				TalonSRX talon = (TalonSRX) motor;
+				talon.disableCurrentLimiting();
+			}
+		});
+	}
 
-    public boolean isCurrentLimited() {
-	    return currentLimited;
-    }
-
+	public boolean isCurrentLimited() {
+		return currentLimited;
+	}
 
 }

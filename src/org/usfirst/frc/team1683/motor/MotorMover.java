@@ -60,7 +60,7 @@ public class MotorMover implements Runnable {
 	/**
 	 * @return the speed
 	 */
-	public double getSpeed() {
+	public double getPercentSpeed() {
 		return speed;
 	}
 
@@ -68,7 +68,7 @@ public class MotorMover implements Runnable {
 	 * @param speed
 	 *            the speed to set
 	 */
-	public void setSpeed(double speed) {
+	public void setPercentSpeed(double speed) {
 		this.speed = speed;
 	}
 
