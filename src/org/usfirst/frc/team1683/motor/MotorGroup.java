@@ -1,9 +1,9 @@
 package org.usfirst.frc.team1683.motor;
 
-import java.util.ArrayList;
-
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.sensors.Encoder;
+
+import java.util.ArrayList;
 
 /*
  * Creates a group of motors (for left and right side)
@@ -15,6 +15,7 @@ public class MotorGroup extends ArrayList<Motor> {
 
 	private AntiDrift antiDrift;
 	private boolean singleMotorDisabled;
+	private boolean currentLimited = false;
 
 	/**
 	 * Basically a list of motors.
@@ -37,7 +38,7 @@ public class MotorGroup extends ArrayList<Motor> {
 	}
 
 	public ArrayList<Motor> getMotor() {
-		ArrayList<Motor> motors = new ArrayList<Motor>();
+		ArrayList<Motor> motors = new ArrayList<>();
 		for (Motor motor : this) {
 			motors.add(motor);
 		}
@@ -167,4 +168,30 @@ public class MotorGroup extends ArrayList<Motor> {
 	public AntiDrift getAntiDrift() {
 		return antiDrift;
 	}
+
+	public void enableCurrentLimiting(int ampLimit, int peakAmpThreshold, int limitTimeout) {
+
+        this.forEach(motor -> {
+            if (motor instanceof TalonSRX) {
+                TalonSRX talon = (TalonSRX) motor;
+                talon.setupCurrentLimiting(ampLimit, peakAmpThreshold, limitTimeout);
+            }
+        });
+        currentLimited = true;
+	}
+
+    public void disableCurrentLimiting() {
+	    this.forEach(motor -> {
+            if (motor instanceof TalonSRX) {
+                TalonSRX talon = (TalonSRX) motor;
+                talon.disableCurrentLimiting();
+            }
+        });
+    }
+
+    public boolean isCurrentLimited() {
+	    return currentLimited;
+    }
+
+
 }
