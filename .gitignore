@@ -1,6 +1,8 @@
 /bin/
 /build/
 /.classpath
-/dist/
+/dist/*
 /build.xml
 /.classpath*
+
+
