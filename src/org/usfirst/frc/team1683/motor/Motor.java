@@ -6,7 +6,9 @@ public interface Motor {
 
 	public void set(double speed);
 
-	public double get();
+	public double getPercentSpeed();
+	
+	public double getSpeed();
 
 	public void stop();
 

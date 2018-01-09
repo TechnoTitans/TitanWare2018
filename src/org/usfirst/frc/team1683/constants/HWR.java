@@ -10,7 +10,7 @@ public class HWR {
 	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_5;
 	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_4;
 
-	// encoders
+	// Encoders
 	public static final int LEFT_DRIVE_ENCODER = HWP.CAN_7;
 	public static final int RIGHT_DRIVE_ENCODER = HWP.CAN_6;
 
@@ -23,9 +23,8 @@ public class HWR {
 	public static final int GYRO = HWP.ANALOG_1;
 	public static final int LIMIT_SWITCH = HWP.DIO_0;
 
-	// joystick buttons
+	// Joystick Buttons
 	public static final int FULL_POWER = HWP.BUTTON_11;
 	public static final int SECOND_POWER = HWP.BUTTON_6;
-
 	public static final int OVERRIDE_TIMER = HWP.BUTTON_9;
 }

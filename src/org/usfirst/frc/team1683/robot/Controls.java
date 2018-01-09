@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 public class Controls {
 	public static boolean[] toggle = new boolean[11];
 	public static boolean[][] joystickCheckToggle = new boolean[3][11];
-	DriveTrain drive;
+	private DriveTrain drive;
 	
 	private boolean frontMode = true;
 
@@ -37,10 +37,12 @@ public class Controls {
 
 	public void run() {
 		SmartDashboard.sendData("Drive Power", maxPower);
+		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
+		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);
 		
 		// brownout protection
 		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
-		if(pdp.getVoltage() < 7.2) {
+		if(pdp.getVoltage() < 7.2) { //TODO Test
 			SmartDashboard.flash("Brownout Protection", 0.8);
 			drive.enableBrownoutProtection();
 		}

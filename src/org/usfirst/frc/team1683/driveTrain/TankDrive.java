@@ -53,6 +53,11 @@ public class TankDrive implements DriveTrain {
 	}
 
 	@Override
+	public double[] getSpeed() {
+		return new double[] { left.getSpeed(), right.getSpeed() };
+	}
+
+	@Override
 	public void stop() {
 		left.brake();
 		right.brake();
@@ -95,13 +100,13 @@ public class TankDrive implements DriveTrain {
 	public MotorGroup getRightGroup() {
 		return right;
 	}
-	
+
 	@Override
 	public void enableBrownoutProtection() {
 		left.enableBrownoutProtection();
 		right.enableBrownoutProtection();
 	}
-	
+
 	@Override
 	public void disableBrownoutProtection() {
 		left.disableBrownoutProtection();
