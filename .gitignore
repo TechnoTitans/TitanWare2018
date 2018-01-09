@@ -6,3 +6,5 @@
 /.classpath*
 *.class
 
+/_config.yml
+/sysProps.xml
