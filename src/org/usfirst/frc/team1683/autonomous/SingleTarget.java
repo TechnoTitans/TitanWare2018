@@ -10,13 +10,13 @@ public class SingleTarget extends Autonomous{
 	
 	public SingleTarget(DriveTrain drive, Target target) {
 		super(drive);
-		if(target == Target.CLOSEST_SWITCH) {
+		if(target == Target.CLOSE_SWITCH) {
 			//TODO
 		}
-		else if (target == Target.SCALE) {
+		else if (target == Target.CLOSE_SCALE) {
 			//TODO
 		}
-		else if (target == Target.OPPONENET_SWITCH) {
+		else if (target == Target.FAR_SWITCH) {
 			//TODO
 		}
 		else {

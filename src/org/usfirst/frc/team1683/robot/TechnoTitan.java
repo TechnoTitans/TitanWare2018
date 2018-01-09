@@ -3,6 +3,8 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
+import org.usfirst.frc.team1683.autonomous.Target;
+import org.usfirst.frc.team1683.autonomous.TargetChooser;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
@@ -74,6 +76,9 @@ public class TechnoTitan extends IterativeRobot {
 		
 		controls = new Controls(drive, pdp);
 		CameraServer.getInstance().startAutomaticCapture();
+		TargetChooser chooser = new TargetChooser(new Target[] {
+				Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH
+		}, 'L');
 	}
 	
 	@Override
