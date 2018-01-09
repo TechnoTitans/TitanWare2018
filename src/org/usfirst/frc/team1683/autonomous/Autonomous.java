@@ -29,6 +29,10 @@ public abstract class Autonomous {
 	public static enum State {
 		INIT_CASE, END_CASE, WAIT, DRIVE_FORWARD;
 	}
+	
+	public static enum Target {
+		CLOSEST_SWITCH, OPPONENET_SWITCH, SCALE;
+	}
 
 	public boolean isAtEndCase() {
 		return presentState == State.END_CASE;

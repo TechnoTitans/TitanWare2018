@@ -38,6 +38,8 @@ public interface DriveTrain {
 
 	public void setRight(double speed);
 	
+	public double[] getSpeed();
+	
 	public void enableBrownoutProtection();
 	
 	public void disableBrownoutProtection();

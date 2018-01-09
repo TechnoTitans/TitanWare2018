@@ -119,7 +119,7 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	
 	@Override
 	public double getSpeed() {
-		if (hasEncoder())
+		if (!hasEncoder())
 			return 0;
 		return encoder.getSpeed();
 	}
