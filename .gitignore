@@ -5,6 +5,5 @@
 /build.xml
 /.classpath*
 *.class
-
 /_config.yml
 /sysProps.xml
