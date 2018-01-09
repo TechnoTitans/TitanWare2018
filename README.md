@@ -9,5 +9,4 @@ In src/org/usfirst/frc/team1683/ there are the following directories:
   * driveTrain - controls motors to form drive train
   * robot - the main class and ports
   * sensors - self explanatory
-  * scoring - contains programs for scoring gears, shooting balls, and turning winch
   * vision - takes values sent from raspberry pi 

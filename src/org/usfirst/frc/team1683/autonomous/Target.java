@@ -24,4 +24,8 @@ public enum Target {
 	public boolean getIsClose() {
 		return isClose;
 	}
+	
+	public boolean isUserAGoat() {
+		return true;
+	}
 }
