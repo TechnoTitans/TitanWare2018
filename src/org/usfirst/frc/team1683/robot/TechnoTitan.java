@@ -77,6 +77,11 @@ public class TechnoTitan extends IterativeRobot {
 		pdp = new PowerDistributionPanel(HWR.PDP);
 
 		controls = new Controls(drive, pdp);
+		
+		// Current Overdraw Protection
+		leftGroup.enableCurrentLimiting();
+		rightGroup.enableCurrentLimiting();
+		
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 
