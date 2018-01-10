@@ -7,13 +7,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CollisionDetector {
 	static Accelerometer accel; 
-	
+	static double previousAccel;
+	static double currentAccel;
 	public CollisionDetector() {
 		accel = new BuiltInAccelerometer();
+		
 	}
 	
 	public static void printAcceleration() {
-		SmartDashboard.putNumber("X speed", accel.getX());
-		SmartDashboard.putNumber("Y Speed", accel.getY());
+		
+		SmartDashboard.putNumber("Z speed", accel.getZ());
 	}
 }
