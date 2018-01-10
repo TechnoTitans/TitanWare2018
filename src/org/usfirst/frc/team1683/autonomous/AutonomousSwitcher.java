@@ -19,13 +19,13 @@ public class AutonomousSwitcher {
 	// Creates buttons for co driver to pick autonomous
 	public AutonomousSwitcher(TankDrive tankDrive) {
 		chooser = new SendableChooser<Autonomous>();
-		targetChooser = new TargetChooser(
-				new Target[] { Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH, Target.FAR_SCALE }, 'L');
+//		targetChooser = new TargetChooser(
+//				new Target[] { Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH, Target.FAR_SCALE }, 'L');
 
 		addAuto("Do Nothing", new DoNothing(tankDrive));
 		addAuto("Square Auto", new SquareAuto(tankDrive));
 		addAuto("Drive Straight", new DriveStraight(tankDrive));
-		setDefault("Priority (Single)", new SingleTarget(tankDrive, targetChooser));
+//		setDefault("Priority (Single)", new SingleTarget(tankDrive, targetChooser));
 		SmartDashboard.putData("Auto", chooser);
 	}
 

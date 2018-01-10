@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
+import org.usfirst.frc.team1683.autonomous.Target;
 import org.usfirst.frc.team1683.autonomous.TargetChooser;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
@@ -13,6 +14,7 @@ import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
+import org.usfirst.frc.team1683.sensors.CollisionDetector;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -31,15 +33,16 @@ public class TechnoTitan extends IterativeRobot {
 
 	TankDrive drive;
 	Controls controls;
-
+	
+	CollisionDetector collisionDetector;
+	
 	Timer waitTeleop;
 	Timer waitAuto;
-
+	
 	CameraServer server;
 
 	Autonomous auto;
 	AutonomousSwitcher autoSwitch;
-	TargetChooser chooser;
 	LimitSwitch limitSwitch;
 	Gyro gyro;
 
@@ -53,6 +56,8 @@ public class TechnoTitan extends IterativeRobot {
 	public void robotInit() {
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
+		
+		collisionDetector = new CollisionDetector();
 
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
@@ -72,12 +77,15 @@ public class TechnoTitan extends IterativeRobot {
 		rightGroup.enableAntiDrift(right);
 
 		autoSwitch = new AutonomousSwitcher(drive);
-		pdp = new PowerDistributionPanel(HWR.PDP);
-
+		pdp = new PowerDistributionPanel();
+		
 		controls = new Controls(drive, pdp);
 		CameraServer.getInstance().startAutomaticCapture();
+		TargetChooser chooser = new TargetChooser(new Target[] {
+				Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH
+		}, 'L');
 	}
-
+	
 	@Override
 	public void autonomousInit() {
 		drive.stop();
@@ -87,20 +95,20 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		autoSwitch.run();
-	}
+	} 
 
 	@Override
-	public void teleopInit() {
+	public void teleopInit() {		
 		drive.stop();
-		waitTeleop.start();
 	}
 
 	@Override
 	public void teleopPeriodic() {
 		if (waitTeleop.get() > 0.2 || DriverSetup.rightStick.getRawButton(HWR.OVERRIDE_TIMER))
 			teleopReady = true;
-		if (teleopReady)
+		if (teleopReady) { 
 			controls.run();
+		}
 	}
 
 	@Override

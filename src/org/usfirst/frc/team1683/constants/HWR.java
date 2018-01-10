@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1683.constants;
 
 public class HWR {
-	// PDP
-	public static final int PDP = HWP.CAN_0;
 
 	// Motors
 	public static final int RIGHT_DRIVE_TRAIN_FRONT = HWP.CAN_7;
