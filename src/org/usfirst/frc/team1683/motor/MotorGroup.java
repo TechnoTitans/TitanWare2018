@@ -169,12 +169,12 @@ public class MotorGroup extends ArrayList<Motor> {
 		return antiDrift;
 	}
 
-	public void enableCurrentLimiting(int ampLimit, int peakAmpThreshold, int limitTimeout) {
+	public void enableCurrentLimiting() {
 
 		this.forEach(motor -> {
 			if (motor instanceof TalonSRX) {
 				TalonSRX talon = (TalonSRX) motor;
-				talon.setupCurrentLimiting(ampLimit, peakAmpThreshold, limitTimeout);
+				talon.enableCurrentLimiting();
 			}
 		});
 		currentLimited = true;
