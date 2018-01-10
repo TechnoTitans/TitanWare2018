@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1683.motor;
 
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.robot.TechnoTitan;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -117,6 +118,20 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 		return super.getMotorOutputPercent();
 	}
 	
+		// RPM = rotations/minute == circumference / inches
+	public double getSpeedInches() {
+	    return (getSpeed() * 2 * Math.PI * TechnoTitan.WHEEL_RADIUS / 60);
+	}
+	
+	public void setSpeedRPM(double speed) {
+		double speedEncoderTicks = speed * 4096 / 600;
+		super.set(ControlMode.Velocity, speedEncoderTicks);
+	}
+	
+	public void setSpeedInches(double speed) {
+	    this.setSpeedRPM(speed * 60 / (2 * Math.PI * TechnoTitan.WHEEL_RADIUS));
+	}
+	
 	@Override
 	public double getSpeed() {
 		if (!hasEncoder())
@@ -134,7 +149,9 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 		set(0);
 	}
 
-	public void setupCurrentLimiting(int ampLimit, int peakAmpThreshold, int limitTimeout) {
+
+	public void setupCurrentLimiting() {
+
 		this.configContinuousCurrentLimit(CURRENT_LIMIT, 0);
 		this.configPeakCurrentLimit(CURRENT_LIMIT_THRESHOLD, 0);
 		this.configPeakCurrentDuration(LIMIT_TIMEOUT, 0);

@@ -39,10 +39,12 @@ public class Controls {
 		SmartDashboard.sendData("Drive Power", maxPower);
 		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
 		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);
-		SmartDashboard.flash("Testing", 1);
+		SmartDashboard.flash("Testing", 0.6);
 
 		// brownout protection
 		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
+		SmartDashboard.sendData("PDP Current", pdp.getTotalCurrent());
+		
 		if (pdp.getVoltage() < 7.2) { // TODO Test
 			SmartDashboard.flash("Brownout Protection", 0.8);
 			drive.enableBrownoutProtection();

@@ -11,7 +11,7 @@ public class AutonomousSwitcher {
 	public Autonomous autoSelected;
 
 	public SendableChooser<Autonomous> chooser;
-	private TargetChooser targetChooser;
+//	private TargetChooser targetChooser;
 
 	BuiltInAccel accel;
 	Gyro gyro;

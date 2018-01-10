@@ -34,8 +34,7 @@ public class TechnoTitan extends IterativeRobot {
 	TankDrive drive;
 	Controls controls;
 	
-	CollisionDetector collisionDetector;
-	
+	CollisionDetector detector;
 	Timer waitTeleop;
 	Timer waitAuto;
 	
@@ -56,9 +55,9 @@ public class TechnoTitan extends IterativeRobot {
 	public void robotInit() {
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
-		
-		collisionDetector = new CollisionDetector();
 
+		detector = new CollisionDetector();
+		
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
 
@@ -106,9 +105,9 @@ public class TechnoTitan extends IterativeRobot {
 	public void teleopPeriodic() {
 		if (waitTeleop.get() > 0.2 || DriverSetup.rightStick.getRawButton(HWR.OVERRIDE_TIMER))
 			teleopReady = true;
-		if (teleopReady) { 
+		if (teleopReady)
 			controls.run();
-		}
+		detector.printAcceleration();
 	}
 
 	@Override
