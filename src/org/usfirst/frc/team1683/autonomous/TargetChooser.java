@@ -13,6 +13,9 @@ public class TargetChooser {
 
 	public Target getCorrectTarget() {
 		String sides = DriverStation.getInstance().getGameSpecificMessage();
+		if (startingSide == 'M') {
+			return Target.CLOSE_SCALE;
+		}
 		for (Target poss : priorities) {
 			boolean isSameSide = sides.charAt(poss.getSwitchScale()) == startingSide;
 			// if it is on the same side matches with whether the target is on
@@ -22,5 +25,9 @@ public class TargetChooser {
 			}
 		}
 		throw new Error("No target works");
+	}
+	
+	public char getPosition() {
+		return startingSide;
 	}
 }

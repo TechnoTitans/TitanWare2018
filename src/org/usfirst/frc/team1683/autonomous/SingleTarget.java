@@ -13,7 +13,10 @@ public class SingleTarget extends Autonomous{
 		super(drive);
 		
 		target = chooser.getCorrectTarget();
-		if(target == Target.CLOSE_SWITCH) {
+		if(chooser.getPosition() == 'M') {
+			//TODO
+		}
+		else if(target == Target.CLOSE_SWITCH) {
 			//TODO
 		}
 		else if (target == Target.CLOSE_SCALE) {

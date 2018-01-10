@@ -92,6 +92,7 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		drive.stop();
+		waitTeleop.start();
 	}
 
 	@Override
