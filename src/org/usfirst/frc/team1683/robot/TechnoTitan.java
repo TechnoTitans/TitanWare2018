@@ -8,6 +8,7 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.sensors.Gyro;
@@ -53,6 +54,7 @@ public class TechnoTitan extends IterativeRobot {
 	public void robotInit() {
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
+		SmartDashboard.initFlashTimer();
 
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
