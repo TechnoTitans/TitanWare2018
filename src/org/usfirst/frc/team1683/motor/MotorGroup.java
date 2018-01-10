@@ -174,7 +174,7 @@ public class MotorGroup extends ArrayList<Motor> {
 		this.forEach(motor -> {
 			if (motor instanceof TalonSRX) {
 				TalonSRX talon = (TalonSRX) motor;
-				talon.enableCurrentLimiting();
+				talon.setupCurrentLimiting();
 			}
 		});
 		currentLimited = true;
