@@ -148,7 +148,7 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 		set(0);
 	}
 
-	public void setupCurrentLimiting(int ampLimit, int peakAmpThreshold, int limitTimeout) {
+	public void setupCurrentLimiting() {
 		this.configContinuousCurrentLimit(CURRENT_LIMIT, 0);
 		this.configPeakCurrentLimit(CURRENT_LIMIT_THRESHOLD, 0);
 		this.configPeakCurrentDuration(LIMIT_TIMEOUT, 0);
