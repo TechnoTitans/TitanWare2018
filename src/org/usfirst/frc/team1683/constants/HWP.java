@@ -22,7 +22,7 @@ public class HWP {
 	public static final int PWM_9 = 9;
 
 	// Controller Area Network (CAN)
-	public static final int CAN_0 = 0; // do not assign to any TalonSRX
+	public static final int CAN_0 = 0; // pdp
 	// (default)
 	public static final int CAN_1 = 1;
 	public static final int CAN_2 = 2;

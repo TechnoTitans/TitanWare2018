@@ -14,24 +14,24 @@ public class Controls {
 	public static boolean[] toggle = new boolean[11];
 	public static boolean[][] joystickCheckToggle = new boolean[3][11];
 	private DriveTrain drive;
-	
+
 	private boolean frontMode = true;
 
 	private double rSpeed;
 	private double lSpeed;
 	private double maxPower = 1.0;
 
-	private final double MAX_JOYSTICK_SPEED = 0.5; //TODO
-	private final double SECOND_JOYSTICK_SPEED = 0.35; //TODO
+	private final double MAX_JOYSTICK_SPEED = 1.0; // TODO
+	private final double SECOND_JOYSTICK_SPEED = 0.6; // TODO
 
 	private InputFilter rightFilter, leftFilter;
 	private PowerDistributionPanel pdp;
-	
+
 	public Controls(DriveTrain drive, PowerDistributionPanel pdp) {
 		this.drive = drive;
 		rightFilter = new InputFilter(0.86);
 		leftFilter = new InputFilter(0.86);
-		
+
 		this.pdp = pdp;
 	}
 
@@ -39,17 +39,16 @@ public class Controls {
 		SmartDashboard.sendData("Drive Power", maxPower);
 		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
 		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);
-		
+
 		// brownout protection
 		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
-		if(pdp.getVoltage() < 7.2) { //TODO Test
+		if (pdp.getVoltage() < 7.2) { // TODO Test
 			SmartDashboard.flash("Brownout Protection", 0.8);
 			drive.enableBrownoutProtection();
-		}
-		else {
+		} else {
 			drive.disableBrownoutProtection();
 		}
-		
+
 		if (frontMode) {
 			lSpeed = -maxPower * DriverSetup.leftStick.getRawAxis(DriverSetup.YAxis);
 			rSpeed = -maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);

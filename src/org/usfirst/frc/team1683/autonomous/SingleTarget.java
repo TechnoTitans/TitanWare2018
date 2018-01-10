@@ -7,9 +7,12 @@ import org.usfirst.frc.team1683.driveTrain.PathPoint;
 public class SingleTarget extends Autonomous{
 	private PathPoint[] points;
 	private Path path;
+	private Target target;
 	
-	public SingleTarget(DriveTrain drive, Target target) {
+	public SingleTarget(DriveTrain drive, TargetChooser chooser) {
 		super(drive);
+		
+		target = chooser.getCorrectTarget();
 		if(target == Target.CLOSE_SWITCH) {
 			//TODO
 		}

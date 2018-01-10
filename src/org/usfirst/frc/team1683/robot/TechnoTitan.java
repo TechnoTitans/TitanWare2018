@@ -3,7 +3,6 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
-import org.usfirst.frc.team1683.autonomous.Target;
 import org.usfirst.frc.team1683.autonomous.TargetChooser;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
@@ -35,11 +34,12 @@ public class TechnoTitan extends IterativeRobot {
 
 	Timer waitTeleop;
 	Timer waitAuto;
-	
+
 	CameraServer server;
 
 	Autonomous auto;
 	AutonomousSwitcher autoSwitch;
+	TargetChooser chooser;
 	LimitSwitch limitSwitch;
 	Gyro gyro;
 
@@ -72,15 +72,12 @@ public class TechnoTitan extends IterativeRobot {
 		rightGroup.enableAntiDrift(right);
 
 		autoSwitch = new AutonomousSwitcher(drive);
-		pdp = new PowerDistributionPanel();
-		
+		pdp = new PowerDistributionPanel(HWR.PDP);
+
 		controls = new Controls(drive, pdp);
 		CameraServer.getInstance().startAutomaticCapture();
-		TargetChooser chooser = new TargetChooser(new Target[] {
-				Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH
-		}, 'L');
 	}
-	
+
 	@Override
 	public void autonomousInit() {
 		drive.stop();
@@ -90,10 +87,10 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		autoSwitch.run();
-	} 
+	}
 
 	@Override
-	public void teleopInit() {		
+	public void teleopInit() {
 		drive.stop();
 	}
 
