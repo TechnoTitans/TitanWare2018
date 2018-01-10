@@ -14,7 +14,7 @@ public class TargetChooser {
 	public Target getCorrectTarget() {
 		String sides = DriverStation.getInstance().getGameSpecificMessage();
 		if (startingSide == 'M') {
-			return Target.CLOSE_SCALE;
+			return Target.MIDDLE_SWITCH;
 		}
 		for (Target poss : priorities) {
 			boolean isSameSide = sides.charAt(poss.getSwitchScale()) == startingSide;

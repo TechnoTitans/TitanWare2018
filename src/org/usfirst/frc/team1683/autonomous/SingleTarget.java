@@ -3,6 +3,9 @@ package org.usfirst.frc.team1683.autonomous;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
+import org.usfirst.frc.team1683.driverStation.DriverSetup;
+
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class SingleTarget extends Autonomous{
 	private PathPoint[] points;
@@ -13,8 +16,16 @@ public class SingleTarget extends Autonomous{
 		super(drive);
 		
 		target = chooser.getCorrectTarget();
-		if(chooser.getPosition() == 'M') {
-			//TODO
+		// default paths assume everything is on left, so multiply by -1 if otherwise
+		boolean isLeft = target.isStartMiddle() ? 
+				DriverStation.getInstance().getGameSpecificMessage().charAt(target.getSwitchScale()) == 'L'
+				: chooser.getPosition() == 'L';
+		int side = isLeft ? 1 : -1;
+		if(target == Target.MIDDLE_SWITCH) {
+			side = DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' ? 1 : -1;
+		}
+		else if (target == Target.MIDDLE_SCALE) {
+			// TODO
 		}
 		else if(target == Target.CLOSE_SWITCH) {
 			//TODO

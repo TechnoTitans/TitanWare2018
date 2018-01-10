@@ -1,9 +1,10 @@
 package org.usfirst.frc.team1683.autonomous;
 
 public enum Target {
-	CLOSE_SWITCH(0, true), FAR_SWITCH(0, false), CLOSE_SCALE(1, true), FAR_SCALE(1, false);
+	CLOSE_SWITCH(0, true), FAR_SWITCH(0, false), CLOSE_SCALE(1, true), FAR_SCALE(1, false), MIDDLE_SCALE, MIDDLE_SWITCH;
 	private boolean isClose;
 	private int switchScale;
+	private boolean middle = false;
 
 	/**
 	 * Creates a target for autonomous
@@ -17,6 +18,10 @@ public enum Target {
 		this.isClose = isClose;
 		this.switchScale = switchScale;
 	}
+	
+	private Target() {
+		middle = true;
+	}
 
 	public int getSwitchScale() {
 		return switchScale;
@@ -28,5 +33,9 @@ public enum Target {
 
 	public boolean isUserAGoat() {
 		return true;
+	}
+	
+	public boolean isStartMiddle() {
+		return middle;
 	}
 }
