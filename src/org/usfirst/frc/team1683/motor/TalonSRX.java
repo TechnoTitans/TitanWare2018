@@ -117,6 +117,20 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 		return super.getMotorOutputPercent();
 	}
 	
+		// RPM = rotations/minute == circumference / inches
+	public double getSpeedInches() {
+	    return (getSpeed() * 2 * Math.PI * TechnoTitan.WHEEL_RADIUS / 60);
+	}
+	
+	public void setSpeedRPM(double speed) {
+		double speedEncoderTicks = speed * 4096 / 600;
+		super.set(ControlMode.Velocity, speedEncoderTicks);
+	}
+	
+	public void setSpeedInches(double speed) {
+	    this.setSpeedRPM(speed * 60 / (2 * Math.PI * TechnoTitan.WHEEL_RADIUS))
+	}
+	
 	@Override
 	public double getSpeed() {
 		if (!hasEncoder())
