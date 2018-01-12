@@ -11,7 +11,7 @@ import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
-import org.usfirst.frc.team1683.sensors.CollisionDetector;
+import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
@@ -34,7 +34,6 @@ public class TechnoTitan extends IterativeRobot {
 	TankDrive drive;
 	Controls controls;
 	
-	CollisionDetector detector;
 	Timer waitTeleop;
 	Timer waitAuto;
 	
@@ -50,6 +49,7 @@ public class TechnoTitan extends IterativeRobot {
 	PowerDistributionPanel pdp;
 	
 	Solenoid solenoid;
+	BuiltInAccel accel;
 
 	boolean teleopReady = false;
 
@@ -60,7 +60,7 @@ public class TechnoTitan extends IterativeRobot {
 		waitAuto = new Timer();
 		
 		solenoid = new Solenoid(HWR.PCM,HWR.SOLENOID);
-		detector = new CollisionDetector();
+		accel = new BuiltInAccel();
 		
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
@@ -79,7 +79,7 @@ public class TechnoTitan extends IterativeRobot {
 		leftGroup.enableAntiDrift(left);
 		rightGroup.enableAntiDrift(right);
 
-		autoSwitch = new AutonomousSwitcher(drive);
+		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
 		
 		controls = new Controls(drive, pdp, solenoid);

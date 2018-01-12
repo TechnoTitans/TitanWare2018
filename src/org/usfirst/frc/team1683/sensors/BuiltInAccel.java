@@ -5,9 +5,10 @@ import org.usfirst.frc.team1683.robot.InputFilter;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 
 public class BuiltInAccel extends BuiltInAccelerometer {
-	public static final double MAX_FLAT_ANGLE = 3.0;
-	public static final double FILTER_K = 0.5;
-	public static final double THRESHOLD = 0.4;
+	private final double MAX_FLAT_ANGLE = 3.0;
+	private final double FILTER_K = 0.5;
+	private final double THRESHOLD = 0.4;
+	private final double Z_THRESHOLD = 2;
 
 	private InputFilter filter;
 
@@ -29,6 +30,10 @@ public class BuiltInAccel extends BuiltInAccelerometer {
 	@Override
 	public double getZ() {
 		return super.getZ();
+	}
+	
+	public boolean hasCollision() {
+		return getZ() > Z_THRESHOLD;
 	}
 	
 	/**

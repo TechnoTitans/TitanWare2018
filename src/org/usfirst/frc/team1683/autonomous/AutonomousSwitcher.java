@@ -11,16 +11,12 @@ public class AutonomousSwitcher {
 	public Autonomous autoSelected;
 
 	public SendableChooser<Autonomous> chooser;
-//	private TargetChooser targetChooser;
 
-	BuiltInAccel accel;
 	Gyro gyro;
 
 	// Creates buttons for co driver to pick autonomous
-	public AutonomousSwitcher(TankDrive tankDrive) {
+	public AutonomousSwitcher(TankDrive tankDrive, BuiltInAccel accel) {
 		chooser = new SendableChooser<Autonomous>();
-//		targetChooser = new TargetChooser(
-//				new Target[] { Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH, Target.FAR_SCALE }, 'L');
 
 		addAuto("Do Nothing", new DoNothing(tankDrive));
 		addAuto("Square Auto", new SquareAuto(tankDrive));
