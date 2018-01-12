@@ -3,7 +3,6 @@ package org.usfirst.frc.team1683.autonomous;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
-import org.usfirst.frc.team1683.driverStation.DriverSetup;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -20,6 +19,7 @@ public class SingleTarget extends Autonomous{
 		boolean isLeft = target.isStartMiddle() ? 
 				DriverStation.getInstance().getGameSpecificMessage().charAt(target.getSwitchScale()) == 'L'
 				: chooser.getPosition() == 'L';
+		@SuppressWarnings("unused")
 		int side = isLeft ? 1 : -1;
 		if(target == Target.MIDDLE_SWITCH) {
 			side = DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' ? 1 : -1;

@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
  * Handles all joystick inputs
  */
 public class Controls {
-	public static boolean[] toggle = new boolean[11];
-	public static boolean[][] joystickCheckToggle = new boolean[3][11];
+	private boolean[][] toggle = new boolean[3][11];
+	private boolean[][] joystickCheckToggle = new boolean[3][11];
 	private DriveTrain drive;
 
 	private boolean frontMode = true;
@@ -22,14 +22,12 @@ public class Controls {
 	private double lSpeed;
 	private double maxPower = 1.0;
 
-	private final double MAX_JOYSTICK_SPEED = 1.0; // TODO
-	private final double SECOND_JOYSTICK_SPEED = 0.6; // TODO
+	private final double MAX_JOYSTICK_SPEED = 1.0;
+	private final double SECOND_JOYSTICK_SPEED = 0.6;
 
 	private InputFilter rightFilter, leftFilter;
 	private PowerDistributionPanel pdp;
 	private Solenoid solenoid;
-	
-	private boolean isFired = false;
 
 	public Controls(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
 		this.drive = drive;
@@ -41,11 +39,8 @@ public class Controls {
 	}
 
 	public void run() {
-		SmartDashboard.sendData("FIRE Solenoid", isFired);
-		if(checkToggle(HWR.RIGHT_JOYSTICK, HWR.FIRE_SOLENOID)) {
-			isFired = !isFired;
-		}
-		if(isFired) {
+		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.RIGHT_JOYSTICK, HWR.FIRE_SOLENOID));
+		if(findToggle(HWR.RIGHT_JOYSTICK, HWR.FIRE_SOLENOID)) {
 			solenoid.fire();
 		}
 		else {
@@ -61,8 +56,8 @@ public class Controls {
 		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
 		SmartDashboard.sendData("PDP Current", pdp.getTotalCurrent());
 		
-		if (pdp.getVoltage() < 7.2) { // TODO Test
-			SmartDashboard.flash("Brownout Protection", 0.8);
+		if (pdp.getVoltage() < 7.2) {
+			SmartDashboard.flash("Brownout Protection", 0.3);
 			drive.enableBrownoutProtection();
 		} else {
 			drive.disableBrownoutProtection();
@@ -92,8 +87,17 @@ public class Controls {
 
 		drive.driveMode(lSpeed, rSpeed);
 	}
+	
+	// toggle button
+	public boolean findToggle(int joystick, int button){
+		if (checkSingleChange(joystick, button)) {
+			toggle[joystick][button - 1] = !toggle[joystick][button - 1];
+		}
+		return toggle[joystick][button - 1];
+	}
 
-	public static boolean checkToggle(int joystick, int button) {
+	// returns true if the joystick is first pressed
+	public boolean checkSingleChange(int joystick, int button) {
 		boolean pressed = false;
 
 		switch (joystick) {
