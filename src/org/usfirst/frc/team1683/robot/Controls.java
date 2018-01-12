@@ -4,6 +4,7 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
+import org.usfirst.frc.team1683.pneumatics.Solenoid;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
@@ -26,9 +27,13 @@ public class Controls {
 
 	private InputFilter rightFilter, leftFilter;
 	private PowerDistributionPanel pdp;
+	private Solenoid solenoid;
+	
+	private boolean isFired = false;
 
-	public Controls(DriveTrain drive, PowerDistributionPanel pdp) {
+	public Controls(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
 		this.drive = drive;
+		this.solenoid = solenoid;
 		rightFilter = new InputFilter(0.86);
 		leftFilter = new InputFilter(0.86);
 
@@ -36,6 +41,17 @@ public class Controls {
 	}
 
 	public void run() {
+		SmartDashboard.sendData("FIRE Solenoid", isFired);
+		if(checkToggle(HWR.RIGHT_JOYSTICK, HWR.FIRE_SOLENOID)) {
+			isFired = !isFired;
+		}
+		if(isFired) {
+			solenoid.fire();
+		}
+		else {
+			solenoid.retract();
+		}
+		
 		SmartDashboard.sendData("Drive Power", maxPower);
 		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
 		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);

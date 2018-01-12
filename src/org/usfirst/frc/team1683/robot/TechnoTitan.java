@@ -3,8 +3,6 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
-import org.usfirst.frc.team1683.autonomous.Target;
-import org.usfirst.frc.team1683.autonomous.TargetChooser;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
@@ -12,10 +10,11 @@ import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
+import org.usfirst.frc.team1683.pneumatics.Solenoid;
+import org.usfirst.frc.team1683.sensors.CollisionDetector;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
-import org.usfirst.frc.team1683.sensors.CollisionDetector;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -49,15 +48,18 @@ public class TechnoTitan extends IterativeRobot {
 	MotorGroup leftGroup;
 	MotorGroup rightGroup;
 	PowerDistributionPanel pdp;
+	
+	Solenoid solenoid;
 
 	boolean teleopReady = false;
 
 	@Override
 	public void robotInit() {
+		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
-		SmartDashboard.initFlashTimer();
 		
+		solenoid = new Solenoid(HWR.PCM,HWR.SOLENOID);
 		detector = new CollisionDetector();
 		
 		gyro = new Gyro(HWR.GYRO);
@@ -80,11 +82,8 @@ public class TechnoTitan extends IterativeRobot {
 		autoSwitch = new AutonomousSwitcher(drive);
 		pdp = new PowerDistributionPanel();
 		
-		controls = new Controls(drive, pdp);
+		controls = new Controls(drive, pdp, solenoid);
 		CameraServer.getInstance().startAutomaticCapture();
-		TargetChooser chooser = new TargetChooser(new Target[] {
-				Target.CLOSE_SWITCH, Target.CLOSE_SCALE, Target.FAR_SWITCH
-		}, 'L');
 	}
 	
 	@Override
@@ -101,16 +100,15 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void teleopInit() {		
 		drive.stop();
+		waitTeleop.start();
 	}
 
 	@Override
 	public void teleopPeriodic() {
 		if (waitTeleop.get() > 0.2 || DriverSetup.rightStick.getRawButton(HWR.OVERRIDE_TIMER))
 			teleopReady = true;
-		
-			
-		controls.run();
-		detector.printAcceleration();
+		if (teleopReady)
+			controls.run();
 	}
 
 	@Override

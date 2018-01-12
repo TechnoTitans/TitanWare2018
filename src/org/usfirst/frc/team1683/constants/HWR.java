@@ -10,6 +10,10 @@ public class HWR {
 	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_5;
 	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_4;
 
+	// Solenoids
+	public static final int PCM = HWP.CAN_15;
+	public static final int SOLENOID = HWP.PCM_0;
+	
 	// Encoders
 	public static final int LEFT_DRIVE_ENCODER = HWP.CAN_7;
 	public static final int RIGHT_DRIVE_ENCODER = HWP.CAN_6;
@@ -27,4 +31,6 @@ public class HWR {
 	public static final int FULL_POWER = HWP.BUTTON_11;
 	public static final int SECOND_POWER = HWP.BUTTON_6;
 	public static final int OVERRIDE_TIMER = HWP.BUTTON_9;
+	
+	public static final int FIRE_SOLENOID = HWP.BUTTON_3;
 }

@@ -20,6 +20,16 @@ public class HWP {
 	public static final int PWM_7 = 7;
 	public static final int PWM_8 = 8;
 	public static final int PWM_9 = 9;
+	
+	// PCM
+	public static final int PCM_0 = 0;
+	public static final int PCM_1 = 1;
+	public static final int PCM_2 = 2;
+	public static final int PCM_3 = 3;
+	public static final int PCM_4 = 4;
+	public static final int PCM_5 = 5;
+	public static final int PCM_6 = 6;
+	public static final int PCM_7 = 7;
 
 	// Controller Area Network (CAN)
 	public static final int CAN_0 = 0; // pdp
