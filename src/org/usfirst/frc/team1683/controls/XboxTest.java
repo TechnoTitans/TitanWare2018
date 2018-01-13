@@ -11,9 +11,11 @@ public class XboxTest {
     public void run() {
         SmartDashboard.putString("kLeft_y", "INPUT y is kLeft" + controller.getY(GenericHID.Hand.kLeft));
         SmartDashboard.putString("kRight_y", "INPUT y is kRight" + controller.getY(GenericHID.Hand.kRight));
-        SmartDashboard.putString("getAxis0", "INPUT getRawAxis 0" + controller.getRawAxis(0));
-        SmartDashboard.putString("getAxis1", "INPUT getRawAxis 1" + controller.getRawAxis(1));
-        SmartDashboard.putString("getAxis2", "INPUT getRawAxis 2" + controller.getRawAxis(2));
         SmartDashboard.putString("abtn", "INPUT getAButton" + controller.getAButton());
+        
+        
+        // forward is -1.0, backwards (down is +1.0), so always multiply by one 
+        
+        
     }
 }
