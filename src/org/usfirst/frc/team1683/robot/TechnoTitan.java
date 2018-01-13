@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
+import org.usfirst.frc.team1683.constants.HWP;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
@@ -11,6 +12,7 @@ import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
+import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
@@ -48,6 +50,8 @@ public class TechnoTitan extends IterativeRobot {
 	MotorGroup rightGroup;
 	PowerDistributionPanel pdp;
 	
+	Elevator elevator;
+	
 	Solenoid solenoid;
 	BuiltInAccel accel;
 
@@ -78,6 +82,8 @@ public class TechnoTitan extends IterativeRobot {
 		drive = new TankDrive(leftGroup, rightGroup, gyro);
 		leftGroup.enableAntiDrift(left);
 		rightGroup.enableAntiDrift(right);
+		
+		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false));
 
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();

@@ -10,8 +10,8 @@ public class Elevator {
 	private TalonSRX elevatorMotor;	
 	private double liftSpeed = .7;
 	
-	public Elevator(int channel) {
-		this.elevatorMotor = new TalonSRX(channel, true);
+	public Elevator(TalonSRX motor) {
+		this.elevatorMotor = motor;
 	}
 	
 	public void run() {
