@@ -26,12 +26,7 @@ public abstract class Controls {
 		leftFilter = new InputFilter(0.86);
 	}
 
-	public void run(double[] drivePower, boolean solenoidPosition) {
-		// drive
-		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
-		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);
-		SmartDashboard.flash("Testing", 0.6);
-
+	public void run() {
 		// brownout protection
 		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
 		SmartDashboard.sendData("PDP Current", pdp.getTotalCurrent());
@@ -42,17 +37,25 @@ public abstract class Controls {
 		} else {
 			drive.disableBrownoutProtection();
 		}
-
-		double lSpeed = leftFilter.filterInput(Math.pow(drivePower[0], 3));
-		double rSpeed = rightFilter.filterInput(Math.pow(drivePower[1], 3));
+		
+		// drive
+		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
+		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);
+		SmartDashboard.flash("Testing", 0.6);
+		double lSpeed = leftFilter.filterInput(Math.pow(drivePower()[0], 3));
+		double rSpeed = rightFilter.filterInput(Math.pow(drivePower()[1], 3));
 		drive.driveMode(lSpeed, rSpeed);
 
 		// solenoids
-		SmartDashboard.sendData("FIRE Solenoid", solenoidPosition);
-		if (solenoidPosition) {
+		SmartDashboard.sendData("FIRE Solenoid", solenoidToggle());
+		if (solenoidToggle()) {
 			solenoid.fire();
 		} else {
 			solenoid.retract();
 		}
 	}
+	
+	public abstract double[] drivePower();
+	
+	public abstract boolean solenoidToggle();
 }

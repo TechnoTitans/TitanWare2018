@@ -17,7 +17,6 @@ public class XBox extends Controls {
 	private double rSpeed;
 	private double lSpeed;
 
-	private boolean solenoidToggle = false;
 	private double maxPower = 1.0;
 
 	private XboxController controller;
@@ -27,14 +26,7 @@ public class XBox extends Controls {
 		controller = new XboxController(0); // TODO
 	}
 
-	public void run() {
-		SmartDashboard.sendData("FIRE Solenoid", controller.getBButtonPressed());
-		if (controller.getBButtonPressed()) {
-			solenoidToggle = true;
-		} else if (controller.getAButtonPressed()) {
-			solenoidToggle = false;
-		}
-
+	public double[] drivePower() {
 		if (frontMode) {
 			lSpeed = -maxPower * controller.getY(Hand.kLeft);
 			rSpeed = -maxPower * controller.getY(Hand.kRight);
@@ -42,6 +34,14 @@ public class XBox extends Controls {
 			lSpeed = maxPower * controller.getY(Hand.kLeft);
 			rSpeed = maxPower * controller.getY(Hand.kRight);
 		}
-		super.run(new double[] { lSpeed, rSpeed }, solenoidToggle);
+		return new double[] { lSpeed, rSpeed };
+	}
+	
+	public boolean solenoidToggle() {
+		SmartDashboard.sendData("FIRE Solenoid", controller.getBButtonPressed());
+		if (controller.getBButtonPressed()) {
+			return true;
+		}
+		return false;
 	}
 }

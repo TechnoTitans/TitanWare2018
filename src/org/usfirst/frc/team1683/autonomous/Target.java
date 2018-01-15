@@ -31,10 +31,6 @@ public enum Target {
 		return isClose;
 	}
 
-	public boolean isUserAGoat() {
-		return true;
-	}
-
 	public boolean isStartMiddle() {
 		return middle;
 	}

@@ -19,13 +19,12 @@ public class Joysticks extends Controls {
 	private Joystick leftStick;
 	private Joystick rightStick;
 	private Joystick auxStick;
-	
+
 	private int YAxis = 1;
 
 	private double rSpeed;
 	private double lSpeed;
 
-	private boolean solenoidToggle = false;
 	private double maxPower = 1.0;
 
 	public Joysticks(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
@@ -35,14 +34,7 @@ public class Joysticks extends Controls {
 		auxStick = new Joystick(HWR.AUX_JOYSTICK);
 	}
 
-	public void run() {
-		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
-		if (findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID)) {
-			solenoidToggle = true;
-		} else {
-			solenoidToggle = false;
-		}
-
+	public double[] drivePower() {
 		if (frontMode) {
 			lSpeed = -maxPower * leftStick.getRawAxis(YAxis);
 			rSpeed = -maxPower * rightStick.getRawAxis(YAxis);
@@ -56,7 +48,15 @@ public class Joysticks extends Controls {
 		else if (leftStick.getRawButton(HWR.SECOND_POWER))
 			maxPower = Controls.SECOND_JOYSTICK_SPEED;
 
-		super.run(new double[] { lSpeed, rSpeed }, solenoidToggle);
+		return new double[] { lSpeed, rSpeed };
+	}
+
+	public boolean solenoidToggle() {
+		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
+		if (findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID)) {
+			return true;
+		}
+		return false;
 	}
 
 	// toggle button
