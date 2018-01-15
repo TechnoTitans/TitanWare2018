@@ -1,9 +1,7 @@
 package org.usfirst.frc.team1683.scoring;
 
-import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
-import org.usfirst.frc.team1683.sensors.Encoder;
 
 public class Elevator {
 	

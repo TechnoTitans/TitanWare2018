@@ -3,8 +3,8 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
-import org.usfirst.frc.team1683.constants.HWP;
 import org.usfirst.frc.team1683.constants.HWR;
+import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
@@ -34,7 +34,7 @@ public class TechnoTitan extends IterativeRobot {
 	public static final double WHEEL_RADIUS = 2.0356;
 
 	TankDrive drive;
-	Controls controls;
+	Joysticks controls;
 	
 	Timer waitTeleop;
 	Timer waitAuto;
@@ -88,7 +88,7 @@ public class TechnoTitan extends IterativeRobot {
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
 		
-		controls = new Controls(drive, pdp, solenoid);
+		controls = new Joysticks(drive, pdp, solenoid);
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 	
