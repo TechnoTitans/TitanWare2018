@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1683.controls;
 
-import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
-import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.robot.InputFilter;
@@ -10,8 +8,6 @@ import org.usfirst.frc.team1683.robot.InputFilter;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 public abstract class Controls {
-	private boolean[][] toggle = new boolean[3][11];
-	private boolean[][] joystickCheckToggle = new boolean[3][11];
 
 	protected static final double MAX_JOYSTICK_SPEED = 1.0;
 	protected static final double SECOND_JOYSTICK_SPEED = 0.6;
@@ -57,43 +53,6 @@ public abstract class Controls {
 			solenoid.fire();
 		} else {
 			solenoid.retract();
-		}
-	}
-
-	// toggle button
-	public boolean findToggle(int joystick, int button) {
-		if (checkSingleChange(joystick, button)) {
-			toggle[joystick][button - 1] = !toggle[joystick][button - 1];
-		}
-		return toggle[joystick][button - 1];
-	}
-
-	// returns true if the joystick is first pressed
-	public boolean checkSingleChange(int joystick, int button) {
-		boolean pressed = false;
-
-		switch (joystick) {
-			case HWR.AUX_JOYSTICK:
-				pressed = DriverSetup.auxStick.getRawButton(button);
-				break;
-			case HWR.RIGHT_JOYSTICK:
-				pressed = DriverSetup.rightStick.getRawButton(button);
-				break;
-			case HWR.LEFT_JOYSTICK:
-				pressed = DriverSetup.leftStick.getRawButton(button);
-				break;
-			default:
-				break;
-		}
-
-		if (pressed && !joystickCheckToggle[joystick][button - 1]) {
-			joystickCheckToggle[joystick][button - 1] = true;
-			return true;
-		} else if (pressed && joystickCheckToggle[joystick][button - 1]) {
-			return false;
-		} else {
-			joystickCheckToggle[joystick][button - 1] = false;
-			return false;
 		}
 	}
 }

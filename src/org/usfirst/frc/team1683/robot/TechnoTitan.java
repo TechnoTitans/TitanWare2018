@@ -7,7 +7,6 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
-import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
@@ -35,10 +34,10 @@ public class TechnoTitan extends IterativeRobot {
 
 	TankDrive drive;
 	Joysticks controls;
-	
+
 	Timer waitTeleop;
 	Timer waitAuto;
-	
+
 	CameraServer server;
 
 	Autonomous auto;
@@ -49,9 +48,9 @@ public class TechnoTitan extends IterativeRobot {
 	MotorGroup leftGroup;
 	MotorGroup rightGroup;
 	PowerDistributionPanel pdp;
-	
+
 	Elevator elevator;
-	
+
 	Solenoid solenoid;
 	BuiltInAccel accel;
 
@@ -62,10 +61,10 @@ public class TechnoTitan extends IterativeRobot {
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
-		
-		solenoid = new Solenoid(HWR.PCM,HWR.SOLENOID);
+
+		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		accel = new BuiltInAccel();
-		
+
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
 
@@ -82,16 +81,16 @@ public class TechnoTitan extends IterativeRobot {
 		drive = new TankDrive(leftGroup, rightGroup, gyro);
 		leftGroup.enableAntiDrift(left);
 		rightGroup.enableAntiDrift(right);
-		
+
 		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false));
 
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
-		
+
 		controls = new Joysticks(drive, pdp, solenoid);
 		CameraServer.getInstance().startAutomaticCapture();
 	}
-	
+
 	@Override
 	public void autonomousInit() {
 		drive.stop();
@@ -101,17 +100,17 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		autoSwitch.run();
-	} 
+	}
 
 	@Override
-	public void teleopInit() {		
+	public void teleopInit() {
 		drive.stop();
 		waitTeleop.start();
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		if (waitTeleop.get() > 0.2 || DriverSetup.rightStick.getRawButton(HWR.OVERRIDE_TIMER))
+		if (waitTeleop.get() > 0.2)
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();

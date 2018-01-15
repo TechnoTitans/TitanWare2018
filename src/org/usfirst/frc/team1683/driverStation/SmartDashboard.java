@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDashboard {
 	private static Boolean flashValue = true;
 	private static Timer flashTimer;
+
 	/**
 	 * Sends the value to SmartDashboard
 	 *
@@ -56,17 +57,16 @@ public class SmartDashboard extends edu.wpi.first.wpilibj.smartdashboard.SmartDa
 		} catch (IllegalArgumentException e) {
 		}
 	}
-	
+
 	public static void initFlashTimer() {
 		flashTimer = new Timer();
 		flashTimer.start();
 	}
-	
+
 	/**
 	 * 
-	 * Init before starting flash!!!!!!!!
-	 * Flashing green and red message
-	 * Boolean only
+	 * Init before starting flash!!!!!!!! Flashing green and red message Boolean
+	 * only
 	 */
 	public static void flash(String key, double pause) {
 		if (flashTimer.get() > pause) {
