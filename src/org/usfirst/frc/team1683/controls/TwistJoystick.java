@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 /**
  * Handles all joystick inputs
  */
-public class Joysticks extends Controls {
-	private boolean frontMode = true;
+public class TwistJoystick extends Controls {
 
 	private double rSpeed;
 	private double lSpeed;
@@ -20,7 +19,7 @@ public class Joysticks extends Controls {
 	private boolean solenoidToggle = false;
 	private double maxPower = 1.0;
 
-	public Joysticks(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
+	public TwistJoystick(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
 		super(drive, pdp, solenoid);
 	}
 
@@ -32,13 +31,14 @@ public class Joysticks extends Controls {
 			solenoidToggle = false;
 		}
 
-		if (frontMode) {
-			lSpeed = -maxPower * DriverSetup.leftStick.getRawAxis(DriverSetup.YAxis);
-			rSpeed = -maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);
-		} else {
-			lSpeed = maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);
-			rSpeed = maxPower * DriverSetup.leftStick.getRawAxis(DriverSetup.YAxis);
-		}
+		lSpeed = -maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);
+		rSpeed = -maxPower * DriverSetup.rightStick.getRawAxis(DriverSetup.YAxis);
+
+		lSpeed += DriverSetup.rightStick.getTwist();
+		rSpeed -= DriverSetup.rightStick.getTwist();
+
+		lSpeed = normalize(lSpeed);
+		rSpeed = normalize(rSpeed);
 
 		if (DriverSetup.rightStick.getRawButton(HWR.FULL_POWER))
 			maxPower = Controls.MAX_JOYSTICK_SPEED;
@@ -46,5 +46,15 @@ public class Joysticks extends Controls {
 			maxPower = Controls.SECOND_JOYSTICK_SPEED;
 
 		super.run(new double[] { lSpeed, rSpeed }, solenoidToggle);
+	}
+
+	public double normalize(double input) {
+		if (input > 1) {
+			return 1;
+		}
+		if (input < -1) {
+			return -1;
+		}
+		return input;
 	}
 }

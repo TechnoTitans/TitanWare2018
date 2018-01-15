@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.XboxController;
 /**
  * Handles all joystick inputs
  */
-public class XBox extends Controls{
+public class XBox extends Controls {
 	private boolean frontMode = true;
 
 	private double rSpeed;
 	private double lSpeed;
-	
+
 	private boolean solenoidToggle = false;
 	private double maxPower = 1.0;
 
@@ -24,7 +24,7 @@ public class XBox extends Controls{
 
 	public XBox(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
 		super(drive, pdp, solenoid);
-		controller = new XboxController(0); //TODO
+		controller = new XboxController(0); // TODO
 	}
 
 	public void run() {
@@ -42,6 +42,6 @@ public class XBox extends Controls{
 			lSpeed = maxPower * controller.getY(Hand.kLeft);
 			rSpeed = maxPower * controller.getY(Hand.kRight);
 		}
-		super.run(new double[] {lSpeed, rSpeed}, solenoidToggle);
+		super.run(new double[] { lSpeed, rSpeed }, solenoidToggle);
 	}
 }
