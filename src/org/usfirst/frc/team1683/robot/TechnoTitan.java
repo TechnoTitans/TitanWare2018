@@ -5,6 +5,10 @@ import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainMover;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
+import org.usfirst.frc.team1683.driveTrain.Path;
+import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
@@ -50,6 +54,10 @@ public class TechnoTitan extends IterativeRobot {
 	
 	Solenoid solenoid;
 	BuiltInAccel accel;
+	
+	private Path testPath;
+	private DriveTrainTurner testTurner, turner2;
+	private double initGyro;
 
 	boolean teleopReady = false;
 
@@ -83,18 +91,32 @@ public class TechnoTitan extends IterativeRobot {
 		pdp = new PowerDistributionPanel();
 		
 		controls = new Controls(drive, pdp, solenoid);
-		CameraServer.getInstance().startAutomaticCapture();
+		// CameraServer.getInstance().startAutomaticCapture();
+		
+		PathPoint[] testPathPoints = new PathPoint[] {
+				new PathPoint(0, 12, false),
+				new PathPoint(12, 12, false),
+				new PathPoint(12, 0, false),
+				new PathPoint(0, 0, false)
+		};
+		testPath = new Path(drive, testPathPoints, 0.3, 0.2);
+		//testTurner = new DriveTrainTurner(drive, 180, 0.2);
 	}
 	
 	@Override
 	public void autonomousInit() {
 		drive.stop();
 		autoSwitch.getSelected();
+		gyro.reset();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		autoSwitch.run();
+		if (!testPath.isDone()) {
+			testPath.run();
+		} else {
+			drive.stop();
+		}
 	} 
 
 	@Override

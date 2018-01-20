@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class Gyro extends AnalogGyro{
 
-	public static double GYRO_SENSITIVITY = 0.0065693; /// TODO find real value
+	public static double GYRO_SENSITIVITY = 0.00601; /// TODO find real value
 
 	public Gyro(int channel) {
 		super(channel);
@@ -20,9 +20,20 @@ public class Gyro extends AnalogGyro{
 		super.calibrate();
 	}
 
+	/**
+	 * @return The gyro angle between -359 and 359 degrees
+	 */
 	@Override
 	public double getAngle() {
 		return super.getAngle() % 360;
+	}
+	
+	/**
+	 * 
+	 * @return The raw angle of the gyro (not between -360 and 360)
+	 */
+	public double getRawAngle() {
+		return super.getAngle();
 	}
 
 	@Override
