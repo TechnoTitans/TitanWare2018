@@ -20,7 +20,7 @@ public class HWP {
 	public static final int PWM_7 = 7;
 	public static final int PWM_8 = 8;
 	public static final int PWM_9 = 9;
-	
+
 	// PCM
 	public static final int PCM_0 = 0;
 	public static final int PCM_1 = 1;

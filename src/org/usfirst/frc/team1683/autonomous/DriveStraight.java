@@ -6,11 +6,11 @@ import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class DriveStraight extends Autonomous{
+public class DriveStraight extends Autonomous {
 	DriveTrain driveTrain;
 	DriveTrainMover mover;
 	private Timer timer;
-	
+
 	public DriveStraight(DriveTrain driveTrain) {
 		super(driveTrain);
 		this.driveTrain = driveTrain;
@@ -23,7 +23,7 @@ public class DriveStraight extends Autonomous{
 			case INIT_CASE:
 				timer = new Timer();
 				timer.start();
-				
+
 				mover = new DriveTrainMover(driveTrain, 2000, 0.4);
 				nextState = State.DRIVE_FORWARD;
 				break;

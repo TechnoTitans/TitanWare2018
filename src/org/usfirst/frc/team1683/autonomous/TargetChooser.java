@@ -26,7 +26,7 @@ public class TargetChooser {
 		}
 		throw new Error("No target works");
 	}
-	
+
 	public char getPosition() {
 		return startingSide;
 	}

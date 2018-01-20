@@ -18,7 +18,7 @@ public enum Target {
 		this.isClose = isClose;
 		this.switchScale = switchScale;
 	}
-	
+
 	private Target() {
 		middle = true;
 	}
@@ -31,10 +31,6 @@ public enum Target {
 		return isClose;
 	}
 
-	public boolean isUserAGoat() {
-		return true;
-	}
-	
 	public boolean isStartMiddle() {
 		return middle;
 	}

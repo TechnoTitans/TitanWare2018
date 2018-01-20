@@ -4,17 +4,15 @@ package org.usfirst.frc.team1683.robot;
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
+import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
-import org.usfirst.frc.team1683.driveTrain.DriveTrainMover;
-import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
-import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
-import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
+import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
@@ -36,8 +34,8 @@ public class TechnoTitan extends IterativeRobot {
 	public static final double WHEEL_RADIUS = 2.0356;
 
 	TankDrive drive;
-	Controls controls;
-	
+	Joysticks controls;
+
 	Timer waitTeleop;
 	Timer waitAuto;
 	
@@ -51,13 +49,11 @@ public class TechnoTitan extends IterativeRobot {
 	MotorGroup leftGroup;
 	MotorGroup rightGroup;
 	PowerDistributionPanel pdp;
-	
+
+	Elevator elevator;
+
 	Solenoid solenoid;
 	BuiltInAccel accel;
-	
-	private Path testPath;
-	private DriveTrainTurner testTurner, turner2;
-	private double initGyro;
 
 	boolean teleopReady = false;
 
@@ -66,10 +62,10 @@ public class TechnoTitan extends IterativeRobot {
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
-		
-		solenoid = new Solenoid(HWR.PCM,HWR.SOLENOID);
+
+		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		accel = new BuiltInAccel();
-		
+
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
 
@@ -87,10 +83,12 @@ public class TechnoTitan extends IterativeRobot {
 		leftGroup.enableAntiDrift(left);
 		rightGroup.enableAntiDrift(right);
 
+		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false));
+
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
-		
-		controls = new Controls(drive, pdp, solenoid);
+
+		controls = new Joysticks(drive, pdp, solenoid);
 		// CameraServer.getInstance().startAutomaticCapture();
 		
 		PathPoint[] testPathPoints = new PathPoint[] {
@@ -99,7 +97,7 @@ public class TechnoTitan extends IterativeRobot {
 				new PathPoint(12, 0, false),
 				new PathPoint(0, 0, false)
 		};
-		testPath = new Path(drive, testPathPoints, 0.3, 0.2);
+		//testPath = new Path(drive, testPathPoints, 0.3, 0.2);
 		//testTurner = new DriveTrainTurner(drive, 180, 0.2);
 	}
 	
@@ -112,11 +110,11 @@ public class TechnoTitan extends IterativeRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		if (!testPath.isDone()) {
-			testPath.run();
-		} else {
-			drive.stop();
-		}
+		//if (!testPath.isDone()) {
+		//	testPath.run();
+		//} else {
+		//	drive.stop();
+		//}
 	} 
 
 	@Override
@@ -127,7 +125,7 @@ public class TechnoTitan extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		if (waitTeleop.get() > 0.2 || DriverSetup.rightStick.getRawButton(HWR.OVERRIDE_TIMER))
+		if (waitTeleop.get() > 0.2)
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();
