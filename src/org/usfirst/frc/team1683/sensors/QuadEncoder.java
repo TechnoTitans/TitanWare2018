@@ -12,6 +12,7 @@ public class QuadEncoder implements Encoder {
 
 	private TalonSRX talonSRX;
 	private double wheelRadius;
+	private final double PULSES_PER_ROTATION = 4096;
 
 	public QuadEncoder(TalonSRX talonSRX, double wheelRadius) {
 		this.talonSRX = talonSRX;
@@ -28,7 +29,7 @@ public class QuadEncoder implements Encoder {
 	 */
 	@Override
 	public double getDistance() {
-		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius;
+		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius / PULSES_PER_ROTATION;
 	}
 
 	/**

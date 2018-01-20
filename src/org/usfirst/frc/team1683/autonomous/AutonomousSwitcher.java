@@ -20,7 +20,8 @@ public class AutonomousSwitcher {
 
 		addAuto("Do Nothing", new DoNothing(tankDrive));
 		addAuto("Square Auto", new SquareAuto(tankDrive));
-		addAuto("Drive Straight", new DriveStraight(tankDrive));
+		setDefault("Drive Straight", new DriveStraight(tankDrive));
+		addAuto("Drive Points", new DrivePathPoints(tankDrive));
 		// setDefault("Priority (Single)", new SingleTarget(tankDrive,
 		// targetChooser));
 		SmartDashboard.putData("Auto", chooser);
