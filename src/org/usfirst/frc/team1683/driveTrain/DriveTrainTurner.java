@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1683.driveTrain;
 
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.sensors.Gyro;
+
 
 /**
  * Turns robot a certain number of degrees
@@ -12,7 +14,7 @@ public class DriveTrainTurner {
 	private double speed;
 	private double angle;
 	private boolean done = false;
-	private final double ANGLE_TOLERANCE = 4;
+	private final double ANGLE_TOLERANCE = 1;
 
 	/**
 	 * Creates a DriveTrainTurner
@@ -61,6 +63,7 @@ public class DriveTrainTurner {
 	 */
 	public void run() {
 		double heading = angleDiff(gyro.getAngle(), initialHeading);
+		SmartDashboard.putNumber("gyro angle", heading);
 		if (!done && Math.abs(heading) <= Math.abs(angle) - ANGLE_TOLERANCE) {
 			// If angle > 0, then it should turn counterclockwise so the "right"
 			// parameter should be false

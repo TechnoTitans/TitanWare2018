@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.Timer;
  * Main class
  *
  */
-@SuppressWarnings("unused")
 public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
