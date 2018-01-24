@@ -94,7 +94,7 @@ public class TechnoTitan extends IterativeRobot {
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks(drive, pdp, solenoid);
+		controls = new Joysticks(drive, pdp);
 		CameraServer.getInstance().startAutomaticCapture();
 		
 	}

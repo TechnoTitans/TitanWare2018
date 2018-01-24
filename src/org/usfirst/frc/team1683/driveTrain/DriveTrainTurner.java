@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1683.driveTrain;
 
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.sensors.Gyro;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Turns robot a certain number of degrees

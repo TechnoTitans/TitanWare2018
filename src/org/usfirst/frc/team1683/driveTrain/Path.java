@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1683.driveTrain;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Moves robot in a path based on coordinates
  */
@@ -97,9 +99,11 @@ public class Path {
 				driveTrain.stop();
 			} else {
 				turner.run();
+				SmartDashboard.putNumber("degrees left", turner.angleLeft());
 			}
 		} else {
 			mover.runIteration();
+			SmartDashboard.putNumber("distance left", mover.getAverageDistanceLeft());
 			if (isMoverDone()) {
 				pathIndex++;
 				if (!isDone()) {
@@ -109,5 +113,6 @@ public class Path {
 				}
 			}
 		}
+		SmartDashboard.putBoolean("isTurning", isTurning);
 	}
 }

@@ -2,7 +2,6 @@ package org.usfirst.frc.team1683.controls;
 
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -21,8 +20,8 @@ public class XBox extends Controls {
 
 	private XboxController controller;
 
-	public XBox(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
-		super(drive, pdp, solenoid);
+	public XBox(DriveTrain drive, PowerDistributionPanel pdp) {//, Solenoid solenoid) {
+		super(drive, pdp);//, solenoid);
 		controller = new XboxController(0); // TODO
 	}
 

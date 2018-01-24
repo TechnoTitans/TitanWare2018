@@ -3,7 +3,6 @@ package org.usfirst.frc.team1683.controls;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -15,9 +14,7 @@ public class TwistJoystick extends Controls {
 	private boolean[][] toggle = new boolean[3][11];
 	private boolean[][] joystickCheckToggle = new boolean[3][11];
 
-	private Joystick leftStick;
 	private Joystick rightStick;
-	private Joystick auxStick;
 
 	private int YAxis = 1;
 
@@ -26,26 +23,33 @@ public class TwistJoystick extends Controls {
 
 	private double maxPower = 1.0;
 
-	public TwistJoystick(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
-		super(drive, pdp, solenoid);
-		leftStick = new Joystick(HWR.LEFT_JOYSTICK);
+	public TwistJoystick(DriveTrain drive, PowerDistributionPanel pdp) {//, Solenoid solenoid) {
+		super(drive, pdp);//, solenoid);
 		rightStick = new Joystick(HWR.RIGHT_JOYSTICK);
-		auxStick = new Joystick(HWR.AUX_JOYSTICK);
 	}
 
 	public double[] drivePower() {
 		lSpeed = -maxPower * rightStick.getRawAxis(YAxis);
 		rSpeed = -maxPower * rightStick.getRawAxis(YAxis);
+		
+		SmartDashboard.sendData("Controls LSpeed", lSpeed);
+		SmartDashboard.sendData("Controls RSpeed", rSpeed);
 
-		lSpeed += rightStick.getTwist();
-		rSpeed -= rightStick.getTwist();
+		lSpeed += 0.4 * rightStick.getTwist();
+		rSpeed -= 0.4 * rightStick.getTwist();
+		
+		SmartDashboard.sendData("Twist LSpeed", 0.4 * rightStick.getTwist());
+		SmartDashboard.sendData("Twist RSpeed", -0.4 * rightStick.getTwist());
 
 		lSpeed = normalize(lSpeed);
 		rSpeed = normalize(rSpeed);
+		
+		SmartDashboard.sendData("LLSpeed", lSpeed);
+		SmartDashboard.sendData("RRSpeed", rSpeed);
 
 		if (rightStick.getRawButton(HWR.FULL_POWER))
 			maxPower = Controls.MAX_JOYSTICK_SPEED;
-		else if (leftStick.getRawButton(HWR.SECOND_POWER))
+		else if (rightStick.getRawButton(HWR.SECOND_POWER))
 			maxPower = Controls.SECOND_JOYSTICK_SPEED;
 
 		return new double[] { lSpeed, rSpeed };
@@ -82,14 +86,8 @@ public class TwistJoystick extends Controls {
 		boolean pressed = false;
 
 		switch (joystick) {
-			case HWR.AUX_JOYSTICK:
-				pressed = auxStick.getRawButton(button);
-				break;
 			case HWR.RIGHT_JOYSTICK:
 				pressed = rightStick.getRawButton(button);
-				break;
-			case HWR.LEFT_JOYSTICK:
-				pressed = leftStick.getRawButton(button);
 				break;
 			default:
 				break;

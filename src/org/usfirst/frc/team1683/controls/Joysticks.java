@@ -3,7 +3,6 @@ package org.usfirst.frc.team1683.controls;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -27,8 +26,8 @@ public class Joysticks extends Controls {
 
 	private double maxPower = 1.0;
 
-	public Joysticks(DriveTrain drive, PowerDistributionPanel pdp, Solenoid solenoid) {
-		super(drive, pdp, solenoid);
+	public Joysticks(DriveTrain drive, PowerDistributionPanel pdp) {//, Solenoid solenoid) {
+		super(drive, pdp);//, //solenoid);
 		leftStick = new Joystick(HWR.LEFT_JOYSTICK);
 		rightStick = new Joystick(HWR.RIGHT_JOYSTICK);
 		auxStick = new Joystick(HWR.AUX_JOYSTICK);
