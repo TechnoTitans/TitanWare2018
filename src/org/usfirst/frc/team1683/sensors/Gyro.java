@@ -11,7 +11,7 @@ public class Gyro extends AnalogGyro{
 		super(channel);
 		super.initGyro();
 		super.reset();
-		super.setSensitivity(GYRO_SENSITIVITY);
+		// super.setSensitivity(GYRO_SENSITIVITY);
 	}
 
 	@Override
@@ -23,6 +23,10 @@ public class Gyro extends AnalogGyro{
 	@Override
 	public double getAngle() {
 		return super.getAngle() % 360;
+	}
+	
+	public double getRawAngle() {
+		return super.getAngle();
 	}
 
 	@Override

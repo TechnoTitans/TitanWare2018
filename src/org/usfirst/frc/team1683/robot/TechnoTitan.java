@@ -6,6 +6,7 @@ import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
@@ -19,6 +20,7 @@ import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -55,6 +57,11 @@ public class TechnoTitan extends IterativeRobot {
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
+	
+	private DriveTrainTurner turner;
+	private double initAngle;
+	
+	private Joystick turnJoystick;
 
 	@Override
 	public void robotInit() {
@@ -84,36 +91,47 @@ public class TechnoTitan extends IterativeRobot {
 
 		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false));
 
-		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
+		autoSwitch = new AutonomousSwitcher(drive, accel);
 
 		controls = new Joysticks(drive, pdp, solenoid);
 		CameraServer.getInstance().startAutomaticCapture();
+		
 	}
 
 	@Override
 	public void autonomousInit() {
 		drive.stop();
 		autoSwitch.getSelected();
+//		turner = new DriveTrainTurner(drive, 180, 0.3);
+//		initAngle = gyro.getRawAngle();
+//		SmartDashboard.putNumber("init angle", initAngle);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		autoSwitch.run();
+//		turner.run();
+//		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
 	}
 
 	@Override
 	public void teleopInit() {
 		drive.stop();
 		waitTeleop.start();
+		initAngle = gyro.getRawAngle();
+		SmartDashboard.putNumber("init angle", initAngle);
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		if (waitTeleop.get() > 0.2)
+		/*if (waitTeleop.get() > 0.2)
 			teleopReady = true;
 		if (teleopReady)
-			controls.run();
+			controls.run();*/
+		double joystick = turnJoystick.getRawAxis(1);
+		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
+		drive.turnInPlace(joystick > 0, Math.abs(joystick));
 	}
 
 	@Override
