@@ -43,4 +43,16 @@ public class XBox extends Controls {
 		}
 		return false;
 	}
+
+	@Override
+	public void flyWheel() {
+		// TODO Auto-generated method stub
+	
+	}
+
+	@Override
+	public void pistonWheel() {
+		// TODO Auto-generated method stub
+
+	}
 }

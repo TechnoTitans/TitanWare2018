@@ -24,6 +24,13 @@ public class HWR {
 	public static final int LEFT_JOYSTICK = HWP.JOY_0;
 	public static final int RIGHT_JOYSTICK = HWP.JOY_1;
 	public static final int AUX_JOYSTICK = HWP.JOY_2;
+	
+	//Flywheels
+	public static final int GRABBER_LEFT = HWP.CAN_1;
+	public static final int GRABBER_RIGHT = HWP.CAN_2;
+	
+	//Piston
+	public static final int GRABBER_PISTON = HWP.CAN_3;
 
 	// Sensors
 	public static final int GYRO = HWP.ANALOG_1;

@@ -103,4 +103,16 @@ public class TwistJoystick extends Controls {
 			return false;
 		}
 	}
+
+	@Override
+	public void flyWheel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pistonWheel() {
+		// TODO Auto-generated method stub
+		
+	}
 }

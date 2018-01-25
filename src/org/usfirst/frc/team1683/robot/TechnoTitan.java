@@ -12,6 +12,7 @@ import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
+import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
@@ -32,6 +33,10 @@ public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
 	public static final double WHEEL_RADIUS = 2.05125;
+	
+	TalonSRX grabberLeft;
+	TalonSRX grabberRight;
+	Solenoid grabberSolenoid;
 
 	TankDrive drive;
 	Controls controls;
@@ -53,12 +58,14 @@ public class TechnoTitan extends IterativeRobot {
 	Elevator elevator;
 
 //	Solenoid solenoid;
+	
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
 
 	@Override
 	public void robotInit() {
+		grabberSolenoid = new Solenoid(HWR.SOLENOID, 1);
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
@@ -68,9 +75,14 @@ public class TechnoTitan extends IterativeRobot {
 
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
-
+		
+		
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
+		
+		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
+		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
+		
 		TalonSRX leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
 		TalonSRX rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
 		leftGroup = new MotorGroup(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS), leftETalonSRX,
@@ -88,7 +100,7 @@ public class TechnoTitan extends IterativeRobot {
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
 
-		controls = new Joysticks(drive, pdp);//, solenoid);
+		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);//, solenoid);
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 

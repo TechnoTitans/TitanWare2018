@@ -49,6 +49,8 @@ public abstract class Controls {
 		double rSpeed = rightFilter.filterInput(Math.pow(drivePower()[1], 3));
 		drive.driveMode(lSpeed, rSpeed);
 
+		pistonWheel();
+		flyWheel();
 		// solenoids
 //		SmartDashboard.sendData("FIRE Solenoid", solenoidToggle());
 //		if (solenoidToggle()) {
@@ -61,4 +63,8 @@ public abstract class Controls {
 	public abstract double[] drivePower();
 	
 	public abstract boolean solenoidToggle();
+	
+	public abstract void flyWheel();
+	
+	public abstract void pistonWheel();
 }
