@@ -1,12 +1,14 @@
 package org.usfirst.frc.team1683.autonomous;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class TargetChooser {
-	private Target[] priorities;
+	private List<Target> priorities;
 	private char startingSide;
 
-	public TargetChooser(Target[] priorities, char startingSide) {
+	public TargetChooser(List<Target> priorities, char startingSide) {
 		this.priorities = priorities;
 		this.startingSide = startingSide;
 	}

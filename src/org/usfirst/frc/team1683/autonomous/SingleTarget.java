@@ -5,16 +5,25 @@ import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SingleTarget extends Autonomous {
 	private PathPoint[] points;
 	private Path path;
 	private Target target;
+	private TargetChooser chooser;
 
-	public SingleTarget(DriveTrain drive, TargetChooser chooser) {
+	public SingleTarget(DriveTrain drive) {
 		super(drive);
-
+	}
+	
+	public void setChooser(TargetChooser chooser) {
+		this.chooser = chooser;
+	}
+	
+	public void init() {
 		target = chooser.getCorrectTarget();
+		SmartDashboard.putString("target", target.toString());
 		// default paths assume everything is on left, so multiply by -1 if
 		// otherwise
 		boolean isLeft = target.isStartMiddle()
@@ -35,14 +44,14 @@ public class SingleTarget extends Autonomous {
 		} else {
 			// TODO
 		}
-		path = new Path(tankDrive, points, 0.3, 0.3);
+		// path = new Path(tankDrive, points, 0.3, 0.3);
 	}
 
 	public void run() {
-		if (!path.isDone()) {
-			path.run();
-		} else {
-			tankDrive.stop();
-		}
+//		if (!path.isDone()) {
+//			path.run();
+//		} else {
+//			tankDrive.stop();
+//		}
 	}
 }

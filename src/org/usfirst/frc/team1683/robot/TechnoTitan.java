@@ -1,13 +1,14 @@
 
+
+
 package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Joysticks;
-import org.usfirst.frc.team1683.controls.Controls;
-import org.usfirst.frc.team1683.controls.TwistJoystick;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
@@ -21,6 +22,7 @@ import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -32,14 +34,14 @@ import edu.wpi.first.wpilibj.Timer;
 public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
-	public static final double WHEEL_RADIUS = 2.05125;
+	public static final double WHEEL_RADIUS = 2.0356;
+
+	TankDrive drive;
+	Joysticks controls;
+	Solenoid grabberSolenoid;
 	
 	TalonSRX grabberLeft;
 	TalonSRX grabberRight;
-	Solenoid grabberSolenoid;
-
-	TankDrive drive;
-	Controls controls;
 
 	Timer waitTeleop;
 	Timer waitAuto;
@@ -57,32 +59,34 @@ public class TechnoTitan extends IterativeRobot {
 
 	Elevator elevator;
 
-//	Solenoid solenoid;
-	
+	Solenoid solenoid;
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
+	
+	private DriveTrainTurner turner;
+	private double initAngle;
+	
+	private Joystick turnJoystick;
 
 	@Override
 	public void robotInit() {
-		grabberSolenoid = new Solenoid(HWR.SOLENOID, 1);
+		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
+		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
+		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
+		
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
 
-//		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		accel = new BuiltInAccel();
 
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
-		
-		
+
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
-		
-		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
-		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
-		
 		TalonSRX leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
 		TalonSRX rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
 		leftGroup = new MotorGroup(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS), leftETalonSRX,
@@ -97,37 +101,47 @@ public class TechnoTitan extends IterativeRobot {
 
 		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false));
 
-		autoSwitch = new AutonomousSwitcher(drive, accel);
 		pdp = new PowerDistributionPanel();
+		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);//, solenoid);
+		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);
 		CameraServer.getInstance().startAutomaticCapture();
+		
 	}
 
 	@Override
 	public void autonomousInit() {
 		drive.stop();
 		autoSwitch.getSelected();
+//		turner = new DriveTrainTurner(drive, 180, 0.3);
+//		initAngle = gyro.getRawAngle();
+//		SmartDashboard.putNumber("init angle", initAngle);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		autoSwitch.run();
+//		turner.run();
+//		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
 	}
 
 	@Override
 	public void teleopInit() {
 		drive.stop();
 		waitTeleop.start();
+		initAngle = gyro.getRawAngle();
+		SmartDashboard.putNumber("init angle", initAngle);
 	}
 
 	@Override
 	public void teleopPeriodic() {
-//		if (waitTeleop.get() > 0.2)
-//			teleopReady = true;
-//		if (teleopReady)
-//			controls.run();
-		controls.run();
+		/*if (waitTeleop.get() > 0.2)
+			teleopReady = true;
+		if (teleopReady)
+			controls.run();*/
+		double joystick = turnJoystick.getRawAxis(1);
+		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
+		drive.turnInPlace(joystick > 0, Math.abs(joystick));
 	}
 
 	@Override

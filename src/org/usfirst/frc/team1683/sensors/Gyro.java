@@ -11,7 +11,7 @@ public class Gyro extends AnalogGyro{
 		super(channel);
 		super.initGyro();
 		super.reset();
-		super.setSensitivity(GYRO_SENSITIVITY);
+		// super.setSensitivity(GYRO_SENSITIVITY);
 	}
 
 	@Override
