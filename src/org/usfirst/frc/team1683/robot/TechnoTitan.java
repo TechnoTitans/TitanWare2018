@@ -8,6 +8,7 @@ import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainMover;
 import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
@@ -64,10 +65,10 @@ public class TechnoTitan extends IterativeRobot {
 
 	boolean teleopReady = false;
 	
-	private DriveTrainTurner turner;
+	private DriveTrainMover mover;
 	private double initAngle;
 	
-	private Joystick turnJoystick;
+	private Joystick driveJoystick;
 
 	@Override
 	public void robotInit() {
@@ -107,31 +108,38 @@ public class TechnoTitan extends IterativeRobot {
 		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);
 		CameraServer.getInstance().startAutomaticCapture();
 		
-		turnJoystick = new Joystick(1);
+		driveJoystick = new Joystick(1);
 	}
 
 	@Override
 	public void autonomousInit() {
 		drive.stop();
 		//autoSwitch.getSelected();
-		turner = new DriveTrainTurner(drive, 90, 0.2);
-		initAngle = gyro.getRawAngle();
-		SmartDashboard.putNumber("init angle", initAngle);
+		mover = new DriveTrainMover(drive, 12, 0.2);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		//autoSwitch.run();
-		turner.run();
-		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
+		if (mover.areAnyFinished()) {
+			drive.stop();
+		} else {
+			SmartDashboard.putNumber("prev encoder left", drive.getLeftEncoder().getDistance());
+			SmartDashboard.putNumber("prev encoder right", drive.getRightEncoder().getDistance());
+			mover.runIteration();
+		}
+		SmartDashboard.putNumber("encoder left", drive.getLeftEncoder().getDistance());
+		SmartDashboard.putNumber("encoder right", drive.getRightEncoder().getDistance());
 	}
 
 	@Override
 	public void teleopInit() {
 		drive.stop();
 		waitTeleop.start();
-		initAngle = gyro.getRawAngle();
-		SmartDashboard.putNumber("init angle", initAngle);
+		drive.getLeftEncoder().reset();
+		drive.getRightEncoder().reset();
+		SmartDashboard.putNumber("init encoders left", drive.getLeftEncoder().getDistance());
+		SmartDashboard.putNumber("init encoders right", drive.getRightEncoder().getDistance());
 	}
 
 	@Override
@@ -140,9 +148,10 @@ public class TechnoTitan extends IterativeRobot {
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();*/
-		double joystick = turnJoystick.getRawAxis(1);
-		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
-		drive.turnInPlace(joystick > 0, Math.abs(joystick));
+		double joystick = driveJoystick.getRawAxis(1);
+		SmartDashboard.putNumber("encoders left", drive.getLeftEncoder().getDistance());
+		SmartDashboard.putNumber("encoders right", drive.getRightEncoder().getDistance());
+		drive.set(joystick, joystick);
 	}
 
 	@Override
