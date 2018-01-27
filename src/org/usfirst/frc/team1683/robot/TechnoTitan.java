@@ -8,8 +8,6 @@ import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
-import org.usfirst.frc.team1683.driveTrain.DriveTrainMover;
-import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.MotorGroup;
@@ -23,7 +21,6 @@ import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -64,11 +61,6 @@ public class TechnoTitan extends IterativeRobot {
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
-	
-	private DriveTrainMover mover;
-	private double initAngle;
-	
-	private Joystick driveJoystick;
 
 	@Override
 	public void robotInit() {
@@ -107,51 +99,31 @@ public class TechnoTitan extends IterativeRobot {
 
 		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);
 		CameraServer.getInstance().startAutomaticCapture();
-		
-		driveJoystick = new Joystick(1);
 	}
 
 	@Override
 	public void autonomousInit() {
 		drive.stop();
-		//autoSwitch.getSelected();
-		mover = new DriveTrainMover(drive, 12, 0.2);
+		autoSwitch.getSelected();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		//autoSwitch.run();
-		if (mover.areAnyFinished()) {
-			drive.stop();
-		} else {
-			SmartDashboard.putNumber("prev encoder left", drive.getLeftEncoder().getDistance());
-			SmartDashboard.putNumber("prev encoder right", drive.getRightEncoder().getDistance());
-			mover.runIteration();
-		}
-		SmartDashboard.putNumber("encoder left", drive.getLeftEncoder().getDistance());
-		SmartDashboard.putNumber("encoder right", drive.getRightEncoder().getDistance());
+		autoSwitch.run();
 	}
 
 	@Override
 	public void teleopInit() {
 		drive.stop();
 		waitTeleop.start();
-		drive.getLeftEncoder().reset();
-		drive.getRightEncoder().reset();
-		SmartDashboard.putNumber("init encoders left", drive.getLeftEncoder().getDistance());
-		SmartDashboard.putNumber("init encoders right", drive.getRightEncoder().getDistance());
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		/*if (waitTeleop.get() > 0.2)
+		if (waitTeleop.get() > 0.2)
 			teleopReady = true;
 		if (teleopReady)
-			controls.run();*/
-		double joystick = driveJoystick.getRawAxis(1);
-		SmartDashboard.putNumber("encoders left", drive.getLeftEncoder().getDistance());
-		SmartDashboard.putNumber("encoders right", drive.getRightEncoder().getDistance());
-		drive.set(joystick, joystick);
+			controls.run();
 	}
 
 	@Override

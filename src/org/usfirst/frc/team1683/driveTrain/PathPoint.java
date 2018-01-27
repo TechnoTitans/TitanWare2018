@@ -93,13 +93,17 @@ public class PathPoint {
 	}
 
 	public String toString() {
-		return x + ", " + y + ", " + getAngle();
+		return "(" + x + ", " + y + ", " + getAngle() + ")";
 	}
 
 	void setRelativeTo(PathPoint other) {
 		x -= other.x;
 		y -= other.y;
 		isRelative = true;
+	}
+	
+	public PathPoint flipX() {
+		return new PathPoint(-x, y, isRelative);
 	}
 
 	public PathPoint subtract(PathPoint other) {

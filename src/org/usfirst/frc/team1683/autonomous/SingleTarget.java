@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1683.autonomous;
 
+import java.util.Arrays;
+
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
@@ -29,29 +31,33 @@ public class SingleTarget extends Autonomous {
 		boolean isLeft = target.isStartMiddle()
 				? DriverStation.getInstance().getGameSpecificMessage().charAt(target.getSwitchScale()) == 'L'
 				: chooser.getPosition() == 'L';
-		@SuppressWarnings("unused")
-		int side = isLeft ? 1 : -1;
 		if (target == Target.MIDDLE_SWITCH) {
-			side = DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' ? 1 : -1;
+			// TODO
 		} else if (target == Target.MIDDLE_SCALE) {
 			// TODO
 		} else if (target == Target.CLOSE_SWITCH) {
-			// TODO
+			points = DrivePathPoints.LeftSwitchLeft;
 		} else if (target == Target.CLOSE_SCALE) {
-			// TODO
+			points = DrivePathPoints.LeftScaleLeft;
 		} else if (target == Target.FAR_SWITCH) {
-			// TODO
-		} else {
-			// TODO
+			points = DrivePathPoints.LeftSwitchRight;
+		} else if (target == Target.FAR_SCALE) {
+			points = DrivePathPoints.LeftScaleRight;
 		}
-		// path = new Path(tankDrive, points, 0.3, 0.3);
+		if (!isLeft) {
+			for (int i = 0; i < points.length; ++i) {
+				points[i] = points[i].flipX();
+			}
+		}
+		path = new Path(tankDrive, points, 0.3, 0.2);
+		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
 
 	public void run() {
-//		if (!path.isDone()) {
-//			path.run();
-//		} else {
-//			tankDrive.stop();
-//		}
+		if (!path.isDone()) {
+			path.run();
+		} else {
+			tankDrive.stop();
+		}
 	}
 }

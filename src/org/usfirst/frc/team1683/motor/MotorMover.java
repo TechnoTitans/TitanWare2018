@@ -18,6 +18,8 @@ public class MotorMover implements Runnable {
 
 	private InputFilter inputFilter;
 
+	private final double BASE_OVERSHOOT = 2.5; // overshoot at 20% speed
+	private final double SPEED_OVERSHOOT = 1.5; // overshoot per 10% speed
 	/**
 	 * Class for moving a motor a certain distance based on an encoder
 	 * 
@@ -109,6 +111,10 @@ public class MotorMover implements Runnable {
 		motor.set(inputFilter.filterInput(correctSpeed));
 		return false;
 	}
+	
+	private double getOvershoot() {
+		return BASE_OVERSHOOT + SPEED_OVERSHOOT * (speed - 0.2) * 10;
+	}
 
 	/**
 	 * 
@@ -118,6 +124,6 @@ public class MotorMover implements Runnable {
 	 */
 
 	public double distanceLeft() {
-		return Math.abs(distance) - Math.abs(encoder.getDistance());
+		return Math.abs(distance) - Math.abs(encoder.getDistance()) - getOvershoot();
 	}
 }
