@@ -51,6 +51,7 @@ public abstract class Controls {
 
 		pistonWheel();
 		flyWheel();
+		elevator();
 		// solenoids
 //		SmartDashboard.sendData("FIRE Solenoid", solenoidToggle());
 //		if (solenoidToggle()) {
@@ -67,4 +68,6 @@ public abstract class Controls {
 	public abstract void flyWheel();
 	
 	public abstract void pistonWheel();
+	
+	public abstract void elevator();
 }

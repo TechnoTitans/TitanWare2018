@@ -5,6 +5,7 @@ import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
+import org.usfirst.frc.team1683.scoring.Elevator;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -24,6 +25,7 @@ public class Joysticks extends Controls {
 	private TalonSRX grabberLeft;
 	private TalonSRX grabberRight;
 	private Solenoid grabberSolenoid;
+	private Elevator elevator;
 
 	private int YAxis = 1;
 
@@ -33,7 +35,7 @@ public class Joysticks extends Controls {
 	private double maxPower = 1.0;
 
 	public Joysticks(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight,
-			Solenoid grabberSolenoid) {// , Solenoid solenoid) {
+			Solenoid grabberSolenoid, Elevator elevator) {// , Solenoid solenoid) {
 		super(drive, pdp);// , //solenoid);
 		leftStick = new Joystick(HWR.LEFT_JOYSTICK);
 		rightStick = new Joystick(HWR.RIGHT_JOYSTICK);
@@ -42,6 +44,7 @@ public class Joysticks extends Controls {
 		this.grabberRight = grabberRight;
 		this.grabberLeft = grabberLeft;
 		this.grabberSolenoid = grabberSolenoid;
+		this.elevator = elevator;
 
 	}
 
@@ -119,6 +122,13 @@ public class Joysticks extends Controls {
 			grabberLeft.set(0);
 			grabberRight.set(0);
 		}
+	}
+	
+	public void elevator() {
+		if (auxStick.getRawButton(2)) //pick actual button
+			elevator.spinUp(.5);
+		else if (auxStick.getRawButton(3))
+			elevator.spinDown(.5);
 	}
 
 	@Override

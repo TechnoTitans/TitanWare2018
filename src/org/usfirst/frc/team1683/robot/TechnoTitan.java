@@ -92,12 +92,12 @@ public class TechnoTitan extends IterativeRobot {
 		leftGroup.enableAntiDrift(left);
 		rightGroup.enableAntiDrift(right);
 
-		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false));
+		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
 
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);
+		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 

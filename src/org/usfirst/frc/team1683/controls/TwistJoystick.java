@@ -115,4 +115,10 @@ public class TwistJoystick extends Controls {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void elevator() {
+		// TODO Auto-generated method stub
+		
+	}
 }
