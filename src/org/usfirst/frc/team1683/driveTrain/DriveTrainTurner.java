@@ -74,8 +74,10 @@ public class DriveTrainTurner {
 			// If angle > 0, then it should turn counterclockwise so the "right"
 			// parameter should be false
 			driveTrain.turnInPlace(angle < 0, speed);
+			SmartDashboard.putNumber("prev angle", heading);
 		} else {
 			driveTrain.set(0);
+			driveTrain.stop();
 			done = true;
 		}
 	}

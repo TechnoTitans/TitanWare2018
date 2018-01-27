@@ -107,22 +107,23 @@ public class TechnoTitan extends IterativeRobot {
 		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);
 		CameraServer.getInstance().startAutomaticCapture();
 		
+		turnJoystick = new Joystick(1);
 	}
 
 	@Override
 	public void autonomousInit() {
 		drive.stop();
-		autoSwitch.getSelected();
-//		turner = new DriveTrainTurner(drive, 180, 0.3);
-//		initAngle = gyro.getRawAngle();
-//		SmartDashboard.putNumber("init angle", initAngle);
+		//autoSwitch.getSelected();
+		turner = new DriveTrainTurner(drive, 90, 0.2);
+		initAngle = gyro.getRawAngle();
+		SmartDashboard.putNumber("init angle", initAngle);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		autoSwitch.run();
-//		turner.run();
-//		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
+		//autoSwitch.run();
+		turner.run();
+		SmartDashboard.putNumber("angle", gyro.getRawAngle() - initAngle);
 	}
 
 	@Override

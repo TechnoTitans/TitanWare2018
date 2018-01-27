@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class Gyro extends AnalogGyro{
 
-	public static double GYRO_SENSITIVITY = 0.00601; /// TODO find real value
+	public static double GYRO_SENSITIVITY = 0.00665; /// TODO find real value
 
 	public Gyro(int channel) {
 		super(channel);
 		super.initGyro();
 		super.reset();
-		// super.setSensitivity(GYRO_SENSITIVITY);
+		super.setSensitivity(GYRO_SENSITIVITY);
 	}
 
 	@Override
