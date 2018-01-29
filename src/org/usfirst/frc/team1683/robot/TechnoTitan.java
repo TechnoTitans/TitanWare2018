@@ -19,6 +19,8 @@ import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -67,6 +69,7 @@ public class TechnoTitan extends IterativeRobot {
 		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
+		// grabberRight.set(ControlMode.Follower, HWR.GRABBER_RIGHT); ?
 		
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
@@ -92,7 +95,11 @@ public class TechnoTitan extends IterativeRobot {
 		leftGroup.enableAntiDrift(left);
 		rightGroup.enableAntiDrift(right);
 
-		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
+		TalonSRX elevatorFast = new TalonSRX(HWR.ELEVATOR_FAST, false);
+		TalonSRX elevatorSlow = new TalonSRX(HWR.ELEVATOR_SLOW, false);
+		elevatorFast.setEncoder(new QuadEncoder(elevatorFast, 5)); // TODO Find actual wheel radius
+		elevator = new Elevator(elevatorFast, elevatorSlow, limitSwitch);
+		
 
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
@@ -124,6 +131,7 @@ public class TechnoTitan extends IterativeRobot {
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();
+		SmartDashboard.putBoolean("limit switch", limitSwitch.get());
 	}
 
 	@Override

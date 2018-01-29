@@ -125,10 +125,15 @@ public class Joysticks extends Controls {
 	}
 	
 	public void elevator() {
-		if (auxStick.getRawButton(2)) //pick actual button
-			elevator.spinUp(.5);
-		else if (auxStick.getRawButton(3))
-			elevator.spinDown(.5);
+//		if (auxStick.getRawButton(2)) //pick actual button
+//			elevator.spinUp(.5);
+//		else if (auxStick.getRawButton(3))
+//			elevator.spinDown(.5);
+		// The reason we should use the joystick itself for the elevator is that 
+		// finer control is needed (e.g. adjustments)
+		// whereas the grabber is either forward, backward,or stopped and find adjustment isn't as needed
+		// TODO confirm this/change
+		// elevator.spin(auxStick.getRawAxis(YAxis));
 	}
 
 	@Override

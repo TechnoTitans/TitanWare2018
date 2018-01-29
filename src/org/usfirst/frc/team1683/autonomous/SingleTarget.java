@@ -54,10 +54,23 @@ public class SingleTarget extends Autonomous {
 	}
 
 	public void run() {
-		if (!path.isDone()) {
-			path.run();
-		} else {
-			tankDrive.stop();
+		switch (presentState) {
+		case INIT_CASE:
+			init();
+			nextState = State.RUN_PATH;
+			break;
+		case RUN_PATH:
+			if (!path.isDone()) {
+				path.run();
+			} else {
+				tankDrive.stop();
+				nextState = State.LIFT_ELEVATOR;
+			}
+			break;
+		case LIFT_ELEVATOR:
+			break;
+		default:
+			break;
 		}
 	}
 }

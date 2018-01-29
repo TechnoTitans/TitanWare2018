@@ -6,8 +6,6 @@ import org.usfirst.frc.team1683.sensors.Encoder;
 import edu.wpi.first.wpilibj.Timer;
 
 public abstract class Autonomous {
-	public static final double GYRO_ANGLE_TOLERANCE = 15.0;
-
 	protected DriveTrain tankDrive;
 	protected Encoder leftEncoder;
 	protected Encoder rightEncoder;
@@ -27,7 +25,7 @@ public abstract class Autonomous {
 
 	// Different states the autonomous could take
 	public static enum State {
-		INIT_CASE, END_CASE, WAIT, DRIVE_FORWARD;
+		INIT_CASE, END_CASE, WAIT, DRIVE_FORWARD, RUN_PATH, LIFT_ELEVATOR, RELEASE_CUBE;
 	}
 
 	public boolean isAtEndCase() {
