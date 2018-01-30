@@ -18,8 +18,10 @@ public class Elevator {
 			elevatorMotor.brake();
 		else if (limitBottom.isPressed()) {
 			elevatorMotor.getEncoder().reset();
+		} 
+		else if(limitBottom.isPressed() && speed < 0)
 			elevatorMotor.brake();
-		} else
+		else
 			elevatorMotor.set(speed);
 	}
 }
