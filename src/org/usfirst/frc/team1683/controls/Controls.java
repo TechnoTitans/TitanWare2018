@@ -41,7 +41,6 @@ public abstract class Controls {
 	public void run() {
 		SmartDashboard.sendData("Drive Encoder Left", drive.getLeftEncoder().getDistance());
 		SmartDashboard.sendData("Drive Encoder Right", drive.getRightEncoder().getDistance());
-
 		// brownout protection
 		SmartDashboard.sendData("PDP Voltage", pdp.getVoltage());
 		SmartDashboard.sendData("PDP Current", pdp.getTotalCurrent());
@@ -55,11 +54,11 @@ public abstract class Controls {
 		}
 
 		// drive
-		SmartDashboard.sendData("Drive RPM Left", drive.getSpeed()[0]);
-		SmartDashboard.sendData("Drive RPM Right", drive.getSpeed()[1]);
-
-		double lSpeed = leftFilter.filterInput(Math.pow(drivePower()[0], 3));
-		double rSpeed = rightFilter.filterInput(Math.pow(drivePower()[1], 3));
+		double[] speeds = drivePower();
+		double lSpeed = leftFilter.filterInput(Math.pow(speeds[0], 3));
+		double rSpeed = rightFilter.filterInput(Math.pow(speeds[1], 3));
+		if (lSpeed != 0) SmartDashboard.putNumber("Drive RPM left ratio", drive.getLeftEncoder().getSpeed() / lSpeed);
+		if (rSpeed != 0) SmartDashboard.putNumber("Drive RPM right ratio", drive.getRightEncoder().getSpeed() / rSpeed);
 		drive.driveMode(lSpeed, rSpeed);
 
 		// Flywheel

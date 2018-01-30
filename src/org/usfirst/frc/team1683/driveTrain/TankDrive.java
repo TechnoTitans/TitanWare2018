@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1683.driveTrain;
 
-import org.usfirst.frc.team1683.motor.MotorGroup;
+import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.sensors.Encoder;
 import org.usfirst.frc.team1683.sensors.Gyro;
 
@@ -9,18 +9,24 @@ import org.usfirst.frc.team1683.sensors.Gyro;
  */
 public class TankDrive implements DriveTrain {
 
-	private MotorGroup left;
-	private MotorGroup right;
+	private TalonSRX left;
+	private TalonSRX right;
 	private Gyro gyro;
 
-	public TankDrive(MotorGroup left, MotorGroup right) {
-		this.left = left;
-		this.right = right;
+	public TankDrive(TalonSRX leftETalonSRX, TalonSRX rightETalonSRX) {
+		this.left = leftETalonSRX;
+		this.right = rightETalonSRX;
 	}
 
-	public TankDrive(MotorGroup left, MotorGroup right, Gyro gyro) {
-		this.left = left;
-		this.right = right;
+	/**
+	 * Creates a tank drive
+	 * @param leftETalonSRX The main talon on the left (with encoder)
+	 * @param rightETalonSRX The main talon on the right (with encoder)
+	 * @param gyro
+	 */
+	public TankDrive(TalonSRX leftETalonSRX, TalonSRX rightETalonSRX, Gyro gyro) {
+		this.left = leftETalonSRX;
+		this.right = rightETalonSRX;
 		this.gyro = gyro;
 		// this.gyro.reset();
 	}
@@ -92,25 +98,25 @@ public class TankDrive implements DriveTrain {
 	}
 
 	@Override
-	public MotorGroup getLeftGroup() {
+	public TalonSRX getLeft() {
 		return left;
 	}
 
 	@Override
-	public MotorGroup getRightGroup() {
+	public TalonSRX getRight() {
 		return right;
 	}
 
 	@Override
 	public void enableBrownoutProtection() {
-		left.enableBrownoutProtection();
-		right.enableBrownoutProtection();
+//		left.enableBrownoutProtection();
+//		right.enableBrownoutProtection();
 	}
 
 	@Override
 	public void disableBrownoutProtection() {
-		left.disableBrownoutProtection();
-		right.disableBrownoutProtection();
+//		left.disableBrownoutProtection();
+//		right.disableBrownoutProtection();
 	}
 
 	// public void enableAntiDrift() {

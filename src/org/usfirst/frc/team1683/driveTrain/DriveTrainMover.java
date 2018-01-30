@@ -4,49 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team1683.motor.Motor;
-import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.MotorMover;
+import org.usfirst.frc.team1683.motor.TalonSRX;
 
 /**
  * Mover for robot to move for a set distance in a line
  */
 public class DriveTrainMover {
-	private List<MotorMover> motorMovers = new ArrayList<MotorMover>();
-	private double speed, distance;
+	private MotorMover leftMover, rightMover;
 
 	public DriveTrainMover(DriveTrain driveTrain, double distance, double speed) {
-		this.distance = distance;
-		this.speed = speed;
-		MotorGroup left = driveTrain.getLeftGroup(), right = driveTrain.getRightGroup();
-		addMotorGroup(left);
-		addMotorGroup(right);
+		this(driveTrain, distance, distance, speed, speed);
 	}
 
 	public DriveTrainMover(DriveTrain driveTrain, double leftDistance, double rightDistance, double leftSpeed, double rightSpeed) {
-		MotorGroup left = driveTrain.getLeftGroup(), right = driveTrain.getRightGroup();
-		addMotorGroup(left, leftDistance, leftSpeed);
-		addMotorGroup(right, rightDistance, rightSpeed);
+		TalonSRX left = driveTrain.getLeft(),
+				right = driveTrain.getRight();
+		leftMover = new MotorMover(left, leftDistance, leftSpeed, left.getEncoder());
+		rightMover = new MotorMover(right, rightDistance, rightSpeed, right.getEncoder());
 	}
 
-	private void addMotorGroup(MotorGroup group) {
-		for (Motor m : group) {
-			motorMovers.add(new MotorMover(m, distance, speed, group.getEncoder(), group.getAntiDrift()));
-		}
-	}
+//	private void addMotorGroup(MotorGroup group) {
+//		for (Motor m : group) {
+//			motorMovers.add(new MotorMover(m, distance, speed, group.getEncoder(), group.getAntiDrift()));
+//		}
+//	}
 	
-	private void addMotorGroup(MotorGroup group, double moveDistance, double moveSpeed) {
-		for (Motor m : group) {
-			motorMovers.add(new MotorMover(m, moveDistance, moveSpeed, group.getEncoder()));
-		}
-	}
+//	private void addMotorGroup(MotorGroup group, double moveDistance, double moveSpeed) {
+//		for (Motor m : group) {
+//			motorMovers.add(new MotorMover(m, moveDistance, moveSpeed, group.getEncoder()));
+//		}
+//	}
 
 	/**
 	 * Runs an iteration of all the motor movers
 	 */
 	public void runIteration() {
-		for (MotorMover motorMover : motorMovers) {
-			motorMover.runIteration();
-		}
+		leftMover.runIteration();
+		rightMover.runIteration();
 	}
 
 	/**
@@ -56,22 +51,14 @@ public class DriveTrainMover {
 	 * @return True if all motor movers are finished, false otherwise
 	 */
 	public boolean areAllFinished() {
-		for (MotorMover motorMover : motorMovers) {
-			if (motorMover.distanceLeft() > 0)
-				return false;
-		}
-		return true;
+		return leftMover.distanceLeft() <= 0 && rightMover.distanceLeft() <= 0;
 	}
 
 	/**
 	 * @return True if any (even one) motors are finished, false otherwise
 	 */
 	public boolean areAnyFinished() {
-		for (MotorMover motorMover : motorMovers) {
-			if (motorMover.distanceLeft() <= 0)
-				return true;
-		}
-		return false;
+		return leftMover.distanceLeft() <= 0 || rightMover.distanceLeft() <= 0;
 	}
 
 	/**
@@ -81,10 +68,8 @@ public class DriveTrainMover {
 	 * @return The average distance that all motor movers have traveled
 	 */
 	public double getAverageDistanceLeft() {
-		double total = 0;
-		for (MotorMover motorMover : motorMovers) {
-			total += Math.max(0, motorMover.distanceLeft());
-		}
-		return total / motorMovers.size();
+		double leftDist = Math.max(0, leftMover.distanceLeft());
+		double rightDist = Math.max(0, rightMover.distanceLeft());
+		return (leftDist + rightDist) / 2.0;
 	}
 }

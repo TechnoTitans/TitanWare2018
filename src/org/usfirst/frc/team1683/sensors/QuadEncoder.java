@@ -41,7 +41,7 @@ public class QuadEncoder implements Encoder {
 	// 4096 encoder counts * 100 milliseconds
 	@Override
 	public double getSpeed() {
-		return (talonSRX.getSelectedSensorVelocity(0) * 60) / (4096 * 0.1);
+		return (talonSRX.getSelectedSensorVelocity(0) * 60) / (PULSES_PER_ROTATION * 0.1);
 	}
 
 	@Override

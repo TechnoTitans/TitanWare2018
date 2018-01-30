@@ -5,6 +5,8 @@ import org.usfirst.frc.team1683.sensors.Encoder;
 public interface Motor {
 
 	public void set(double speed);
+	
+	public void setSpeedRPM(double rpm);
 
 	public double getPercentSpeed();
 	
