@@ -14,15 +14,14 @@ public class DriveTrainMover {
 	private MotorMover leftMover, rightMover;
 
 	public DriveTrainMover(DriveTrain driveTrain, double distance, double speed) {
-		TalonSRX left = driveTrain.getLeft(),
-				right = driveTrain.getRight();
-		leftMover = new MotorMover(left, distance, speed, left.getEncoder());
+		this(driveTrain, distance, distance, speed, speed);
 	}
 
 	public DriveTrainMover(DriveTrain driveTrain, double leftDistance, double rightDistance, double leftSpeed, double rightSpeed) {
 		TalonSRX left = driveTrain.getLeft(),
 				right = driveTrain.getRight();
 		leftMover = new MotorMover(left, leftDistance, leftSpeed, left.getEncoder());
+		rightMover = new MotorMover(right, rightDistance, rightSpeed, right.getEncoder());
 	}
 
 //	private void addMotorGroup(MotorGroup group) {
