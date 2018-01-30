@@ -61,8 +61,8 @@ public class PIDLoop extends PIDSubsystem {
 	private void runDrive(double output) {
 		if (!disabled) {
 			if (drive != null) {
-				drive.getLeftGroup().set(speed * (1 - output));
-				drive.getRightGroup().set(speed * (1 + output));
+				drive.getLeft().set(speed * (1 - output));
+				drive.getRight().set(speed * (1 + output));
 			} else if (talon != null) {
 				talon.set(output);
 			}

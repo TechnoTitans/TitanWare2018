@@ -44,7 +44,12 @@ public class MotorGroup extends ArrayList<Motor> {
 		}
 		return motors;
 	}
-
+	
+	public void setRPM(double rpm) {
+		for (Motor motor : this) {
+			motor.setSpeedRPM(rpm);
+		}
+	}
 	/**
 	 * Constructor -- just a list of motors
 	 *

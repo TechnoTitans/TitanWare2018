@@ -50,9 +50,10 @@ public class TechnoTitan extends IterativeRobot {
 	AutonomousSwitcher autoSwitch;
 	LimitSwitch limitSwitch;
 	Gyro gyro;
-
-	MotorGroup leftGroup;
-	MotorGroup rightGroup;
+//
+//	MotorGroup leftGroup;
+//	MotorGroup rightGroup;
+	TalonSRX leftETalonSRX, rightETalonSRX;
 	PowerDistributionPanel pdp;
 
 	Elevator elevator;
@@ -80,17 +81,27 @@ public class TechnoTitan extends IterativeRobot {
 
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
-		TalonSRX leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
-		TalonSRX rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
-		leftGroup = new MotorGroup(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS), leftETalonSRX,
-				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
-				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE));
-		rightGroup = new MotorGroup(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS), rightETalonSRX,
-				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_BACK, RIGHT_REVERSE),
-				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE));
-		drive = new TankDrive(leftGroup, rightGroup, gyro);
-		leftGroup.enableAntiDrift(left);
-		rightGroup.enableAntiDrift(right);
+		leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
+		rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
+		leftETalonSRX.setEncoder(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS));
+		rightETalonSRX.setEncoder(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS));
+		TalonSRX leftFollow1 = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE),
+				 leftFollow2 = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
+				 rightFollow1 = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE),
+				 rightFollow2 = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_BACK, RIGHT_REVERSE);
+		leftFollow1.follow(leftETalonSRX);
+		leftFollow2.follow(leftETalonSRX);
+		rightFollow1.follow(rightETalonSRX);
+		rightFollow2.follow(rightETalonSRX);
+//		leftGroup = new MotorGroup(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS), leftETalonSRX,
+//				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
+//				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE));
+//		rightGroup = new MotorGroup(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS), rightETalonSRX,
+//				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_BACK, RIGHT_REVERSE),
+//				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE));
+		drive = new TankDrive(leftETalonSRX, rightETalonSRX, gyro);
+		//leftGroup.enableAntiDrift(left);
+		//rightGroup.enableAntiDrift(right);
 
 		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
 

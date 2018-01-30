@@ -1,8 +1,10 @@
 package org.usfirst.frc.team1683.driveTrain;
 
 import org.usfirst.frc.team1683.motor.MotorGroup;
+import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.sensors.Encoder;
 import org.usfirst.frc.team1683.sensors.Gyro;
+
 
 public interface DriveTrain {
 
@@ -18,9 +20,9 @@ public interface DriveTrain {
 
 	public Encoder getRightEncoder();
 
-	public MotorGroup getLeftGroup();
+	public TalonSRX getLeft();
 
-	public MotorGroup getRightGroup();
+	public TalonSRX getRight();
 
 	public void driveMode(double leftSpeed, double rightSpeed);
 

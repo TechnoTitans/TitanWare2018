@@ -148,6 +148,10 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	public void stop() {
 		set(0);
 	}
+	
+	public void follow(TalonSRX other) {
+		this.set(ControlMode.Follower, other.getChannel());
+	}
 
 
 	public void setupCurrentLimiting() {
