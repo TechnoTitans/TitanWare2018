@@ -10,7 +10,6 @@ import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
-import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.scoring.Elevator;

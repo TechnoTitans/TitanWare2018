@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1683.driveTrain;
 
-import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.sensors.Encoder;
 import org.usfirst.frc.team1683.sensors.Gyro;

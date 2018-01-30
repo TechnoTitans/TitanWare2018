@@ -124,7 +124,7 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	}
 	
 	public void setSpeedRPM(double speed) {
-		double speedEncoderTicks = speed * 4096 / 600;
+		double speedEncoderTicks = speed * 4096. / 600.;
 		super.set(ControlMode.Velocity, speedEncoderTicks);
 	}
 	
