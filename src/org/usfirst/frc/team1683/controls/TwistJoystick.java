@@ -1,11 +1,9 @@
 package org.usfirst.frc.team1683.controls;
 
 import org.usfirst.frc.team1683.constants.HWR;
-import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 /**
  * Handles all joystick inputs
@@ -15,6 +13,7 @@ public class TwistJoystick extends Controls {
 	private boolean[][] joystickCheckToggle = new boolean[3][11];
 
 	private Joystick rightStick;
+	private Joystick auxStick;
 
 	private int YAxis = 1;
 
@@ -23,31 +22,28 @@ public class TwistJoystick extends Controls {
 
 	private double maxPower = 1.0;
 
-	public TwistJoystick(DriveTrain drive, PowerDistributionPanel pdp) {//, Solenoid solenoid) {
-		super(drive, pdp);//, solenoid);
+	public TwistJoystick() {
+		super();
 		rightStick = new Joystick(HWR.RIGHT_JOYSTICK);
+		auxStick = new Joystick(HWR.AUX_JOYSTICK);
 	}
 
 	public double[] drivePower() {
 		lSpeed = -maxPower * rightStick.getRawAxis(YAxis);
 		rSpeed = -maxPower * rightStick.getRawAxis(YAxis);
-		
+
 		SmartDashboard.sendData("Controls LSpeed", lSpeed);
 		SmartDashboard.sendData("Controls RSpeed", rSpeed);
 
 		lSpeed += 0.7 * rightStick.getTwist();
 		rSpeed -= 0.7 * rightStick.getTwist();
-		
+
 		SmartDashboard.sendData("Twist LSpeed", 0.6 * rightStick.getTwist());
 		SmartDashboard.sendData("Twist RSpeed", -0.6 * rightStick.getTwist());
 
 		lSpeed *= 0.9;
 		rSpeed *= 0.9;
-		double error = 0;
-		if(super.driveRPM()[1] != 0 && rSpeed != 0)
-			error = 0.3 * (lSpeed / rSpeed - super.driveRPM()[0]/super.driveRPM()[1]);
-		SmartDashboard.sendData("ErrorTwist", error);
-		
+
 		lSpeed = normalize(lSpeed);
 		rSpeed = normalize(rSpeed);
 
@@ -55,19 +51,11 @@ public class TwistJoystick extends Controls {
 			maxPower = Controls.MAX_JOYSTICK_SPEED;
 		else if (rightStick.getRawButton(HWR.SECOND_POWER))
 			maxPower = Controls.SECOND_JOYSTICK_SPEED;
-		
+
 		SmartDashboard.sendData("Twist LSpeed1", lSpeed);
 		SmartDashboard.sendData("Twist RSpeed1", rSpeed);
 
 		return new double[] { lSpeed, rSpeed };
-	}
-	
-	public boolean solenoidToggle() {
-		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
-		if (findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID)) {
-			return true;
-		}
-		return false;
 	}
 
 	public double normalize(double input) {
@@ -112,14 +100,31 @@ public class TwistJoystick extends Controls {
 	}
 
 	@Override
-	public void flyWheel() {
-		// TODO Auto-generated method stub
-		
+	public double flyWheel() {
+		if (auxStick.getRawButton(2)) { // TODO
+			return -1;
+		} else if (auxStick.getRawButton(3)) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	@Override
-	public void pistonWheel() {
-		// TODO Auto-generated method stub
-		
+	public double elevator() {
+		if (auxStick.getRawButton(2)) // pick actual button
+			return Controls.ELEVATOR_SPEED;
+		else if (auxStick.getRawButton(3))
+			return -Controls.ELEVATOR_SPEED;
+		return 0;
+	}
+
+	@Override
+	public boolean solenoidToggle() {
+		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
+		if (findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID)) {
+			return true;
+		}
+		return false;
 	}
 }
