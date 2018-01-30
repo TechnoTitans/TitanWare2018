@@ -1,10 +1,8 @@
 package org.usfirst.frc.team1683.controls;
 
-import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -20,8 +18,8 @@ public class XBox extends Controls {
 
 	private XboxController controller;
 
-	public XBox(DriveTrain drive, PowerDistributionPanel pdp) {//, Solenoid solenoid) {
-		super(drive, pdp);//, solenoid);
+	public XBox() {
+		super();
 		controller = new XboxController(0); // TODO
 	}
 
@@ -35,7 +33,7 @@ public class XBox extends Controls {
 		}
 		return new double[] { lSpeed, rSpeed };
 	}
-	
+
 	public boolean solenoidToggle() {
 		SmartDashboard.sendData("FIRE Solenoid", controller.getBButtonPressed());
 		if (controller.getBButtonPressed()) {
@@ -45,20 +43,14 @@ public class XBox extends Controls {
 	}
 
 	@Override
-	public void flyWheel() {
+	public double flyWheel() {
 		// TODO Auto-generated method stub
-	
+		return 0;
 	}
 
 	@Override
-	public void pistonWheel() {
+	public double elevator() {
 		// TODO Auto-generated method stub
-
-	}
-	
-	@Override
-	public void elevator() {
-		// TODO Auto-generated method stub
-
+		return 0;
 	}
 }

@@ -6,7 +6,6 @@ import org.usfirst.frc.team1683.sensors.LimitSwitch;
 public class Elevator {
 
 	private TalonSRX elevatorMotor;
-	private final double liftSpeed = 0.7;
 	private LimitSwitch limitBottom;
 
 	public Elevator(TalonSRX motor, LimitSwitch limitBottom) {
@@ -14,24 +13,15 @@ public class Elevator {
 		this.limitBottom = limitBottom;
 	}
 
-	public void spinUp(double speed) {
-		if (elevatorMotor.getEncoder().getDistance() >= 60) //find actual value
+	public void spin(double speed) {
+		if (elevatorMotor.getEncoder().getDistance() >= 60) // find actual value
 			elevatorMotor.brake();
-		else
-			elevatorMotor.set(liftSpeed);
-	}
-
-	public void spinDown(double speed) {
-		if (limitBottom.isPressed()) {
+		else if (limitBottom.isPressed()) {
 			elevatorMotor.getEncoder().reset();
+		} 
+		else if(limitBottom.isPressed() && speed < 0)
 			elevatorMotor.brake();
-		}
 		else
-			elevatorMotor.set(-liftSpeed);
+			elevatorMotor.set(speed);
 	}
-
-	public TalonSRX getMotor() {
-		return elevatorMotor;
-	}
-
 }

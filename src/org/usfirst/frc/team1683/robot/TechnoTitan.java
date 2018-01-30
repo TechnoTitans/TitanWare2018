@@ -1,11 +1,10 @@
 
-
-
 package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
+import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
@@ -34,9 +33,9 @@ public class TechnoTitan extends IterativeRobot {
 	public static final double WHEEL_RADIUS = 2.0356;
 
 	TankDrive drive;
-	Joysticks controls;
+	Controls controls;
 	Solenoid grabberSolenoid;
-	
+
 	TalonSRX grabberLeft;
 	TalonSRX grabberRight;
 
@@ -57,24 +56,23 @@ public class TechnoTitan extends IterativeRobot {
 
 	Elevator elevator;
 
-	Solenoid solenoid;
+	// Solenoid solenoid;
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
 
 	@Override
 	public void robotInit() {
-		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
-		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
-		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
-		
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
 
-		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
-		accel = new BuiltInAccel();
+		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
+		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
+		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
 
+		accel = new BuiltInAccel();
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
 
@@ -102,12 +100,12 @@ public class TechnoTitan extends IterativeRobot {
 		//leftGroup.enableAntiDrift(left);
 		//rightGroup.enableAntiDrift(right);
 
-		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
-
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
+		controls = new Joysticks();
+		controls.init(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
+
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 
