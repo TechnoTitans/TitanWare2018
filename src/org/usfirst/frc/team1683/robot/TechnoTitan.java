@@ -7,6 +7,9 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
+import org.usfirst.frc.team1683.driveTrain.Path;
+import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
@@ -60,6 +63,8 @@ public class TechnoTitan extends IterativeRobot {
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
+	
+	Path path;
 
 	@Override
 	public void robotInit() {
@@ -112,12 +117,14 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		drive.stop();
-		autoSwitch.getSelected();
+//		autoSwitch.getSelected();
+		path = new Path(drive, new PathPoint[] {new PathPoint(0, 12, false), new PathPoint(12, 12, false)}, 0.2, 0.2);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		autoSwitch.run();
+//		autoSwitch.run();
+		path.run();
 	}
 
 	@Override

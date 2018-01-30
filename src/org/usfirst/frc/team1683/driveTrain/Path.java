@@ -91,6 +91,7 @@ public class Path {
 
 	public void run() {
 		if (isDone()) {
+			driveTrain.stop();
 			return;
 		}
 		if (waitTimer == null) {
@@ -98,18 +99,18 @@ public class Path {
 			waitTimer.reset();
 			waitTimer.start();
 		}
-		if (isTurning && waitTimer.get() > 0.2) {
+		if (isTurning && waitTimer.get() > 0.1) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
 				isTurning = false;
 				currentHeading = path[pathIndex].getAngle();
 				driveTrain.stop();
+				waitTimer.reset();
 			} else {
 				turner.run();
-				waitTimer.reset();
 				SmartDashboard.putNumber("degrees left", turner.angleLeft());
 			}
-		} else if (waitTimer.get() > 0.2){
+		} else if (waitTimer.get() > 0.1){
 			mover.runIteration();
 			SmartDashboard.putNumber("distance left", mover.getAverageDistanceLeft());
 			if (isMoverDone()) {
@@ -118,6 +119,8 @@ public class Path {
 					turner = new DriveTrainTurner(driveTrain, path[pathIndex].getAngle() - currentHeading,
 							Math.abs(turnSpeed));
 					isTurning = true;
+					driveTrain.stop();
+					waitTimer.reset();
 				}
 			}
 		}

@@ -14,14 +14,14 @@ public class Elevator {
 	}
 
 	public void spin(double speed) {
-		if (elevatorMotor.getEncoder().getDistance() >= 60) // find actual value
-			elevatorMotor.brake();
-		else if (limitBottom.isPressed()) {
-			elevatorMotor.getEncoder().reset();
-		} 
-		else if(limitBottom.isPressed() && speed < 0)
-			elevatorMotor.brake();
-		else
-			elevatorMotor.set(speed);
+//		if (elevatorMotor.getEncoder().getDistance() >= 60) // find actual value
+//			elevatorMotor.brake();
+//		else if (limitBottom.isPressed()) {
+//			elevatorMotor.getEncoder().reset();
+//		} 
+//		else if(limitBottom.isPressed() && speed < 0)
+//			elevatorMotor.brake();
+//		else
+//			elevatorMotor.set(speed);
 	}
 }
