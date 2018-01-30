@@ -6,7 +6,7 @@ package org.usfirst.frc.team1683.robot;
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
-import org.usfirst.frc.team1683.controls.Joysticks;
+import org.usfirst.frc.team1683.controls.TwistJoystick;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
@@ -35,8 +35,8 @@ public class TechnoTitan extends IterativeRobot {
 	public static final double WHEEL_RADIUS = 2.0356;
 
 	TankDrive drive;
-	Joysticks controls;
-	Solenoid grabberSolenoid;
+	TwistJoystick controls;
+//	Solenoid grabberSolenoid;
 	
 	TalonSRX grabberLeft;
 	TalonSRX grabberRight;
@@ -57,14 +57,14 @@ public class TechnoTitan extends IterativeRobot {
 
 	Elevator elevator;
 
-	Solenoid solenoid;
+//	Solenoid solenoid;
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
 
 	@Override
 	public void robotInit() {
-		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
+//		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
@@ -72,7 +72,7 @@ public class TechnoTitan extends IterativeRobot {
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
 
-		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+//		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		accel = new BuiltInAccel();
 
 		gyro = new Gyro(HWR.GYRO);
@@ -97,7 +97,7 @@ public class TechnoTitan extends IterativeRobot {
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid);
+		controls = new TwistJoystick(drive, pdp);
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 

@@ -35,22 +35,29 @@ public class TwistJoystick extends Controls {
 		SmartDashboard.sendData("Controls LSpeed", lSpeed);
 		SmartDashboard.sendData("Controls RSpeed", rSpeed);
 
-		lSpeed += 0.4 * rightStick.getTwist();
-		rSpeed -= 0.4 * rightStick.getTwist();
+		lSpeed += 0.7 * rightStick.getTwist();
+		rSpeed -= 0.7 * rightStick.getTwist();
 		
-		SmartDashboard.sendData("Twist LSpeed", 0.4 * rightStick.getTwist());
-		SmartDashboard.sendData("Twist RSpeed", -0.4 * rightStick.getTwist());
+		SmartDashboard.sendData("Twist LSpeed", 0.6 * rightStick.getTwist());
+		SmartDashboard.sendData("Twist RSpeed", -0.6 * rightStick.getTwist());
 
+		lSpeed *= 0.9;
+		rSpeed *= 0.9;
+		double error = 0;
+		if(super.driveRPM()[1] != 0 && rSpeed != 0)
+			error = 0.3 * (lSpeed / rSpeed - super.driveRPM()[0]/super.driveRPM()[1]);
+		SmartDashboard.sendData("ErrorTwist", error);
+		
 		lSpeed = normalize(lSpeed);
 		rSpeed = normalize(rSpeed);
-		
-		SmartDashboard.sendData("LLSpeed", lSpeed);
-		SmartDashboard.sendData("RRSpeed", rSpeed);
 
 		if (rightStick.getRawButton(HWR.FULL_POWER))
 			maxPower = Controls.MAX_JOYSTICK_SPEED;
 		else if (rightStick.getRawButton(HWR.SECOND_POWER))
 			maxPower = Controls.SECOND_JOYSTICK_SPEED;
+		
+		SmartDashboard.sendData("Twist LSpeed1", lSpeed);
+		SmartDashboard.sendData("Twist RSpeed1", rSpeed);
 
 		return new double[] { lSpeed, rSpeed };
 	}

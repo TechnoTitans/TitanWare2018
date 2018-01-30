@@ -60,6 +60,10 @@ public abstract class Controls {
 //		}
 	}
 	
+	public double[] driveRPM() {
+		return drive.getSpeed();
+	}
+	
 	public abstract double[] drivePower();
 	
 	public abstract boolean solenoidToggle();
