@@ -19,6 +19,8 @@ import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -62,8 +64,6 @@ public class TechnoTitan extends IterativeRobot {
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
-	
-	Path path;
 
 	@Override
 	public void robotInit() {
@@ -74,9 +74,10 @@ public class TechnoTitan extends IterativeRobot {
 //		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
-		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
+		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR_SLOW, false), new TalonSRX(HWR.ELEVATOR_FAST, false), limitSwitch);
 
 		accel = new BuiltInAccel();
+
 		gyro = new Gyro(HWR.GYRO);
 		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
 
@@ -94,15 +95,7 @@ public class TechnoTitan extends IterativeRobot {
 		leftFollow2.follow(leftETalonSRX);
 		rightFollow1.follow(rightETalonSRX);
 		rightFollow2.follow(rightETalonSRX);
-//		leftGroup = new MotorGroup(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS), leftETalonSRX,
-//				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
-//				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE));
-//		rightGroup = new MotorGroup(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS), rightETalonSRX,
-//				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_BACK, RIGHT_REVERSE),
-//				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE));
-		drive = new TankDrive(leftETalonSRX, rightETalonSRX, gyro);
-		//leftGroup.enableAntiDrift(left);
-		//rightGroup.enableAntiDrift(right);
+
 
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
@@ -116,14 +109,12 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		drive.stop();
-//		autoSwitch.getSelected();
-		path = new Path(drive, new PathPoint[] {new PathPoint(0, 12, false), new PathPoint(12, 12, false)}, 0.2, 0.2);
+		autoSwitch.getSelected();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-//		autoSwitch.run();
-		path.run();
+		autoSwitch.run();
 	}
 
 	@Override
@@ -138,6 +129,7 @@ public class TechnoTitan extends IterativeRobot {
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();
+		SmartDashboard.putBoolean("limit switch", limitSwitch.get());
 	}
 
 	@Override

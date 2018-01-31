@@ -1,9 +1,14 @@
 package org.usfirst.frc.team1683.controls;
 
 import org.usfirst.frc.team1683.constants.HWR;
+import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
+import org.usfirst.frc.team1683.motor.TalonSRX;
+import org.usfirst.frc.team1683.pneumatics.Solenoid;
+import org.usfirst.frc.team1683.scoring.Elevator;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 /**
  * Handles all joystick inputs
@@ -62,11 +67,12 @@ public class Joysticks extends Controls {
 
 	@Override
 	public double elevator() {
-		if (auxStick.getRawButton(HWR.ELEVATOR_UP)) // pick actual button
-			return Controls.ELEVATOR_SPEED;
-		else if (auxStick.getRawButton(HWR.ELEVATOR_DOWN))
-			return -Controls.ELEVATOR_SPEED;
-		return 0;
+//		if (auxStick.getRawButton(2)) // pick actual button
+//			return Controls.ELEVATOR_SPEED;
+//		else if (auxStick.getRawButton(3))
+//			return -Controls.ELEVATOR_SPEED;
+//		return 0;
+		return auxStick.getRawAxis(YAxis);
 	}
 
 	@Override
