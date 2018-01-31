@@ -1,16 +1,17 @@
 
-
-
 package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
+import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
+import org.usfirst.frc.team1683.driveTrain.Path;
+import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
-import org.usfirst.frc.team1683.motor.MotorGroup;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.scoring.Elevator;
@@ -37,9 +38,9 @@ public class TechnoTitan extends IterativeRobot {
 	public static final double WHEEL_RADIUS = 2.0356;
 
 	TankDrive drive;
-	Joysticks controls;
+	Controls controls;
 	Solenoid grabberSolenoid;
-	
+
 	TalonSRX grabberLeft;
 	TalonSRX grabberRight;
 
@@ -52,30 +53,30 @@ public class TechnoTitan extends IterativeRobot {
 	AutonomousSwitcher autoSwitch;
 	LimitSwitch limitSwitch;
 	Gyro gyro;
-
-	MotorGroup leftGroup;
-	MotorGroup rightGroup;
+//
+//	MotorGroup leftGroup;
+//	MotorGroup rightGroup;
+	TalonSRX leftETalonSRX, rightETalonSRX;
 	PowerDistributionPanel pdp;
 
 	Elevator elevator;
 
-	Solenoid solenoid;
+	// Solenoid solenoid;
 	BuiltInAccel accel;
 
 	boolean teleopReady = false;
 
 	@Override
 	public void robotInit() {
-		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
-		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
-		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
-		// grabberRight.set(ControlMode.Follower, HWR.GRABBER_RIGHT); ?
-		
 		SmartDashboard.initFlashTimer();
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
 
-		solenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
+		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
+		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR_SLOW, false), new TalonSRX(HWR.ELEVATOR_FAST, false), limitSwitch);
+
 		accel = new BuiltInAccel();
 
 		gyro = new Gyro(HWR.GYRO);
@@ -83,28 +84,26 @@ public class TechnoTitan extends IterativeRobot {
 
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
-		TalonSRX leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
-		TalonSRX rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
-		leftGroup = new MotorGroup(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS), leftETalonSRX,
-				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
-				new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE));
-		rightGroup = new MotorGroup(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS), rightETalonSRX,
-				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_BACK, RIGHT_REVERSE),
-				new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE));
-		drive = new TankDrive(leftGroup, rightGroup, gyro);
-		leftGroup.enableAntiDrift(left);
-		rightGroup.enableAntiDrift(right);
+		leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
+		rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
+		leftETalonSRX.setEncoder(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS));
+		rightETalonSRX.setEncoder(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS));
+		TalonSRX leftFollow1 = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE),
+				 leftFollow2 = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
+				 rightFollow1 = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE),
+				 rightFollow2 = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_BACK, RIGHT_REVERSE);
+		leftFollow1.follow(leftETalonSRX);
+		leftFollow2.follow(leftETalonSRX);
+		rightFollow1.follow(rightETalonSRX);
+		rightFollow2.follow(rightETalonSRX);
 
-		TalonSRX elevatorFast = new TalonSRX(HWR.ELEVATOR_FAST, false);
-		TalonSRX elevatorSlow = new TalonSRX(HWR.ELEVATOR_SLOW, false);
-		elevatorFast.setEncoder(new QuadEncoder(elevatorFast, 5)); // TODO Find actual wheel radius
-		elevator = new Elevator(elevatorFast, elevatorSlow, limitSwitch);
-		
 
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
+		controls = new Joysticks();
+		controls.init(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
+
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 

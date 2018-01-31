@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1683.driveTrain;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -16,6 +17,7 @@ public class Path {
 	private double speed;
 	private double turnSpeed;
 	private boolean stopCondition;
+	private Timer waitTimer;
 
 	/**
 	 * Creates a new path object
@@ -89,19 +91,26 @@ public class Path {
 
 	public void run() {
 		if (isDone()) {
+			driveTrain.stop();
 			return;
 		}
-		if (isTurning) {
+		if (waitTimer == null) {
+			waitTimer = new Timer();
+			waitTimer.reset();
+			waitTimer.start();
+		}
+		if (isTurning && waitTimer.get() > 0.1) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
 				isTurning = false;
 				currentHeading = path[pathIndex].getAngle();
 				driveTrain.stop();
+				waitTimer.reset();
 			} else {
 				turner.run();
 				SmartDashboard.putNumber("degrees left", turner.angleLeft());
 			}
-		} else {
+		} else if (waitTimer.get() > 0.1){
 			mover.runIteration();
 			SmartDashboard.putNumber("distance left", mover.getAverageDistanceLeft());
 			if (isMoverDone()) {
@@ -110,6 +119,8 @@ public class Path {
 					turner = new DriveTrainTurner(driveTrain, path[pathIndex].getAngle() - currentHeading,
 							Math.abs(turnSpeed));
 					isTurning = true;
+					driveTrain.stop();
+					waitTimer.reset();
 				}
 			}
 		}
