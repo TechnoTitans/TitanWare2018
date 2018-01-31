@@ -10,8 +10,8 @@ public class HWR {
 	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_5;
 	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_4;
 	
-	public static final int ELEVATOR_SLOW = HWP.CAN_2;
-	public static final int ELEVATOR_FAST = HWP.CAN_1;
+	public static final int ELEVATOR_FOLLOW = HWP.CAN_2;
+	public static final int ELEVATOR_MAIN = HWP.CAN_1;
 
 	// Solenoids
 	public static final int PCM = HWP.CAN_15;
@@ -36,7 +36,8 @@ public class HWR {
 
 	// Sensors
 	public static final int GYRO = HWP.ANALOG_1;
-	public static final int LIMIT_SWITCH = HWP.DIO_0;
+	public static final int LIMIT_SWITCH_TOP = HWP.DIO_0;
+	public static final int LIMIT_SWITCH_BOTTOM = HWP.DIO_1;
 
 	// Joystick Buttons
 	public static final int FULL_POWER = HWP.BUTTON_11;
@@ -44,6 +45,5 @@ public class HWR {
 	public static final int OVERRIDE_TIMER = HWP.BUTTON_9;
 	
 	public static final int FIRE_SOLENOID = HWP.BUTTON_3;
-	public static final int ELEVATOR_UP = HWP.BUTTON_6;
-	public static final int ELEVATOR_DOWN = HWP.BUTTON_7;
+	public static final int OVERRIDE_LIMIT = HWP.BUTTON_9;
 }

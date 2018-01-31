@@ -7,19 +7,14 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
-import org.usfirst.frc.team1683.driveTrain.Path;
-import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -36,32 +31,30 @@ public class TechnoTitan extends IterativeRobot {
 	public static final boolean RIGHT_REVERSE = true;
 	public static final double WHEEL_RADIUS = 2.0356;
 
-	TankDrive drive;
-	Controls controls;
-//	Solenoid grabberSolenoid;
-
-	TalonSRX grabberLeft;
-	TalonSRX grabberRight;
+	Autonomous auto;
+	AutonomousSwitcher autoSwitch;
 
 	Timer waitTeleop;
 	Timer waitAuto;
-
-	CameraServer server;
-
-	Autonomous auto;
-	AutonomousSwitcher autoSwitch;
-	LimitSwitch limitSwitch;
-	Gyro gyro;
-//
-//	MotorGroup leftGroup;
-//	MotorGroup rightGroup;
-	TalonSRX leftETalonSRX, rightETalonSRX;
+	
+	LimitSwitch limitTop;
+	LimitSwitch limitBottom;
+	BuiltInAccel accel;
 	PowerDistributionPanel pdp;
+	Gyro gyro;
 
+	TalonSRX grabberLeft;
+	TalonSRX grabberRight;
+	
 	Elevator elevator;
 
-	// Solenoid solenoid;
-	BuiltInAccel accel;
+	TankDrive drive;
+	TalonSRX leftETalonSRX, rightETalonSRX;
+	Controls controls;
+	
+//	Solenoid grabberSolenoid;
+
+	CameraServer server;
 
 	boolean teleopReady = false;
 
@@ -71,15 +64,18 @@ public class TechnoTitan extends IterativeRobot {
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
 
+		accel = new BuiltInAccel();
+		gyro = new Gyro(HWR.GYRO);
+		limitTop = new LimitSwitch(HWR.LIMIT_SWITCH_TOP);
+		limitBottom = new LimitSwitch(HWR.LIMIT_SWITCH_BOTTOM);
+
 //		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
-		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR_SLOW, false), new TalonSRX(HWR.ELEVATOR_FAST, false), limitSwitch);
-
-		accel = new BuiltInAccel();
-
-		gyro = new Gyro(HWR.GYRO);
-		limitSwitch = new LimitSwitch(HWR.LIMIT_SWITCH);
+		
+		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, false);
+		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 5)); // TODO: find wheel radius
+		elevator = new Elevator(elevatorTalon, new TalonSRX(HWR.ELEVATOR_FOLLOW, false), limitTop, limitBottom);
 
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
@@ -96,6 +92,7 @@ public class TechnoTitan extends IterativeRobot {
 		rightFollow1.follow(rightETalonSRX);
 		rightFollow2.follow(rightETalonSRX);
 
+		drive = new TankDrive(leftETalonSRX, rightETalonSRX, gyro);
 
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
@@ -129,7 +126,6 @@ public class TechnoTitan extends IterativeRobot {
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();
-		SmartDashboard.putBoolean("limit switch", limitSwitch.get());
 	}
 
 	@Override

@@ -5,27 +5,33 @@ import org.usfirst.frc.team1683.sensors.LimitSwitch;
 
 public class Elevator {
 
-	private TalonSRX elevatorMotorFast, elevatorMotorSlow;
+	private TalonSRX elevatorMain;
 	private final double liftSpeedMax = 0.7, liftSpeedMin = 0.4;
+	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
+	
 	// We start raised
 	private final double MAX_DISTANCE = 60; // from when we start at the bottom TODO: find actual value
 	private final double START_DISTANCE = 30; // from when we start 55 in extended TODO: findd actual value
 	private final double SLOW_DOWN_DISTANCE = 20; // start slowing down with this many in left
 	private double distance = START_DISTANCE;
+	
+	private boolean override;
 
-	public Elevator(TalonSRX motorFast, TalonSRX motorSlow, LimitSwitch limitBottom) {
-		elevatorMotorFast = motorFast;
-		elevatorMotorFast = motorSlow;
+	public Elevator(TalonSRX motorMain, TalonSRX motorFollow, LimitSwitch limitTop, LimitSwitch limitBottom) {
+		elevatorMain = motorMain;
+		motorFollow.follow(elevatorMain);
+		
 		this.limitBottom = limitBottom;
+		this.limitTop = limitTop;
+		this.override = false;
 	}
 
 	public boolean spinUp() {
-		double distLeft = distance - Math.abs(elevatorMotorFast.getEncoder().getDistance());
+		double distLeft = distance - Math.abs(elevatorMain.getEncoder().getDistance());
 		if (distLeft <= 0) {
-			elevatorMotorFast.brake();
-			elevatorMotorSlow.brake();
-			elevatorMotorFast.getEncoder().reset();
+			elevatorMain.brake();
+			elevatorMain.getEncoder().reset();
 			return true;
 		}
 		else {
@@ -34,9 +40,15 @@ public class Elevator {
 		}
 	}
 	
+	public void overrideLimit(boolean override) {
+		this.override = override;
+	}
+	
 	public void spin(double speed) {
-		elevatorMotorFast.set(speed);
-		elevatorMotorSlow.set(speed);
+		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0)))
+			elevatorMain.brake();
+		else
+			elevatorMain.set(speed);
 	}
 	
 	/**
@@ -56,21 +68,20 @@ public class Elevator {
 
 	public boolean spinDown() {
 		if (limitBottom.isPressed()) {
-			elevatorMotorFast.getEncoder().reset();
-			elevatorMotorFast.brake();
-			elevatorMotorSlow.brake();
+			elevatorMain.getEncoder().reset();
+			elevatorMain.brake();
 			distance = MAX_DISTANCE; // we have hit the bottom so reset
 			return true;
 		}
 		else {
-			double distLeft = MAX_DISTANCE - Math.abs(elevatorMotorFast.getEncoder().getDistance());
+			double distLeft = MAX_DISTANCE - Math.abs(elevatorMain.getEncoder().getDistance());
 			spin(-getLiftSpeed(distLeft));
 			return false;
 		}
 	}
 
 	public TalonSRX getMotor() {
-		return elevatorMotorFast;
+		return elevatorMain;
 	}
 
 }

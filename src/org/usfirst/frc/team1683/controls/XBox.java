@@ -53,4 +53,10 @@ public class XBox extends Controls {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public boolean overrideElevatorLimit() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

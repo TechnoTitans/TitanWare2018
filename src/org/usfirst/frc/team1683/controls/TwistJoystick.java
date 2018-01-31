@@ -127,4 +127,10 @@ public class TwistJoystick extends Controls {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean overrideElevatorLimit() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

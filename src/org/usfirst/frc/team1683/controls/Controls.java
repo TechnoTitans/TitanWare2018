@@ -73,6 +73,7 @@ public abstract class Controls {
 
 		// Elevator
 		elevator.spin(elevator());
+		elevator.overrideLimit(overrideElevatorLimit());
 		// solenoids
 		// SmartDashboard.sendData("FIRE Solenoid", solenoidToggle());
 		// if (solenoidToggle()) {
@@ -89,4 +90,6 @@ public abstract class Controls {
 	public abstract double flyWheel();
 
 	public abstract double elevator();
+	
+	public abstract boolean overrideElevatorLimit();
 }
