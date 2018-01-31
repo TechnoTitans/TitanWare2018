@@ -62,9 +62,9 @@ public class Joysticks extends Controls {
 
 	@Override
 	public double elevator() {
-		if (auxStick.getRawButton(2)) // pick actual button
+		if (auxStick.getRawButton(HWR.ELEVATOR_UP)) // pick actual button
 			return Controls.ELEVATOR_SPEED;
-		else if (auxStick.getRawButton(3))
+		else if (auxStick.getRawButton(HWR.ELEVATOR_DOWN))
 			return -Controls.ELEVATOR_SPEED;
 		return 0;
 	}

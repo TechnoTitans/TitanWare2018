@@ -43,4 +43,6 @@ public class HWR {
 	public static final int OVERRIDE_TIMER = HWP.BUTTON_9;
 	
 	public static final int FIRE_SOLENOID = HWP.BUTTON_3;
+	public static final int ELEVATOR_UP = HWP.BUTTON_6;
+	public static final int ELEVATOR_DOWN = HWP.BUTTON_7;
 }

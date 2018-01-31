@@ -7,7 +7,6 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.Joysticks;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
-import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
@@ -37,7 +36,7 @@ public class TechnoTitan extends IterativeRobot {
 
 	TankDrive drive;
 	Controls controls;
-	Solenoid grabberSolenoid;
+//	Solenoid grabberSolenoid;
 
 	TalonSRX grabberLeft;
 	TalonSRX grabberRight;
@@ -72,7 +71,7 @@ public class TechnoTitan extends IterativeRobot {
 		waitTeleop = new Timer();
 		waitAuto = new Timer();
 
-		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+//		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		elevator = new Elevator(new TalonSRX(HWR.ELEVATOR, false), limitSwitch);
@@ -109,7 +108,7 @@ public class TechnoTitan extends IterativeRobot {
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
 		controls = new Joysticks();
-		controls.init(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
+		controls.init(drive, pdp, grabberLeft, grabberRight, elevator);//grabberSolenoid, elevator);
 
 		CameraServer.getInstance().startAutomaticCapture();
 	}

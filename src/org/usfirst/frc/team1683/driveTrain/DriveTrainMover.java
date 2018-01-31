@@ -1,9 +1,5 @@
 package org.usfirst.frc.team1683.driveTrain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.usfirst.frc.team1683.motor.Motor;
 import org.usfirst.frc.team1683.motor.MotorMover;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 

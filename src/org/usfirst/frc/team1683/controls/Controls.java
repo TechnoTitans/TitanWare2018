@@ -28,8 +28,8 @@ public abstract class Controls {
 		leftFilter = new InputFilter(0.86);
 	}
 
-	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight,
-			Solenoid grabberSolenoid, Elevator elevator) {
+	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator) {
+			//Solenoid grabberSolenoid, Elevator elevator) {
 		this.drive = drive;
 		this.pdp = pdp;
 		this.grabberLeft = grabberLeft;
@@ -66,10 +66,10 @@ public abstract class Controls {
 		grabberRight.set(flyWheel());
 
 		// Grabber solenoid
-		if (solenoidToggle())
-			grabberSolenoid.fire();
-		else
-			grabberSolenoid.retract();
+//		if (solenoidToggle())
+//			grabberSolenoid.fire();
+//		else
+//			grabberSolenoid.retract();
 
 		// Elevator
 		elevator.spin(elevator());
