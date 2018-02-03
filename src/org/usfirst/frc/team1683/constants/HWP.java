@@ -70,6 +70,8 @@ public class HWP {
 
 	// Xbox
 	public static final int XBOX_0 = 0;
+	public static final int XBOX_1 = 1;
+	public static final int XBOX_2 = 2;
 
 	// Buttons
 	public static final int BUTTON_1 = 1;

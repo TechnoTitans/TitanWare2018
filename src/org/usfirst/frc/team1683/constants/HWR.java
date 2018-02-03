@@ -26,7 +26,7 @@ public class HWR {
 	public static final int LEFT_JOYSTICK = HWP.JOY_0;
 	public static final int RIGHT_JOYSTICK = HWP.JOY_1;
 	public static final int AUX_JOYSTICK = HWP.JOY_2;
-	public static final int XBOX = HWP.XBOX_0;
+	public static final int XBOX = HWP.XBOX_2;
 	
 	//Flywheels
 	public static final int GRABBER_LEFT = HWP.CAN_1;
