@@ -59,4 +59,15 @@ public class XBox extends Controls {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean hasXBox() {
+		return true;
+	}
+
+	@Override
+	public void shakeXBox(double amount) {
+		// TODO Auto-generated method stub
+
+	}
 }

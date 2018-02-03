@@ -63,7 +63,7 @@ public class Joysticks extends Controls {
 	public double elevator() {
 		return auxStick.getRawAxis(YAxis) * Controls.ELEVATOR_SPEED;
 	}
-	
+
 	@Override
 	public boolean overrideElevatorLimit() {
 		return findToggle(HWR.AUX_JOYSTICK, HWR.OVERRIDE_LIMIT);
@@ -110,5 +110,15 @@ public class Joysticks extends Controls {
 			joystickCheckToggle[joystick][button - 1] = false;
 			return false;
 		}
+	}
+
+	@Override
+	public boolean hasXBox() {
+		return false;
+	}
+
+	@Override
+	public void shakeXBox(double amount) {
+		// TODO Auto-generated method stub
 	}
 }

@@ -28,8 +28,9 @@ public abstract class Controls {
 		leftFilter = new InputFilter(0.86);
 	}
 
-	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator) {
-			//Solenoid grabberSolenoid, Elevator elevator) {
+	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight,
+			Elevator elevator) {
+		// Solenoid grabberSolenoid, Elevator elevator) {
 		this.drive = drive;
 		this.pdp = pdp;
 		this.grabberLeft = grabberLeft;
@@ -57,8 +58,10 @@ public abstract class Controls {
 		double[] speeds = drivePower();
 		double lSpeed = leftFilter.filterInput(Math.pow(speeds[0], 3));
 		double rSpeed = rightFilter.filterInput(Math.pow(speeds[1], 3));
-		if (lSpeed != 0) SmartDashboard.putNumber("Drive RPM left ratio", drive.getLeftEncoder().getSpeed() / lSpeed);
-		if (rSpeed != 0) SmartDashboard.putNumber("Drive RPM right ratio", drive.getRightEncoder().getSpeed() / rSpeed);
+		if (lSpeed != 0)
+			SmartDashboard.putNumber("Drive RPM left ratio", drive.getLeftEncoder().getSpeed() / lSpeed);
+		if (rSpeed != 0)
+			SmartDashboard.putNumber("Drive RPM right ratio", drive.getRightEncoder().getSpeed() / rSpeed);
 		drive.driveMode(lSpeed, rSpeed);
 
 		// Flywheel
@@ -66,21 +69,17 @@ public abstract class Controls {
 		grabberRight.set(flyWheel());
 
 		// Grabber solenoid
-//		if (solenoidToggle())
-//			grabberSolenoid.fire();
-//		else
-//			grabberSolenoid.retract();
+		// if (solenoidToggle())
+		// grabberSolenoid.fire();
+		// else
+		// grabberSolenoid.retract();
 
 		// Elevator
 		elevator.spin(elevator());
 		elevator.overrideLimit(overrideElevatorLimit());
-		// solenoids
-		// SmartDashboard.sendData("FIRE Solenoid", solenoidToggle());
-		// if (solenoidToggle()) {
-		// solenoid.fire();
-		// } else {
-		// solenoid.retract();
-		// }
+
+		if (hasXBox())
+			shakeXBox(0.3); // TODO
 	}
 
 	public abstract double[] drivePower();
@@ -90,6 +89,10 @@ public abstract class Controls {
 	public abstract double flyWheel();
 
 	public abstract double elevator();
-	
+
 	public abstract boolean overrideElevatorLimit();
+
+	public abstract boolean hasXBox();
+
+	public abstract void shakeXBox(double amount);
 }
