@@ -133,4 +133,16 @@ public class TwistJoystick extends Controls {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean hasXBox() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void shakeXBox(double amount) {
+		// TODO Auto-generated method stub
+		
+	}
 }
