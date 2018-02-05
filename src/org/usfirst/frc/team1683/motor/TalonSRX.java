@@ -21,6 +21,7 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	public static final int CURRENT_LIMIT_THRESHOLD = 41;
 	public static final int LIMIT_TIMEOUT = 200; //ms
 
+	private TalonSRX brownoutFollower = null;
 
 	/**
 	 * Constructor for a TalonSRX motor
@@ -150,6 +151,7 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	}
 	
 	public void follow(TalonSRX other) {
+		other.brownoutFollower = this;
 		this.set(ControlMode.Follower, other.getChannel());
 	}
 
@@ -166,5 +168,17 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 	    this.enableCurrentLimit(false);
     }
 
+    public void enableBrownoutProtection() {
+		if (brownoutFollower != null) {
+			brownoutFollower.coast();
+		}
+	}
+
+	public void disableBrownoutProtection() {
+		if (brownoutFollower != null) {
+			brownoutFollower.setNeutralMode(NeutralMode.Brake);
+			brownoutFollower.set(ControlMode.Follower, getChannel());
+		}
+	}
 
 }
