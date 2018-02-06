@@ -5,12 +5,11 @@ import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
-import org.usfirst.frc.team1683.controls.Joysticks;
+import org.usfirst.frc.team1683.controls.JoystickXBox;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
@@ -53,7 +52,7 @@ public class TechnoTitan extends IterativeRobot {
 	TalonSRX leftETalonSRX, rightETalonSRX;
 	Controls controls;
 	
-	Solenoid grabberSolenoid;
+//	Solenoid grabberSolenoid;
 
 	CameraServer server;
 
@@ -67,10 +66,10 @@ public class TechnoTitan extends IterativeRobot {
 
 		accel = new BuiltInAccel();
 		gyro = new Gyro(HWR.GYRO);
-		limitTop = new LimitSwitch(HWR.LIMIT_SWITCH_TOP);
-		limitBottom = new LimitSwitch(HWR.LIMIT_SWITCH_BOTTOM);
+		limitTop = new LimitSwitch(HWR.LIMIT_SWITCH_TOP, true);
+		limitBottom = new LimitSwitch(HWR.LIMIT_SWITCH_BOTTOM, true);
 
-		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
+//		grabberSolenoid = new Solenoid(HWR.PCM, HWR.SOLENOID);
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
@@ -98,8 +97,8 @@ public class TechnoTitan extends IterativeRobot {
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, accel);
 
-		controls = new Joysticks();
-		controls.init(drive, pdp, grabberLeft, grabberRight, grabberSolenoid, elevator);
+		controls = new JoystickXBox();
+		controls.init(drive, pdp, grabberLeft, grabberRight, elevator); //grabberSolenoid
 
 		CameraServer.getInstance().startAutomaticCapture();
 	}
@@ -127,6 +126,8 @@ public class TechnoTitan extends IterativeRobot {
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();
+		SmartDashboard.putBoolean("Limit switch top", limitTop.isPressed());
+		SmartDashboard.putBoolean("Limit switch bottom", limitBottom.isPressed());
 	}
 
 	@Override

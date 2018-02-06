@@ -20,7 +20,7 @@ public abstract class Controls {
 	private PowerDistributionPanel pdp;
 	private TalonSRX grabberLeft;
 	private TalonSRX grabberRight;
-	private Solenoid grabberSolenoid;
+//	private Solenoid grabberSolenoid;
 	private Elevator elevator;
 
 	public Controls() {
@@ -28,13 +28,12 @@ public abstract class Controls {
 		leftFilter = new InputFilter(0.86);
 	}
 
-	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight,
-			Solenoid grabberSolenoid, Elevator elevator) {
+	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator) {
 		this.drive = drive;
 		this.pdp = pdp;
 		this.grabberLeft = grabberLeft;
 		this.grabberRight = grabberRight;
-		this.grabberSolenoid = grabberSolenoid;
+//		this.grabberSolenoid = grabberSolenoid;
 		this.elevator = elevator;
 	}
 
@@ -57,28 +56,24 @@ public abstract class Controls {
 		double[] speeds = drivePower();
 		double lSpeed = leftFilter.filterInput(Math.pow(speeds[0], 3));
 		double rSpeed = rightFilter.filterInput(Math.pow(speeds[1], 3));
-		if (lSpeed != 0)
-			SmartDashboard.putNumber("Drive RPM left ratio", drive.getLeftEncoder().getSpeed() / lSpeed);
-		if (rSpeed != 0)
-			SmartDashboard.putNumber("Drive RPM right ratio", drive.getRightEncoder().getSpeed() / rSpeed);
 		drive.driveMode(lSpeed, rSpeed);
 
 		// Flywheel
 		grabberLeft.set(flyWheel());
 		grabberRight.set(flyWheel());
 
-		// Grabber solenoid
-		if (solenoidToggle())
-			grabberSolenoid.fire();
-		else
-			grabberSolenoid.retract();
+//		// Grabber solenoid
+//		if (solenoidToggle())
+//			grabberSolenoid.fire();
+//		else
+//			grabberSolenoid.retract();
 
 		// Elevator
 		elevator.spin(elevator());
 		elevator.overrideLimit(overrideElevatorLimit());
 
 		if (hasXBox())
-			shakeXBox(0.3); // TODO
+			shakeXBox(0.7); // TODO
 	}
 
 	public abstract double[] drivePower();
