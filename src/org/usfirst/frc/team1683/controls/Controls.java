@@ -3,7 +3,6 @@ package org.usfirst.frc.team1683.controls;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.scoring.Elevator;
 
