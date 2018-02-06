@@ -10,8 +10,8 @@ public class HWR {
 	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_4;
 	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_5;
 	
-	public static final int ELEVATOR_FOLLOW = HWP.CAN_11;
-	public static final int ELEVATOR_MAIN = HWP.CAN_10;
+	public static final int ELEVATOR_FOLLOW = HWP.CAN_10;
+	public static final int ELEVATOR_MAIN = HWP.CAN_9;
 
 	// Solenoids
 	public static final int PCM = HWP.CAN_15;
@@ -29,11 +29,11 @@ public class HWR {
 	public static final int XBOX = HWP.XBOX_2;
 	
 	//Flywheels
-	public static final int GRABBER_LEFT = HWP.CAN_12;
-	public static final int GRABBER_RIGHT = HWP.CAN_13;
+	public static final int GRABBER_LEFT = HWP.CAN_6;
+	public static final int GRABBER_RIGHT = HWP.CAN_7;
 	
 	//Piston
-	public static final int GRABBER_PISTON = HWP.CAN_3;
+	public static final int GRABBER_PISTON = HWP.CAN_2;
 
 	// Sensors
 	public static final int GYRO = HWP.ANALOG_1;

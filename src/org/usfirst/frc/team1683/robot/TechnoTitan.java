@@ -100,7 +100,7 @@ public class TechnoTitan extends IterativeRobot {
 		controls = new JoystickXBox();
 		controls.init(drive, pdp, grabberLeft, grabberRight, elevator); //grabberSolenoid
 
-		CameraServer.getInstance().startAutomaticCapture();
+		// CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	@Override
@@ -126,8 +126,6 @@ public class TechnoTitan extends IterativeRobot {
 			teleopReady = true;
 		if (teleopReady)
 			controls.run();
-		SmartDashboard.putBoolean("Limit switch top", limitTop.isPressed());
-		SmartDashboard.putBoolean("Limit switch bottom", limitBottom.isPressed());
 	}
 
 	@Override
