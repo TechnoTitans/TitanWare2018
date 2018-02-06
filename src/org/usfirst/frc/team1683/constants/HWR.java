@@ -3,12 +3,12 @@ package org.usfirst.frc.team1683.constants;
 public class HWR {
 
 	// Motors
-	public static final int RIGHT_DRIVE_TRAIN_FRONT = HWP.CAN_7;
-	public static final int RIGHT_DRIVE_TRAIN_MIDDLE = HWP.CAN_8;
-	public static final int RIGHT_DRIVE_TRAIN_BACK = HWP.CAN_9;
-	public static final int LEFT_DRIVE_TRAIN_FRONT = HWP.CAN_6;
-	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_5;
-	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_4;
+	public static final int RIGHT_DRIVE_TRAIN_FRONT = HWP.CAN_6;
+	public static final int RIGHT_DRIVE_TRAIN_MIDDLE = HWP.CAN_7;
+	public static final int RIGHT_DRIVE_TRAIN_BACK = HWP.CAN_8;
+	public static final int LEFT_DRIVE_TRAIN_FRONT = HWP.CAN_3;
+	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_4;
+	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_5;
 	
 	public static final int ELEVATOR_FOLLOW = HWP.CAN_2;
 	public static final int ELEVATOR_MAIN = HWP.CAN_1;
