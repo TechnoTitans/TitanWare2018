@@ -12,3 +12,7 @@ In src/org/usfirst/frc/team1683/ there are the following directories:
   * sensors - self explanatory
   * scoring - climbing, elevation, and grabbing mechanism
   * vision - takes values sent from raspberry pi 
+
+
+Debugging Solutions
+ - Radio not configuring / wireless not activating - FRC Radio Tool but disable all network connections through control panel
