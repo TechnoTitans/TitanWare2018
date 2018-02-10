@@ -6,9 +6,9 @@ import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.LinearEasing;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SingleTarget extends Autonomous {
 	private PathPoint[] points;
@@ -74,5 +74,7 @@ public class SingleTarget extends Autonomous {
 		default:
 			break;
 		}
+		presentState = nextState;
+		SmartDashboard.sendData("Auto state", presentState.toString());
 	}
 }

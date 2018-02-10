@@ -114,7 +114,7 @@ public class Path {
 		if (isTurning && waitTimer.get() > WAIT_TIME) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
-				mover.setEasing(easing);
+//				mover.setEasing(easing);
 				isTurning = false;
 				currentHeading = path[pathIndex].getAngle();
 				driveTrain.stop();
