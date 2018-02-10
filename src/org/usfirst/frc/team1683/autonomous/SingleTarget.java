@@ -30,13 +30,9 @@ public class SingleTarget extends Autonomous {
 		SmartDashboard.sendData("target", target.toString());
 		// default paths assume everything is on left, so multiply by -1 if
 		// otherwise
-		boolean isLeft = target.isStartMiddle()
-				? DriverStation.getInstance().getGameSpecificMessage().charAt(target.getSwitchScale()) == 'L'
-				: chooser.getPosition() == 'L';
 		if (target == Target.MIDDLE_SWITCH) {
-			// TODO
-		} else if (target == Target.MIDDLE_SCALE) {
-			// TODO
+			boolean left = DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L';
+			points = left ? DrivePathPoints.MiddleRightSwitchLeft : DrivePathPoints.MiddleRightSwitchRight;
 		} else if (target == Target.CLOSE_SWITCH) {
 			points = DrivePathPoints.LeftSwitchLeft;
 		} else if (target == Target.CLOSE_SCALE) {
@@ -46,7 +42,7 @@ public class SingleTarget extends Autonomous {
 		} else if (target == Target.FAR_SCALE) {
 			points = DrivePathPoints.LeftScaleRight;
 		}
-		if (!isLeft) {
+		if (!target.isStartMiddle() && chooser.getPosition() == 'R') {
 			for (int i = 0; i < points.length; ++i) {
 				points[i] = points[i].flipX();
 			}

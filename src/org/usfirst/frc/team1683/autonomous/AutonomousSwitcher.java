@@ -34,7 +34,7 @@ public class AutonomousSwitcher {
 			SendableChooser<Target> p = new SendableChooser<Target>();
 			p.addDefault("Choose priority " + (i + 1) + " (None)", null);
 			for (Target target : possTargets) {
-				if (!target.isStartMiddle()) {
+				if (!target.isStartMiddle() || i == 0) {
 					p.addObject(target.toString(), target);
 				}
 			}
@@ -44,7 +44,7 @@ public class AutonomousSwitcher {
 		
 		side = new SendableChooser<Character>();
 		side.addDefault("Left", 'L');
-		side.addObject("Middle", 'M');
+		side.addObject("Middle Right", 'M');
 		side.addObject("Right", 'R');
 		SmartDashboard.putData("Side", side);
 	}

@@ -109,14 +109,14 @@ public class TankDrive implements DriveTrain {
 
 	@Override
 	public void enableBrownoutProtection() {
-//		left.enableBrownoutProtection();
-//		right.enableBrownoutProtection();
+		left.enableBrownoutProtection();
+		right.enableBrownoutProtection();
 	}
 
 	@Override
 	public void disableBrownoutProtection() {
-//		left.disableBrownoutProtection();
-//		right.disableBrownoutProtection();
+		left.disableBrownoutProtection();
+		right.disableBrownoutProtection();
 	}
 
 	// public void enableAntiDrift() {
