@@ -140,6 +140,9 @@ public class TalonSRX extends com.ctre.phoenix.motorcontrol.can.TalonSRX impleme
 		return encoder.getSpeed();
 	}
 
+	public AntiDrift getAnti() {
+		return anti;
+	}
 	
 	public double getError() {
 		return super.getClosedLoopError(0);

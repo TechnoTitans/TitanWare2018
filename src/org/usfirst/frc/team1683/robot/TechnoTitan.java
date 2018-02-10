@@ -7,6 +7,7 @@ import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.JoystickXBox;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
@@ -29,7 +30,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
-	public static final double WHEEL_RADIUS = 2.0356;
+	public static final double WHEEL_RADIUS = 2.8999;
 
 	Autonomous auto;
 	AutonomousSwitcher autoSwitch;
@@ -55,6 +56,8 @@ public class TechnoTitan extends IterativeRobot {
 //	Solenoid grabberSolenoid;
 
 	CameraServer server;
+	
+	DriveTrainTurner turner;
 
 	boolean teleopReady = false;
 
@@ -99,6 +102,8 @@ public class TechnoTitan extends IterativeRobot {
 
 		controls = new JoystickXBox();
 		controls.init(drive, pdp, grabberLeft, grabberRight, elevator); //grabberSolenoid
+		
+		SmartDashboard.prefDouble("kP", 0.05);
 
 		// CameraServer.getInstance().startAutomaticCapture();
 	}
@@ -118,6 +123,7 @@ public class TechnoTitan extends IterativeRobot {
 	public void teleopInit() {
 		drive.stop();
 		waitTeleop.start();
+		drive.resetEncoders();
 	}
 
 	@Override

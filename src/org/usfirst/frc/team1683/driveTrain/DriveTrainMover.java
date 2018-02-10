@@ -16,8 +16,8 @@ public class DriveTrainMover {
 	public DriveTrainMover(DriveTrain driveTrain, double leftDistance, double rightDistance, double leftSpeed, double rightSpeed) {
 		TalonSRX left = driveTrain.getLeft(),
 				right = driveTrain.getRight();
-		leftMover = new MotorMover(left, leftDistance, leftSpeed, left.getEncoder());
-		rightMover = new MotorMover(right, rightDistance, rightSpeed, right.getEncoder());
+		leftMover = new MotorMover(left, leftDistance, leftSpeed, left.getEncoder(), left.getAnti());
+		rightMover = new MotorMover(right, rightDistance, rightSpeed, right.getEncoder(), right.getAnti());
 	}
 
 //	private void addMotorGroup(MotorGroup group) {

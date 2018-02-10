@@ -2,12 +2,13 @@ package org.usfirst.frc.team1683.autonomous;
 
 import java.util.Arrays;
 
+import org.usfirst.frc.team1683.autonomous.Autonomous.State;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SingleTarget extends Autonomous {
 	private PathPoint[] points;
@@ -17,6 +18,7 @@ public class SingleTarget extends Autonomous {
 
 	public SingleTarget(DriveTrain drive) {
 		super(drive);
+		presentState = State.INIT_CASE;
 	}
 	
 	public void setChooser(TargetChooser chooser) {
@@ -25,7 +27,7 @@ public class SingleTarget extends Autonomous {
 	
 	public void init() {
 		target = chooser.getCorrectTarget();
-		SmartDashboard.putString("target", target.toString());
+		SmartDashboard.sendData("target", target.toString());
 		// default paths assume everything is on left, so multiply by -1 if
 		// otherwise
 		boolean isLeft = target.isStartMiddle()
@@ -49,11 +51,12 @@ public class SingleTarget extends Autonomous {
 				points[i] = points[i].flipX();
 			}
 		}
-		path = new Path(tankDrive, points, 0.3, 0.2);
-		SmartDashboard.putString("path points", Arrays.toString(points));
+		path = new Path(tankDrive, points, 0.4, 0.3);
+		SmartDashboard.sendData("path points", Arrays.toString(points));
 	}
 
 	public void run() {
+		SmartDashboard.sendData("Auto state", presentState.toString());
 		switch (presentState) {
 		case INIT_CASE:
 			init();
@@ -72,5 +75,6 @@ public class SingleTarget extends Autonomous {
 		default:
 			break;
 		}
+		presentState = nextState;
 	}
 }

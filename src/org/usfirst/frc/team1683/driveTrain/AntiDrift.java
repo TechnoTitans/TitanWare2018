@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1683.driveTrain;
 
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.sensors.Gyro;
 
 /*
@@ -10,7 +11,7 @@ import org.usfirst.frc.team1683.sensors.Gyro;
 public class AntiDrift {
 
 	private double antidriftangle = 0;
-	private final double KP = 0.016;
+	private final double KP = SmartDashboard.getDouble("kP");;
 	private Gyro gyro;
 	// 1 if right, -1 if left, 0 if no correction should be applied
 	private int right;

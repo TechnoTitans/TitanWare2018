@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1683.motor;
 
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
@@ -105,9 +106,11 @@ public class MotorMover implements Runnable {
 			running = false;
 			return true;
 		}
+		
 		double correctSpeed = speed;
 		if (anti != null)
 			correctSpeed = anti.antiDrift(speed);
+		SmartDashboard.sendData("drive dorwards",correctSpeed);
 		motor.set(inputFilter.filterInput(correctSpeed));
 		return false;
 	}
