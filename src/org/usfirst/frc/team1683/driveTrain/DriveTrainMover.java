@@ -8,6 +8,7 @@ import org.usfirst.frc.team1683.motor.TalonSRX;
  */
 public class DriveTrainMover {
 	private MotorMover leftMover, rightMover;
+	private LinearEasing easing;
 
 	public DriveTrainMover(DriveTrain driveTrain, double distance, double speed) {
 		this(driveTrain, distance, distance, speed, speed);
@@ -20,17 +21,15 @@ public class DriveTrainMover {
 		rightMover = new MotorMover(right, rightDistance, rightSpeed, right.getEncoder());
 	}
 
-//	private void addMotorGroup(MotorGroup group) {
-//		for (Motor m : group) {
-//			motorMovers.add(new MotorMover(m, distance, speed, group.getEncoder(), group.getAntiDrift()));
-//		}
-//	}
+	public void setEasing(LinearEasing easing) {
+		this.easing = easing;
+		leftMover.setEasing(easing);
+		rightMover.setEasing(easing);
+	}
 	
-//	private void addMotorGroup(MotorGroup group, double moveDistance, double moveSpeed) {
-//		for (Motor m : group) {
-//			motorMovers.add(new MotorMover(m, moveDistance, moveSpeed, group.getEncoder()));
-//		}
-//	}
+	public LinearEasing getEasing() {
+		return easing;
+	}
 
 	/**
 	 * Runs an iteration of all the motor movers

@@ -18,6 +18,10 @@ public class Path {
 	private double turnSpeed;
 	private boolean stopCondition;
 	private Timer waitTimer;
+	
+	private LinearEasing easing;
+	
+	private static final double WAIT_TIME = 0.05;
 
 	/**
 	 * Creates a new path object
@@ -76,6 +80,14 @@ public class Path {
 	public void setStopCondition(boolean allFinished) {
 		stopCondition = allFinished;
 	}
+	
+	public void setEasing(LinearEasing easing) {
+		this.easing = easing;
+	}
+	
+	public LinearEasing getEasing() {
+		return easing;
+	}
 
 	private boolean isMoverDone() {
 		if (stopCondition) {
@@ -99,9 +111,10 @@ public class Path {
 			waitTimer.reset();
 			waitTimer.start();
 		}
-		if (isTurning && waitTimer.get() > 0.1) {
+		if (isTurning && waitTimer.get() > WAIT_TIME) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
+				mover.setEasing(easing);
 				isTurning = false;
 				currentHeading = path[pathIndex].getAngle();
 				driveTrain.stop();
@@ -110,7 +123,7 @@ public class Path {
 				turner.run();
 				SmartDashboard.putNumber("degrees left", turner.angleLeft());
 			}
-		} else if (waitTimer.get() > 0.1){
+		} else if (waitTimer.get() > WAIT_TIME){
 			mover.runIteration();
 			SmartDashboard.putNumber("distance left", mover.getAverageDistanceLeft());
 			if (isMoverDone()) {

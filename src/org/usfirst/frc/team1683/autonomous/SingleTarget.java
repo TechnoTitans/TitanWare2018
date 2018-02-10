@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.autonomous;
 import java.util.Arrays;
 
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
+import org.usfirst.frc.team1683.driveTrain.LinearEasing;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
 
@@ -49,7 +50,8 @@ public class SingleTarget extends Autonomous {
 				points[i] = points[i].flipX();
 			}
 		}
-		path = new Path(tankDrive, points, 0.3, 0.2);
+		path = new Path(tankDrive, points, 0.8, 0.4);
+		path.setEasing(new LinearEasing(10));
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
 

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1683.motor;
 
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
+import org.usfirst.frc.team1683.driveTrain.LinearEasing;
 import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
@@ -20,6 +21,7 @@ public class MotorMover implements Runnable {
 
 	private final double BASE_OVERSHOOT = 2.5; // overshoot at 20% speed
 	private final double SPEED_OVERSHOOT = 1.5; // overshoot per 10% speed
+	private LinearEasing easing;
 	/**
 	 * Class for moving a motor a certain distance based on an encoder
 	 * 
@@ -57,6 +59,14 @@ public class MotorMover implements Runnable {
 			anti.reset();
 		}
 		inputFilter = new InputFilter(0.9, 0);
+	}
+	
+	public void setEasing(LinearEasing easing) {
+		this.easing = easing;
+	}
+	
+	public LinearEasing getEasing() {
+		return easing;
 	}
 
 	/**
@@ -105,15 +115,22 @@ public class MotorMover implements Runnable {
 			running = false;
 			return true;
 		}
-		double correctSpeed = speed;
+		double correctSpeed = getSpeed();
 		if (anti != null)
 			correctSpeed = anti.antiDrift(speed);
-		motor.set(inputFilter.filterInput(correctSpeed));
+		motor.set(correctSpeed);
 		return false;
 	}
 	
+	private double getSpeed() {
+		if (easing != null)
+			return easing.getSpeed(Math.abs(encoder.getDistance()) + getOvershoot(), Math.abs(distance)) * speed;
+		else
+			return speed;
+	}
+	
 	private double getOvershoot() {
-		return BASE_OVERSHOOT + SPEED_OVERSHOOT * (speed - 0.2) * 10;
+		return BASE_OVERSHOOT; //+ SPEED_OVERSHOOT * (speed - 0.2) * 10;
 	}
 
 	/**
