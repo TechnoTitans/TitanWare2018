@@ -65,17 +65,17 @@ public class AutonomousSwitcher {
 		chooser.addDefault(name, auto);
 	}
 
-	// Adds auto to chooser only if it is for competition
 	public void addAuto(String name, Autonomous auto) {
 		chooser.addObject(name, auto);
 	}
 
 	public void getSelected() {
-		autoSelected = (Autonomous) chooser.getSelected();
+		autoSelected = chooser.getSelected();
 		if (autoSelected instanceof SingleTarget) {
 			SingleTarget target = (SingleTarget) autoSelected;
 			target.setChooser(new TargetChooser(getPriorities(), side.getSelected()));
 		}
+		autoSelected.resetAuto();
 	}
 
 	public void run() {

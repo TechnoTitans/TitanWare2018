@@ -18,6 +18,7 @@ public class SingleTarget extends Autonomous {
 
 	public SingleTarget(DriveTrain drive) {
 		super(drive);
+		presentState = State.INIT_CASE;
 	}
 	
 	public void setChooser(TargetChooser chooser) {
@@ -26,7 +27,7 @@ public class SingleTarget extends Autonomous {
 	
 	public void init() {
 		target = chooser.getCorrectTarget();
-		SmartDashboard.putString("target", target.toString());
+		SmartDashboard.sendData("target", target.toString());
 		// default paths assume everything is on left, so multiply by -1 if
 		// otherwise
 		boolean isLeft = target.isStartMiddle()

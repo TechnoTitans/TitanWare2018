@@ -24,7 +24,7 @@ public class DriveStraight extends Autonomous {
 				timer = new Timer();
 				timer.start();
 
-				mover = new DriveTrainMover(driveTrain, 168, 0.4);
+				mover = new DriveTrainMover(driveTrain, 168, 0.3);
 				nextState = State.DRIVE_FORWARD;
 				break;
 			case DRIVE_FORWARD:

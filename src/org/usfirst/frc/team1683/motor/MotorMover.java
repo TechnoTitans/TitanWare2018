@@ -2,7 +2,7 @@ package org.usfirst.frc.team1683.motor;
 
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.LinearEasing;
-import org.usfirst.frc.team1683.robot.InputFilter;
+//import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
 /*
@@ -17,10 +17,9 @@ public class MotorMover implements Runnable {
 	private AntiDrift anti;
 	private boolean running = true;
 
-	private InputFilter inputFilter;
 
 	private final double BASE_OVERSHOOT = 2.5; // overshoot at 20% speed
-	private final double SPEED_OVERSHOOT = 1.5; // overshoot per 10% speed
+//	private final double SPEED_OVERSHOOT = 1.5; // overshoot per 10% speed
 	private LinearEasing easing;
 	/**
 	 * Class for moving a motor a certain distance based on an encoder
@@ -58,7 +57,7 @@ public class MotorMover implements Runnable {
 		if (anti != null) {
 			anti.reset();
 		}
-		inputFilter = new InputFilter(0.9, 0);
+//		inputFilter = new InputFilter(0.9, 0);
 	}
 	
 	public void setEasing(LinearEasing easing) {
