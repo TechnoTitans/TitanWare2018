@@ -76,9 +76,9 @@ public class TechnoTitan extends IterativeRobot {
 		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
-		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, false);
+		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, true);
 		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 5)); // TODO: find wheel radius
-		elevator = new Elevator(elevatorTalon, new TalonSRX(HWR.ELEVATOR_FOLLOW, false), limitTop, limitBottom);
+		elevator = new Elevator(elevatorTalon, new TalonSRX(HWR.ELEVATOR_FOLLOW, true), limitTop, limitBottom);
 
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);

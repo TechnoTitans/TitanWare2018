@@ -66,7 +66,9 @@ public abstract class Controls {
 //			grabberSolenoid.fire();
 //		else
 //			grabberSolenoid.retract();
-
+		
+		SmartDashboard.sendData("LeftCan Elev", pdp.getCurrent(9));
+		SmartDashboard.sendData("RightCan Elev", pdp.getCurrent(10));
 		// Elevator
 		elevator.spin(elevator());
 		elevator.overrideLimit(overrideElevatorLimit());
