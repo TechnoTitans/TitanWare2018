@@ -12,10 +12,16 @@ public class DrivePathPoints extends Autonomous {
 	// right>
 	// start is Left, Middle, or Right
 	// target is Switch or Scale
-
-	// grabber is 10 in
 	
-	public static PathPoint[] LeftSwitchLeft = { new PathPoint(0, 148), new PathPoint(22, 0)},
+	// robot w/o bumpers is 27 in by 33 in
+	// bumpers are 3.25 in thick
+	// front of grabber is 5.5 in in front of the bumpers
+	// overall robot rectangle: (33.5 in by 45 in)
+	
+	
+	
+	
+	public static PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(22, 0)},
 					// 214.7; turn; 215; turn; 65; turn; 4-6 in
 					LeftSwitchRight = { new PathPoint(0, 215), new PathPoint(215, 0),
 										new PathPoint(0, -65), new PathPoint(0, -6) },
