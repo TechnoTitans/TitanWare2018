@@ -100,6 +100,17 @@ public class Path {
 	public boolean isDone() {
 		return pathIndex >= path.length;
 	}
+	
+	public double getApproxDistLeft() {
+		if (isDone()) return 0;
+		double width = 16.5; // doesn't really matter just an approximation
+		double dist = isTurning ?  Math.toRadians(turner.angleLeft()) * width : mover.getAverageDistanceLeft();
+		for (int i = pathIndex + 1; i < path.length; ++i) {
+			dist += Math.toRadians(path[pathIndex].getAngle()) * width;
+			dist += path[pathIndex].getDistance();
+		}
+		return dist;
+	}
 
 	public void run() {
 		if (isDone()) {
@@ -114,7 +125,7 @@ public class Path {
 		if (isTurning && waitTimer.get() > WAIT_TIME) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
-//				mover.setEasing(easing);
+				mover.setEasing(easing);
 				isTurning = false;
 				currentHeading = path[pathIndex].getAngle();
 				driveTrain.stop();

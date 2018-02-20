@@ -7,6 +7,7 @@ public class Elevator {
 
 	private TalonSRX elevatorMain;
 	private final double liftSpeedMax = 0.7, liftSpeedMin = 0.4;
+	private final double kP = 0.05;
 	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
 	
@@ -44,11 +45,26 @@ public class Elevator {
 		this.override = override;
 	}
 	
+	Double initEncValue = null;
 	public void spin(double speed) {
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0)))
-			elevatorMain.brake();
-		else
+			elevatorMain.stop();
+		else if(Math.abs(speed) < 0.09) {
+			if(initEncValue == null) {
+				initEncValue = elevatorMain.getEncoder().getDistance();
+			}
+			stop(initEncValue);
+		}
+		else {
 			elevatorMain.set(speed);
+			initEncValue = null;
+		}
+	}
+	
+	public void stop(double initEncValue) {
+		double error = initEncValue - elevatorMain.getEncoder().getDistance();
+		double correction = kP * error;
+		elevatorMain.set(correction);
 	}
 	
 	/**
