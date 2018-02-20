@@ -77,7 +77,7 @@ public class SingleTarget extends Autonomous {
 				if (!elevatorRaised) {
 					elevatorRaised = elevator.spinTo(30);
 				} else {
-					elevator.stop();
+					elevator.stop(30);
 				}
 			}
 			break;
@@ -85,12 +85,12 @@ public class SingleTarget extends Autonomous {
 			if (!elevatorRaised) {
 				if (elevator.spinTo(30)) elevatorRaised = true;
 			} else {
-				elevator.stop();
+				elevator.stop(30);
 				nextState = State.RELEASE_CUBE;
 			}
 			break;
 		case RELEASE_CUBE:
-			elevator.stop();
+			elevator.stop(30);
 			grabberMain.set(0.5);
 			break;
 		}

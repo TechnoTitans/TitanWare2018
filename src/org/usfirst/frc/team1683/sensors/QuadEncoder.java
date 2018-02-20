@@ -13,12 +13,14 @@ public class QuadEncoder implements Encoder {
 	private TalonSRX talonSRX;
 	private double wheelRadius;
 	private final double PULSES_PER_ROTATION = 4096;
-
-	public QuadEncoder(TalonSRX talonSRX, double wheelRadius) {
+	private boolean reversed = false;
+	
+	public QuadEncoder(TalonSRX talonSRX, double wheelRadius, boolean reversed) {
 		this.talonSRX = talonSRX;
 		// this.talonSRX.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		this.talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		this.wheelRadius = wheelRadius;
+		this.reversed = reversed;
 	}
 
 	/**
@@ -29,7 +31,7 @@ public class QuadEncoder implements Encoder {
 	 */
 	@Override
 	public double getDistance() {
-		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius / PULSES_PER_ROTATION;
+		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius / PULSES_PER_ROTATION * (reversed ? -1 : 1);
 	}
 
 	/**
