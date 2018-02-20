@@ -20,7 +20,7 @@ public class QuadEncoder implements Encoder {
 		// this.talonSRX.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		this.talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		this.wheelRadius = wheelRadius;
-		this.reversed = reversed;
+		talonSRX.setSensorPhase(reversed);
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class QuadEncoder implements Encoder {
 	 */
 	@Override
 	public double getDistance() {
-		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius / PULSES_PER_ROTATION * (reversed ? -1 : 1);
+		return talonSRX.getSelectedSensorPosition(0) * 2 * Math.PI * wheelRadius / PULSES_PER_ROTATION;
 	}
 
 	/**
