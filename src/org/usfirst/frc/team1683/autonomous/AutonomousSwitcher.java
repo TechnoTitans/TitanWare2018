@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
+import org.usfirst.frc.team1683.motor.Motor;
+import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 
@@ -20,12 +22,12 @@ public class AutonomousSwitcher {
 	Gyro gyro;
 
 	// Creates buttons for co driver to pick autonomous
-	public AutonomousSwitcher(TankDrive tankDrive, BuiltInAccel accel) {
+	public AutonomousSwitcher(TankDrive tankDrive, Elevator elevator, Motor grabberMain, BuiltInAccel accel) {
 		chooser = new SendableChooser<Autonomous>();
 
 		addAuto("Do Nothing", new DoNothing(tankDrive));
 		addAuto("Square Auto", new SquareAuto(tankDrive));
-		addAuto("Single Target", new SingleTarget(tankDrive));
+		addAuto("Single Target", new SingleTarget(tankDrive, elevator, grabberMain));
 		setDefault("Drive Straight", new DriveStraight(tankDrive));
 		SmartDashboard.putData("Auto", chooser);
 		priorities = new ArrayList<>();

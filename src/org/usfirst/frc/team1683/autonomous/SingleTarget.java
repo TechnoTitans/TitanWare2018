@@ -7,6 +7,8 @@ import org.usfirst.frc.team1683.driveTrain.LinearEasing;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
+import org.usfirst.frc.team1683.motor.Motor;
+import org.usfirst.frc.team1683.scoring.Elevator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -15,9 +17,15 @@ public class SingleTarget extends Autonomous {
 	private Path path;
 	private Target target;
 	private TargetChooser chooser;
-
-	public SingleTarget(DriveTrain drive) {
+	private Elevator elevator;
+	private Motor grabberMain;
+	
+	private boolean elevatorRaised = false;
+	
+	public SingleTarget(DriveTrain drive, Elevator elevator, Motor grabberMain) {
 		super(drive);
+		this.elevator = elevator;
+		this.grabberMain = grabberMain;
 		presentState = State.INIT_CASE;
 	}
 	
@@ -65,10 +73,25 @@ public class SingleTarget extends Autonomous {
 				tankDrive.stop();
 				nextState = State.LIFT_ELEVATOR;
 			}
+			if (path.getApproxDistLeft() < 10) {
+				if (!elevatorRaised) {
+					elevatorRaised = elevator.spinTo(30);
+				} else {
+					elevator.stop();
+				}
+			}
 			break;
 		case LIFT_ELEVATOR:
+			if (!elevatorRaised) {
+				if (elevator.spinTo(30)) elevatorRaised = true;
+			} else {
+				elevator.stop();
+				nextState = State.RELEASE_CUBE;
+			}
 			break;
-		default:
+		case RELEASE_CUBE:
+			elevator.stop();
+			grabberMain.set(0.5);
 			break;
 		}
 		presentState = nextState;

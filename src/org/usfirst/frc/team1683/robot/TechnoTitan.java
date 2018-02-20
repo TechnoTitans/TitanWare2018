@@ -98,7 +98,7 @@ public class TechnoTitan extends IterativeRobot {
 		drive = new TankDrive(leftETalonSRX, rightETalonSRX, gyro);
 
 		pdp = new PowerDistributionPanel();
-		autoSwitch = new AutonomousSwitcher(drive, accel);
+		autoSwitch = new AutonomousSwitcher(drive, elevator, grabberLeft, accel);
 
 		controls = new JoystickXBox();
 		controls.init(drive, pdp, grabberLeft, grabberRight, elevator); //grabberSolenoid
