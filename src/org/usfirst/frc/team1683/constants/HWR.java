@@ -10,8 +10,8 @@ public class HWR {
 	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_4;
 	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_3;
 	
-	public static final int ELEVATOR_FOLLOW = HWP.CAN_10;
-	public static final int ELEVATOR_MAIN = HWP.CAN_6;
+	public static final int ELEVATOR_FOLLOW = HWP.CAN_6;
+	public static final int ELEVATOR_MAIN = HWP.CAN_10;
 
 	// Solenoids
 	public static final int PCM = HWP.CAN_15;

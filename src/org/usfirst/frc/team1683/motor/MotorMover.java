@@ -2,6 +2,7 @@ package org.usfirst.frc.team1683.motor;
 
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.LinearEasing;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 //import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
@@ -115,13 +116,15 @@ public class MotorMover implements Runnable {
 			return true;
 		}
 		double correctSpeed = getSpeed();
+		SmartDashboard.sendData("auto speed", correctSpeed);
 		if (anti != null)
-			correctSpeed = anti.antiDrift(speed);
+			correctSpeed = anti.antiDrift(correctSpeed);
 		motor.set(correctSpeed);
 		return false;
 	}
 	
 	private double getSpeed() {
+		SmartDashboard.sendData("auto distance", encoder.getDistance());
 		if (easing != null)
 			return easing.getSpeed(Math.abs(encoder.getDistance()) + getOvershoot(), Math.abs(distance)) * speed;
 		else

@@ -79,7 +79,7 @@ public class TechnoTitan extends IterativeRobot {
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
 		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, true);
-		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 5, false)); // TODO: find wheel radius
+		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 0.5, false)); // TODO: find wheel radius
 		elevator = new Elevator(elevatorTalon, new TalonSRX(HWR.ELEVATOR_FOLLOW, true), limitTop, limitBottom);
 
 		AntiDrift left = new AntiDrift(gyro, -1);
@@ -106,7 +106,7 @@ public class TechnoTitan extends IterativeRobot {
 		controls.init(drive, pdp, grabberLeft, grabberRight, elevator); //grabberSolenoid
 		
 		SmartDashboard.prefDouble("kP", 0.05);
-
+		
 		// CameraServer.getInstance().startAutomaticCapture();
 	}
 
@@ -114,8 +114,7 @@ public class TechnoTitan extends IterativeRobot {
 	public void autonomousInit() {
 		drive.stop();
 //		autoSwitch.getSelected();
-		mover = new DriveTrainMover(drive, 96, 0.6);
-		mover.setEasing(new LinearEasing(48));
+		
 	}
 
 	@Override
@@ -142,6 +141,7 @@ public class TechnoTitan extends IterativeRobot {
 		SmartDashboard.sendData("Limit Switch bottom", limitBottom.isPressed());
 		SmartDashboard.sendData("Limit switch top", limitTop.isPressed());
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
+		SmartDashboard.sendData("Elevator encoder", elevator.getMotor().getEncoder().getDistance());
 	}
 
 	@Override
