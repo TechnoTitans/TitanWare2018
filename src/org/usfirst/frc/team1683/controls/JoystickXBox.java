@@ -48,12 +48,12 @@ public class JoystickXBox extends Controls {
 
 	@Override
 	public double flyWheel() {
-		return controller.getY(Hand.kLeft);
+		return -controller.getY(Hand.kLeft);
 	}
 
 	@Override
 	public double elevator() {
-		return controller.getY(Hand.kRight);
+		return -controller.getY(Hand.kRight);
 	}
 
 	private boolean yIsPressed = false;
@@ -81,6 +81,11 @@ public class JoystickXBox extends Controls {
 
 	@Override
 	public void shakeXBox(double amount) {
-		controller.setRumble(RumbleType.kRightRumble, amount);
+//		controller.setRumble(RumbleType.kRightRumble, amount);
+	}
+
+	@Override
+	public boolean getMidElevButton() {
+		return controller.getBButtonPressed();
 	}
 }

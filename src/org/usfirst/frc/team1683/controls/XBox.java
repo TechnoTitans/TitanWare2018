@@ -70,4 +70,10 @@ public class XBox extends Controls {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public boolean getMidElevButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

@@ -21,6 +21,8 @@ public abstract class Controls {
 	private TalonSRX grabberRight;
 //	private Solenoid grabberSolenoid;
 	private Elevator elevator;
+	
+	private ElevTarget elevTarget = ElevTarget.MANUAL;
 
 	public Controls() {
 		rightFilter = new InputFilter(0.86);
@@ -70,12 +72,22 @@ public abstract class Controls {
 		SmartDashboard.sendData("LeftCan Elev", pdp.getCurrent(2));
 		SmartDashboard.sendData("RightCan Elev", pdp.getCurrent(4));
 		// Elevator
-		elevator.spin(elevator());
-		elevator.overrideLimit(overrideElevatorLimit());
-
-		if (hasXBox())
-			shakeXBox(0.7); // TODO
+		
+		double elevSpeed = elevator();
+		if (Math.abs(elevSpeed) > 0.1) elevTarget = ElevTarget.MANUAL;
+		else if (getMidElevButton()) elevTarget = ElevTarget.MID;
+		if (elevTarget == ElevTarget.MANUAL) {
+			elevator.spin(elevSpeed);
+			elevator.overrideLimit(overrideElevatorLimit());
+		} else if (elevTarget == ElevTarget.MID) {
+			elevator.spinTo(30);
+		}
+//
+//		if (hasXBox())
+//			shakeXBox(0.7); // TODO
 	}
+
+	public abstract boolean getMidElevButton();
 
 	public abstract double[] drivePower();
 
@@ -88,6 +100,6 @@ public abstract class Controls {
 	public abstract boolean overrideElevatorLimit();
 
 	public abstract boolean hasXBox();
-
+	
 	public abstract void shakeXBox(double amount);
 }
