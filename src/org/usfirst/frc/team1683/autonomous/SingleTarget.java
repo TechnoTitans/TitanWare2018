@@ -13,12 +13,15 @@ import org.usfirst.frc.team1683.scoring.Elevator;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class SingleTarget extends Autonomous {
+	private static final double SWITCH_HEIGHT = 340;
 	private PathPoint[] points;
 	private Path path;
 	private Target target;
 	private TargetChooser chooser;
 	private Elevator elevator;
 	private Motor grabberMain;
+	
+	private boolean hasReachedEndOfPath = false;
 	
 	private boolean elevatorRaised = false;
 	
@@ -55,11 +58,18 @@ public class SingleTarget extends Autonomous {
 				points[i] = points[i].flipX();
 			}
 		}
-		path = new Path(tankDrive, points, 0.8, 0.4);
-		path.setEasing(new LinearEasing(10));
+		path = new Path(tankDrive, points, 0.5, 0.4);
+		path.setEasing(new LinearEasing(30));
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
-
+	
+	private boolean spinElevator() {
+		if (target == Target.CLOSE_SWITCH || target == Target.FAR_SWITCH || target == Target.MIDDLE_SWITCH)
+			return elevator.spinTo(SWITCH_HEIGHT);
+		else
+			return elevator.spinUp();
+	}
+	
 	public void run() {
 		switch (presentState) {
 		case INIT_CASE:
@@ -73,24 +83,25 @@ public class SingleTarget extends Autonomous {
 				tankDrive.stop();
 				nextState = State.LIFT_ELEVATOR;
 			}
-			if (path.getApproxDistLeft() < 10) {
+			hasReachedEndOfPath = hasReachedEndOfPath || path.getApproxDistLeft() < 60;
+			if (hasReachedEndOfPath) {
 				if (!elevatorRaised) {
-					elevatorRaised = elevator.spinTo(30);
+					elevatorRaised = spinElevator();
 				} else {
-					elevator.stop(30);
+					elevator.stop();
 				}
 			}
 			break;
 		case LIFT_ELEVATOR:
 			if (!elevatorRaised) {
-				if (elevator.spinTo(30)) elevatorRaised = true;
+				if (spinElevator()) elevatorRaised = true;
 			} else {
-				elevator.stop(30);
+				elevator.stop();
 				nextState = State.RELEASE_CUBE;
 			}
 			break;
 		case RELEASE_CUBE:
-			elevator.stop(30);
+			elevator.stop();
 			grabberMain.set(0.5);
 			break;
 		}

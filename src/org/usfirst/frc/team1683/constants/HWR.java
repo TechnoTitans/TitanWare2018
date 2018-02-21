@@ -15,8 +15,7 @@ public class HWR {
 
 	// Solenoids
 	public static final int PCM = HWP.CAN_15;
-	public static final int SOLENOID = HWP.PCM_0;
-	public static final int GRABBER_SOLENOID = HWP.PCM_1;
+	public static final int GRABBER_SOLENOID = 0;
 	
 	// Encoders
 //	public static final int LEFT_DRIVE_ENCODER = HWP.CAN_7;

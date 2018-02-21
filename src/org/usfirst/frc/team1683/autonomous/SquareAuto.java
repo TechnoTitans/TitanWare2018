@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.autonomous;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.Path;
 import org.usfirst.frc.team1683.driveTrain.PathPoint;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 /*
  * 
@@ -25,5 +26,6 @@ public class SquareAuto extends Autonomous {
 		} else {
 			tankDrive.stop();
 		}
+		SmartDashboard.sendData("Path dist left", path.getApproxDistLeft());
 	}
 }

@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.controls;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
+import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.scoring.Elevator;
 
@@ -19,7 +20,7 @@ public abstract class Controls {
 	private PowerDistributionPanel pdp;
 	private TalonSRX grabberLeft;
 	private TalonSRX grabberRight;
-//	private Solenoid grabberSolenoid;
+	private Solenoid grabberSolenoid;
 	private Elevator elevator;
 	
 	private ElevTarget elevTarget = ElevTarget.MANUAL;
@@ -29,12 +30,12 @@ public abstract class Controls {
 		leftFilter = new InputFilter(0.86);
 	}
 
-	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator) {
+	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator, Solenoid grabberSolenoid) {
 		this.drive = drive;
 		this.pdp = pdp;
 		this.grabberLeft = grabberLeft;
 		this.grabberRight = grabberRight;
-//		this.grabberSolenoid = grabberSolenoid;
+		this.grabberSolenoid = grabberSolenoid;
 		this.elevator = elevator;
 	}
 
@@ -64,10 +65,11 @@ public abstract class Controls {
 		grabberRight.set(flyWheel());
 
 //		// Grabber solenoid
-//		if (solenoidToggle())
-//			grabberSolenoid.fire();
-//		else
-//			grabberSolenoid.retract();
+		SmartDashboard.sendData("Solenoid Toggle", solenoidToggle());
+		if (solenoidToggle())
+			grabberSolenoid.fire();
+		else
+			grabberSolenoid.retract();
 		
 		SmartDashboard.sendData("LeftCan Elev", pdp.getCurrent(2));
 		SmartDashboard.sendData("RightCan Elev", pdp.getCurrent(4));
@@ -80,8 +82,9 @@ public abstract class Controls {
 			elevator.spin(elevSpeed);
 			elevator.overrideLimit(overrideElevatorLimit());
 		} else if (elevTarget == ElevTarget.MID) {
-			elevator.spinTo(30);
+			elevator.spinTo(340);
 		}
+		SmartDashboard.sendData("Elevator target", elevTarget.toString());
 //
 //		if (hasXBox())
 //			shakeXBox(0.7); // TODO

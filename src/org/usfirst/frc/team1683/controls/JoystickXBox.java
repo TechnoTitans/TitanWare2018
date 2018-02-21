@@ -1,9 +1,9 @@
 package org.usfirst.frc.team1683.controls;
 
 import org.usfirst.frc.team1683.constants.HWR;
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -71,6 +71,7 @@ public class JoystickXBox extends Controls {
 	public boolean solenoidToggle() {
 		if (controller.getBumperPressed(Hand.kLeft))
 			solenoidDeployed = !solenoidDeployed;
+		SmartDashboard.sendData("SOlenoid", solenoidDeployed);
 		return solenoidDeployed;
 	}
 

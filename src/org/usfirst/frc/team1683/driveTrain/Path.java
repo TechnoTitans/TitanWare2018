@@ -105,6 +105,7 @@ public class Path {
 		if (isDone()) return 0;
 		double width = 16.5; // doesn't really matter just an approximation
 		double dist = isTurning ?  Math.toRadians(turner.angleLeft()) * width : mover.getAverageDistanceLeft();
+		if (isTurning) dist += path[pathIndex].getDistance();
 		for (int i = pathIndex + 1; i < path.length; ++i) {
 			dist += Math.toRadians(path[pathIndex].getAngle()) * width;
 			dist += path[pathIndex].getDistance();

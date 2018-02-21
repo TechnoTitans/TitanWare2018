@@ -13,7 +13,6 @@ public class QuadEncoder implements Encoder {
 	private TalonSRX talonSRX;
 	private double wheelRadius;
 	private final double PULSES_PER_ROTATION = 4096;
-	private boolean reversed = false;
 	
 	public QuadEncoder(TalonSRX talonSRX, double wheelRadius, boolean reversed) {
 		this.talonSRX = talonSRX;

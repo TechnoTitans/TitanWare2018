@@ -4,18 +4,14 @@ import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
-
 public class Elevator {
 
 	private TalonSRX elevatorMain;
 	private final double liftSpeedMax = 0.7;
-	private final double kP = 0.05;
 	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
 	
 	// We start raised
-	private final double MAX_DISTANCE = 50; // todo find
 	private final double START_DISTANCE = 0; // from when we start 55 in extended TODO: findd actual value
 	private double distance = START_DISTANCE;
 	
@@ -33,24 +29,22 @@ public class Elevator {
 
 	public boolean spinUp() {
 		if (limitTop.isPressed()) {
-			elevatorMain.brake();
-			elevatorMain.getEncoder().reset();
-			distance = MAX_DISTANCE;
+			elevatorMain.stop();
 			return true;
 		}
 		else {
-			spin(liftSpeedMax);
+			spin(liftSpeedMax / 2);
 			return false;
 		}
 	}
 	
 	public boolean spinTo(double d) {
 		double distLeft = d - getHeight();
-		if (distLeft <= 0.5 && -0.5 <= distLeft) {
-			stop(d);
+		if (Math.abs(distLeft) <= 10) {
+			stop();
 			return true;
 		} else {
-			spin(distLeft < 0 ? liftSpeedMax : -liftSpeedMax);
+			spin(distLeft > 0 ? liftSpeedMax / 2: -liftSpeedMax / 2);
 			return false;
 		}
 	}
@@ -61,13 +55,14 @@ public class Elevator {
 	
 	Double initEncValue = null;
 	public void spin(double speed) {
+		SmartDashboard.sendData("ELevator Speed speed", speed);
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0))) {
 			elevatorMain.stop();
 		} else if(Math.abs(speed) < 0.09) {
 			if(initEncValue == null) {
 				initEncValue = getHeight();
 			}
-			stop(initEncValue);
+			stop();
 		}
 		else {
 			elevatorMain.set(speed * liftSpeedMax);
@@ -75,10 +70,10 @@ public class Elevator {
 		}
 	}
 	
-	public void stop(double initEncValue) {
-		double error = initEncValue - getHeight();
-		double correction = kP * error;
-//		elevatorMain.set(correction);
+	public void stop() {
+//		double error = initEncValue - getHeight();
+//		double correction = kP * error;
+		elevatorMain.set(0.1);
 	}
 
 	/*public boolean spinDown() {
