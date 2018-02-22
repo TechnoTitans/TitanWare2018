@@ -56,13 +56,13 @@ public class JoystickXBox extends Controls {
 		return -controller.getY(Hand.kRight);
 	}
 
-	private boolean yIsPressed = false;
+	private boolean xIsPressed = false;
 
 	@Override
 	public boolean overrideElevatorLimit() {
-		if (controller.getYButtonPressed())
-			yIsPressed = !yIsPressed;
-		return yIsPressed;
+		if (controller.getXButtonPressed())
+			xIsPressed = !xIsPressed;
+		return xIsPressed;
 	}
 
 	private boolean solenoidDeployed = false;
@@ -84,9 +84,19 @@ public class JoystickXBox extends Controls {
 	public void shakeXBox(double amount) {
 //		controller.setRumble(RumbleType.kRightRumble, amount);
 	}
+	
+	@Override
+	public boolean getLowElevButton() {
+		return controller.getAButtonPressed();
+	}
 
 	@Override
 	public boolean getMidElevButton() {
 		return controller.getBButtonPressed();
+	}
+
+	@Override
+	public boolean getHighElevButton() {
+		return controller.getYButtonPressed();
 	}
 }

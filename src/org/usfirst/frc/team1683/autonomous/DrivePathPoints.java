@@ -21,29 +21,29 @@ public class DrivePathPoints extends Autonomous {
 	
 	
 	
-	public static PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(22, 0)},
+	public static PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(2, 0)},
 					// 214.7; turn; 215; turn; 65; turn; 4-6 in
-					LeftSwitchRight = { new PathPoint(0, 215), new PathPoint(215, 0),
-										new PathPoint(0, -65), new PathPoint(0, -6) },
+					LeftSwitchRight = { new PathPoint(0, 215), new PathPoint(235, 0),
+										new PathPoint(0, -65), new PathPoint(-6, 0) },
 					// 335.69; turn; ~1 in
-					LeftScaleLeft = { new PathPoint(0, 335.7), new PathPoint(0.1, 0) },
+					LeftScaleLeft = { new PathPoint(0, 292), new PathPoint(10, 0) },
 					LeftScaleRight = { new PathPoint(0, 218.7), new PathPoint(260, 228, false), 
 										new PathPoint(260, 323, false), new PathPoint(218, 323, false) },
-					MiddleSwitchLeft = { new PathPoint(0, 60), new PathPoint(-132, 68, false),
-										new PathPoint(-132, 168, false), new PathPoint(-76.5, 168, false) },
-					MiddleSwitchRight = { new PathPoint(0, 60), new PathPoint(132, 68, false),
-										new PathPoint(132, 168, false), new PathPoint(76.5, 168, false) },
-					MiddleScaleLeft = { new PathPoint(0, 60), new PathPoint(-132, 60, false),
-										new PathPoint(-132, 323, false), new PathPoint(-90.1, 323, false) },
-					MiddleScaleRight = { new PathPoint(0, 60), new PathPoint(132, 60, false),
-										new PathPoint(132, 323, false), new PathPoint(90.1, 323, false) },
-					RightSwitchRight = { new PathPoint(0, 168), new PathPoint(-55.5, 168, false) },
-					RightSwitchLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
-										new PathPoint(-260, 168, false), new PathPoint(-208, 168, false) },
-					RightScaleRight = { new PathPoint(0, 323), new PathPoint(-41.9, 323, false) },
-					RightScaleLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
-										new PathPoint(-260, 323, false), new PathPoint(-218, 323, false) },
-					MiddleRightSwitchRight = { new PathPoint(0, 100) },
+//					MiddleSwitchLeft = { new PathPoint(0, 60), new PathPoint(-132, 68, false),
+//										new PathPoint(-132, 168, false), new PathPoint(-76.5, 168, false) },
+//					MiddleSwitchRight = { new PathPoint(0, 60), new PathPoint(132, 68, false),
+//										new PathPoint(132, 168, false), new PathPoint(76.5, 168, false) },
+//					MiddleScaleLeft = { new PathPoint(0, 60), new PathPoint(-132, 60, false),
+//										new PathPoint(-132, 323, false), new PathPoint(-90.1, 323, false) },
+//					MiddleScaleRight = { new PathPoint(0, 60), new PathPoint(132, 60, false),
+//										new PathPoint(132, 323, false), new PathPoint(90.1, 323, false) },
+//					RightSwitchRight = { new PathPoint(0, 168), new PathPoint(-55.5, 168, false) },
+//					RightSwitchLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
+//										new PathPoint(-260, 168, false), new PathPoint(-208, 168, false) },
+//					RightScaleRight = { new PathPoint(0, 323), new PathPoint(-41.9, 323, false) },
+//					RightScaleLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
+//										new PathPoint(-260, 323, false), new PathPoint(-218, 323, false) },
+					MiddleRightSwitchRight = { new PathPoint(0, 95) },
 					MiddleRightSwitchLeft = { new PathPoint(0, 25), new PathPoint(-90, 80, false), new PathPoint(-90, 100, false) };
 
 	private Path path;

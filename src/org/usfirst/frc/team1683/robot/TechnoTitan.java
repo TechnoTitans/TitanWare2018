@@ -31,6 +31,7 @@ public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
 	public static final double WHEEL_RADIUS = 2.8999;
+	public static final double SWITCH_HEIGHT = 340;
 
 	Autonomous auto;
 	AutonomousSwitcher autoSwitch;
@@ -98,7 +99,7 @@ public class TechnoTitan extends IterativeRobot {
 		drive = new TankDrive(leftETalonSRX, rightETalonSRX, gyro);
 
 		pdp = new PowerDistributionPanel();
-		autoSwitch = new AutonomousSwitcher(drive, elevator, grabberLeft, accel);
+		autoSwitch = new AutonomousSwitcher(drive, elevator, grabberLeft, grabberRight, accel);
 
 		controls = new JoystickXBox();
 		controls.init(drive, pdp, grabberLeft, grabberRight, elevator, grabberSolenoid);

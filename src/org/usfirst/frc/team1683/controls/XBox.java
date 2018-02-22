@@ -76,4 +76,16 @@ public class XBox extends Controls {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean getHighElevButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getLowElevButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

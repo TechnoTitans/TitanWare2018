@@ -5,6 +5,7 @@ import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.robot.InputFilter;
+import org.usfirst.frc.team1683.robot.TechnoTitan;
 import org.usfirst.frc.team1683.scoring.Elevator;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -78,11 +79,18 @@ public abstract class Controls {
 		double elevSpeed = elevator();
 		if (Math.abs(elevSpeed) > 0.1) elevTarget = ElevTarget.MANUAL;
 		else if (getMidElevButton()) elevTarget = ElevTarget.MID;
+		else if (getHighElevButton()) elevTarget = ElevTarget.TOP;
+		else if (getLowElevButton()) elevTarget = ElevTarget.BOTTOM;
+
 		if (elevTarget == ElevTarget.MANUAL) {
 			elevator.spin(elevSpeed);
 			elevator.overrideLimit(overrideElevatorLimit());
 		} else if (elevTarget == ElevTarget.MID) {
-			elevator.spinTo(340);
+			elevator.spinTo(TechnoTitan.SWITCH_HEIGHT);
+		} else if (elevTarget == ElevTarget.TOP) {
+			if (elevator.spinUp()) elevTarget = ElevTarget.MANUAL;
+		} else if (elevTarget == ElevTarget.BOTTOM){
+			if (elevator.spinDown()) elevTarget = ElevTarget.MANUAL;
 		}
 		SmartDashboard.sendData("Elevator target", elevTarget.toString());
 //
@@ -90,7 +98,11 @@ public abstract class Controls {
 //			shakeXBox(0.7); // TODO
 	}
 
+	public abstract boolean getHighElevButton();
+
 	public abstract boolean getMidElevButton();
+	
+	public abstract boolean getLowElevButton();
 
 	public abstract double[] drivePower();
 
