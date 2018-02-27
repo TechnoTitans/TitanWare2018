@@ -22,14 +22,18 @@ public class AutonomousSwitcher {
 	Gyro gyro;
 
 	// Creates buttons for co driver to pick autonomous
-	public AutonomousSwitcher(TankDrive tankDrive, Elevator elevator, TalonSRX grabberLeft, TalonSRX grabberRight, BuiltInAccel accel) {
+	public AutonomousSwitcher(TankDrive tankDrive, Elevator elevator, TalonSRX grabberLeft, TalonSRX grabberRight,
+			BuiltInAccel accel) {
 		chooser = new SendableChooser<Autonomous>();
-
+		
+		SingleTarget singleTarget = new SingleTarget(tankDrive, elevator, grabberLeft, grabberRight);
 		addAuto("Do Nothing", new DoNothing(tankDrive));
 		addAuto("Square Auto", new SquareAuto(tankDrive));
-		addAuto("Single Target", new SingleTarget(tankDrive, elevator, grabberLeft, grabberRight));
+		addAuto("Single Target", singleTarget);
+		addAuto("Double Target", new DoubleTarget(singleTarget, tankDrive, elevator, grabberLeft, grabberRight));
 		setDefault("Drive Straight", new DriveStraight(tankDrive));
 		SmartDashboard.putData("Auto", chooser);
+
 		priorities = new ArrayList<>();
 		Target[] possTargets = Target.values();
 		for (int i = 0; i < 3; ++i) {
@@ -41,16 +45,16 @@ public class AutonomousSwitcher {
 				}
 			}
 			priorities.add(p);
-			SmartDashboard.putData("Priority " + (i+1), p);
+			SmartDashboard.putData("Priority " + (i + 1), p);
 		}
-		
+
 		side = new SendableChooser<Character>();
 		side.addDefault("Left", 'L');
 		side.addObject("Middle Right", 'M');
 		side.addObject("Right", 'R');
 		SmartDashboard.putData("Side", side);
 	}
-	
+
 	private List<Target> getPriorities() {
 		List<Target> targets = new ArrayList<Target>();
 		for (SendableChooser<Target> p : priorities) {
@@ -60,7 +64,6 @@ public class AutonomousSwitcher {
 		}
 		return targets;
 	}
-	
 
 	// When chooser is displayed, this autonomous is autonomatically selected
 	public void setDefault(String name, Autonomous auto) {

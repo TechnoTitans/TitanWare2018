@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1683.autonomous;
 
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
-import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.Encoder;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -26,7 +25,8 @@ public abstract class Autonomous {
 
 	// Different states the autonomous could take
 	public static enum State {
-		INIT_CASE, END_CASE, WAIT, DRIVE_FORWARD, RUN_PATH, LIFT_ELEVATOR, RELEASE_CUBE, BACKUP;
+		INIT_CASE, END_CASE, WAIT, DRIVE_FORWARD, RUN_PATH, LIFT_ELEVATOR, RELEASE_CUBE, BACKUP, SINGLE_TARGET_INSTEAD, 
+		LIFT_ELEVATOR_2, LOWER_ELEVATOR, GRAB_CUBE, RELEASE_CUBE_2;
 	}
 
 	public boolean isAtEndCase() {
