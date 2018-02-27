@@ -3,12 +3,12 @@ package org.usfirst.frc.team1683.controls;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.robot.TechnoTitan;
 import org.usfirst.frc.team1683.scoring.Elevator;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Timer;
 
 public abstract class Controls {
 
@@ -21,22 +21,23 @@ public abstract class Controls {
 	private PowerDistributionPanel pdp;
 	private TalonSRX grabberLeft;
 	private TalonSRX grabberRight;
-	private Solenoid grabberSolenoid;
+//	private Solenoid grabberSolenoid
+	private Timer grabCorrection;
 	private Elevator elevator;
 	
 	private ElevTarget elevTarget = ElevTarget.MANUAL;
+	private Grabber grabState = Grabber.MANUAL;
 
 	public Controls() {
 		rightFilter = new InputFilter(0.86);
 		leftFilter = new InputFilter(0.86);
 	}
 
-	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator, Solenoid grabberSolenoid) {
+	public void init(DriveTrain drive, PowerDistributionPanel pdp, TalonSRX grabberLeft, TalonSRX grabberRight, Elevator elevator) {
 		this.drive = drive;
 		this.pdp = pdp;
 		this.grabberLeft = grabberLeft;
 		this.grabberRight = grabberRight;
-		this.grabberSolenoid = grabberSolenoid;
 		this.elevator = elevator;
 	}
 
@@ -62,15 +63,45 @@ public abstract class Controls {
 		drive.driveMode(lSpeed, rSpeed);
 
 		// Flywheel
-		grabberLeft.set(flyWheel());
-		grabberRight.set(flyWheel());
+		if (Math.abs(flyWheel()) > 0.1) grabState = Grabber.MANUAL;
+		else if (correctCube()) grabState = Grabber.CORRECTION_OUTTAKE;
+		
+		if(grabState == Grabber.MANUAL){
+			grabberLeft.set(flyWheel());
+			grabberRight.set(flyWheel());
+			grabCorrection = null;
+		}
+		else if(grabState == Grabber.CORRECTION_OUTTAKE){
+			if(grabCorrection == null){
+				grabCorrection = new Timer();
+				grabCorrection.start();
+			}
+			grabberLeft.set(-0.5);
+			grabberRight.set(-0.5);
+			if (grabCorrection.get() > 0.1){
+				grabCorrection = null;
+				grabState = Grabber.CORRECTION_INTAKE;
+			}
+		}
+		else if (grabState == Grabber.CORRECTION_INTAKE) {
+			if(grabCorrection == null){
+				grabCorrection = new Timer();
+				grabCorrection.start();
+			}
+			grabberLeft.set(0.5);
+			grabberRight.set(0.5);
+			if (grabCorrection.get() > 0.1){
+				grabCorrection = null;
+				grabState = Grabber.MANUAL;
+			}
+		}
 
 //		// Grabber solenoid
-		SmartDashboard.sendData("Solenoid Toggle", solenoidToggle());
-		if (solenoidToggle())
-			grabberSolenoid.fire();
-		else
-			grabberSolenoid.retract();
+//		SmartDashboard.sendData("Solenoid Toggle", solenoidToggle());
+//		if (solenoidToggle())
+//			grabberSolenoid.fire();
+//		else
+//			grabberSolenoid.retract();
 		
 		SmartDashboard.sendData("LeftCan Elev", pdp.getCurrent(2));
 		SmartDashboard.sendData("RightCan Elev", pdp.getCurrent(4));
@@ -106,7 +137,7 @@ public abstract class Controls {
 
 	public abstract double[] drivePower();
 
-	public abstract boolean solenoidToggle();
+//	public abstract boolean solenoidToggle();
 
 	public abstract double flyWheel();
 
@@ -117,4 +148,6 @@ public abstract class Controls {
 	public abstract boolean hasXBox();
 	
 	public abstract void shakeXBox(double amount);
+
+	public abstract boolean correctCube();
 }

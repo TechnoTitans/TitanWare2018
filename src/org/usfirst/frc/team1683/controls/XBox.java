@@ -88,4 +88,10 @@ public class XBox extends Controls {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean correctCube() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

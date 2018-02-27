@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1683.controls;
 
 import org.usfirst.frc.team1683.constants.HWR;
-import org.usfirst.frc.team1683.driverStation.SmartDashboard;
+
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -69,11 +69,11 @@ public class Joysticks extends Controls {
 		return findToggle(HWR.AUX_JOYSTICK, HWR.OVERRIDE_LIMIT);
 	}
 
-	@Override
-	public boolean solenoidToggle() {
-		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
-		return findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID);
-	}
+//	@Override
+//	public boolean solenoidToggle() {
+//		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
+//		return findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID);
+//	}
 
 	// toggle button
 	public boolean findToggle(int joystick, int button) {
@@ -136,6 +136,12 @@ public class Joysticks extends Controls {
 
 	@Override
 	public boolean getLowElevButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean correctCube() {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -10,7 +10,6 @@ import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
-import org.usfirst.frc.team1683.pneumatics.Solenoid;
 import org.usfirst.frc.team1683.scoring.Elevator;
 import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
@@ -54,7 +53,7 @@ public class TechnoTitan extends IterativeRobot {
 	TalonSRX leftETalonSRX, rightETalonSRX;
 	Controls controls;
 	
-	Solenoid grabberSolenoid;
+//	Solenoid grabberSolenoid;
 
 	CameraServer server;
 	
@@ -73,9 +72,9 @@ public class TechnoTitan extends IterativeRobot {
 		limitTop = new LimitSwitch(HWR.LIMIT_SWITCH_TOP, false);
 		limitBottom = new LimitSwitch(HWR.LIMIT_SWITCH_BOTTOM, false);
 
-		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
-		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, true);
-		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, true);
+//		grabberSolenoid = new Solenoid(HWR.PCM, HWR.GRABBER_SOLENOID);
+		grabberLeft = new TalonSRX(HWR.GRABBER_LEFT, false);
+		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
 		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, false);
 		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 0.5, true)); // TODO: find wheel radius
@@ -102,11 +101,11 @@ public class TechnoTitan extends IterativeRobot {
 		autoSwitch = new AutonomousSwitcher(drive, elevator, grabberLeft, grabberRight, accel);
 
 		controls = new JoystickXBox();
-		controls.init(drive, pdp, grabberLeft, grabberRight, elevator, grabberSolenoid);
+		controls.init(drive, pdp, grabberLeft, grabberRight, elevator);
 		
 		SmartDashboard.prefDouble("kP", 0.05);
 		
-		// CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	@Override

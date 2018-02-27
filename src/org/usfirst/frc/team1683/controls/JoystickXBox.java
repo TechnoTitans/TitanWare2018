@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1683.controls;
 
 import org.usfirst.frc.team1683.constants.HWR;
-import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -48,7 +47,7 @@ public class JoystickXBox extends Controls {
 
 	@Override
 	public double flyWheel() {
-		return -controller.getY(Hand.kLeft);
+		return -0.8 * controller.getY(Hand.kLeft);
 	}
 
 	@Override
@@ -64,16 +63,21 @@ public class JoystickXBox extends Controls {
 			xIsPressed = !xIsPressed;
 		return xIsPressed;
 	}
-
-	private boolean solenoidDeployed = false;
-
+	
 	@Override
-	public boolean solenoidToggle() {
-		if (controller.getBumperPressed(Hand.kLeft))
-			solenoidDeployed = !solenoidDeployed;
-		SmartDashboard.sendData("SOlenoid", solenoidDeployed);
-		return solenoidDeployed;
+	public boolean correctCube(){
+		return controller.getStickButton(Hand.kLeft);
 	}
+
+//	private boolean solenoidDeployed = false;
+
+//	@Override
+//	public boolean solenoidToggle() {
+//		if (controller.getBumperPressed(Hand.kLeft))
+//			solenoidDeployed = !solenoidDeployed;
+//		SmartDashboard.sendData("SOlenoid", solenoidDeployed);
+//		return solenoidDeployed;
+//	}
 
 	@Override
 	public boolean hasXBox() {

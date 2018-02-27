@@ -119,14 +119,14 @@ public class TwistJoystick extends Controls {
 		return 0;
 	}
 
-	@Override
-	public boolean solenoidToggle() {
-		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
-		if (findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID)) {
-			return true;
-		}
-		return false;
-	}
+//	@Override
+//	public boolean solenoidToggle() {
+//		SmartDashboard.sendData("FIRE Solenoid", findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID));
+//		if (findToggle(HWR.AUX_JOYSTICK, HWR.FIRE_SOLENOID)) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	@Override
 	public boolean overrideElevatorLimit() {
@@ -160,6 +160,12 @@ public class TwistJoystick extends Controls {
 
 	@Override
 	public boolean getLowElevButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean correctCube() {
 		// TODO Auto-generated method stub
 		return false;
 	}
