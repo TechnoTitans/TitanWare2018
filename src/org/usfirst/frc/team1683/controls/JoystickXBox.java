@@ -66,7 +66,7 @@ public class JoystickXBox extends Controls {
 	
 	@Override
 	public boolean correctCube(){
-		return controller.getStickButton(Hand.kLeft);
+		return controller.getBumperPressed(Hand.kLeft);
 	}
 
 //	private boolean solenoidDeployed = false;
