@@ -90,7 +90,7 @@ public abstract class Controls {
 			}
 			grabberLeft.set(0.5);
 			grabberRight.set(0.5);
-			if (grabCorrection.get() > 0.1){
+			if (grabCorrection.get() > 0.4){
 				grabCorrection = null;
 				grabState = Grabber.MANUAL;
 			}
