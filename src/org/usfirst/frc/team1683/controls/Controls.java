@@ -76,9 +76,9 @@ public abstract class Controls {
 				grabCorrection = new Timer();
 				grabCorrection.start();
 			}
-			grabberLeft.set(-0.5);
-			grabberRight.set(-0.5);
-			if (grabCorrection.get() > 0.1){
+			grabberLeft.set(0.5);
+			grabberRight.set(0.5);
+			if (grabCorrection.get() > 0.17){
 				grabCorrection = null;
 				grabState = Grabber.CORRECTION_INTAKE;
 			}
@@ -88,8 +88,8 @@ public abstract class Controls {
 				grabCorrection = new Timer();
 				grabCorrection.start();
 			}
-			grabberLeft.set(0.5);
-			grabberRight.set(0.5);
+			grabberLeft.set(-0.5);
+			grabberRight.set(-0.5);
 			if (grabCorrection.get() > 0.4){
 				grabCorrection = null;
 				grabState = Grabber.MANUAL;

@@ -26,7 +26,8 @@ public class SingleTarget extends Autonomous {
 	private Timer grabberTimer;
 	private DriveTrainMover forward;
 	private DriveTrainMover backup;
-
+	private DriveTrainMover grabberFall;
+	
 	private boolean hasReachedEndOfPath = false;
 
 	private boolean elevatorRaised = false;
@@ -89,7 +90,23 @@ public class SingleTarget extends Autonomous {
 		switch (presentState) {
 		case INIT_CASE:
 			init();
-			nextState = State.RUN_PATH;
+			nextState = State.DROP_GRABBER_1;
+			grabberFall = new DriveTrainMover(tankDrive, 4, 0.2);
+			break;
+		case DROP_GRABBER_1:
+			grabberFall.runIteration();
+			if(grabberFall.areAnyFinished()){
+				tankDrive.stop();
+				grabberFall = new DriveTrainMover(tankDrive, -4, 0.2);
+				nextState = State.DROP_GRABBER_2;
+			}
+			break;
+		case DROP_GRABBER_2:
+			grabberFall.runIteration();
+			if(grabberFall.areAnyFinished()){
+				tankDrive.stop();
+				nextState = State.RUN_PATH;
+			}
 			break;
 		case RUN_PATH:
 			if (!path.isDone()) {
