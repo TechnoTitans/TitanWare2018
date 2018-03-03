@@ -87,7 +87,8 @@ public class Elevator {
 	public void stop() {
 		// double error = initEncValue - getHeight();
 		// double correction = kP * error;
-		elevatorMain.set(0.1);
+		if (!limitBottom.isPressed())
+			elevatorMain.set(0.1);
 	}
 
 	/*
