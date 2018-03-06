@@ -7,7 +7,10 @@ import org.usfirst.frc.team1683.sensors.LimitSwitch;
 public class Elevator {
 
 	private TalonSRX elevatorMain;
-	private final double liftSpeedMax = 0.7;
+	private TalonSRX elevatorFollow;
+
+	private final double LIFT_SPEED_MAX = 0.8;
+	private final double LIFT_RATIO = 0.9;
 	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
 
@@ -22,7 +25,7 @@ public class Elevator {
 	public Elevator(TalonSRX motorMain, TalonSRX motorFollow, LimitSwitch limitTop, LimitSwitch limitBottom) {
 		elevatorMain = motorMain;
 		elevatorMain.getEncoder().reset();
-		motorFollow.follow(elevatorMain);
+		elevatorFollow = motorFollow;
 
 		this.limitBottom = limitBottom;
 		this.limitTop = limitTop;
@@ -32,9 +35,10 @@ public class Elevator {
 	public boolean spinUp() {
 		if (limitTop.isPressed()) {
 			elevatorMain.stop();
+			elevatorFollow.stop();
 			return true;
 		} else {
-			spin(liftSpeedMax);
+			spin(1);
 			return false;
 		}
 	}
@@ -42,20 +46,23 @@ public class Elevator {
 	public boolean spinDown() {
 		if (limitBottom.isPressed()) {
 			elevatorMain.stop();
+			elevatorFollow.stop();
+			SmartDashboard.sendData("going down2", false);
 			return true;
 		} else {
-			spin(-liftSpeedMax / 2);
+			SmartDashboard.sendData("going down2", Math.random());
+			spin(-0.5);
 			return false;
 		}
 	}
 
 	public boolean spinTo(double d) {
 		double distLeft = d - getHeight();
-		if (Math.abs(distLeft) <= 10) {
+		if (Math.abs(distLeft) <= 30) {
 			stop();
 			return true;
 		} else {
-			spin(distLeft > 0 ? liftSpeedMax : -liftSpeedMax);
+			spin(distLeft > 0 ? 1 : -1);
 			return false;
 		}
 	}
@@ -64,31 +71,30 @@ public class Elevator {
 		this.override = override;
 	}
 
-	Double initEncValue = null;
-
 	public void spin(double speed) {
 		SmartDashboard.sendData("ELevator Speed speed", speed);
-		if(limitBottom.isPressed()) 
+		if (limitBottom.isPressed())
 			elevatorMain.getEncoder().reset();
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0))) {
 			elevatorMain.stop();
-		}
-		else if (Math.abs(speed) < 0.09) {
-			if (initEncValue == null) {
-				initEncValue = getHeight();
-			}
+			elevatorFollow.stop();
+		} else if (Math.abs(speed) < 0.09) {
 			stop();
 		} else {
-			elevatorMain.set(speed * liftSpeedMax);
-			initEncValue = null;
+			elevatorFollow.set(speed * LIFT_SPEED_MAX);
+			elevatorMain.set(LIFT_RATIO * speed * LIFT_SPEED_MAX);
+			SmartDashboard.sendData("Elevator Ratio", LIFT_RATIO * speed * LIFT_SPEED_MAX);
+			SmartDashboard.sendData("Elevator Ratio2", speed * LIFT_SPEED_MAX);
 		}
 	}
 
 	public void stop() {
 		// double error = initEncValue - getHeight();
 		// double correction = kP * error;
-		if (!limitBottom.isPressed())
+		if (!limitBottom.isPressed()) {
 			elevatorMain.set(0.1);
+			elevatorFollow.set(0.1);
+		}
 	}
 
 	/*

@@ -29,6 +29,9 @@ public class JoystickXBox extends Controls {
 
 	@Override
 	public double[] drivePower() {
+		if(leftStick.getRawButtonPressed(10)){
+			frontMode = !frontMode;
+		}
 		if (frontMode) {
 			lSpeed = -maxPower * leftStick.getRawAxis(YAxis);
 			rSpeed = -maxPower * rightStick.getRawAxis(YAxis);
@@ -37,10 +40,7 @@ public class JoystickXBox extends Controls {
 			rSpeed = maxPower * leftStick.getRawAxis(YAxis);
 		}
 
-		if (rightStick.getRawButton(HWR.FULL_POWER))
-			maxPower = Controls.MAX_JOYSTICK_SPEED;
-		else if (leftStick.getRawButton(HWR.SECOND_POWER))
-			maxPower = Controls.SECOND_JOYSTICK_SPEED;
+		maxPower = 1;
 
 		return new double[] { lSpeed, rSpeed };
 	}

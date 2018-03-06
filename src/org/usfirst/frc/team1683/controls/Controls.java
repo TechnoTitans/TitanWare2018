@@ -150,4 +150,5 @@ public abstract class Controls {
 	public abstract void shakeXBox(double amount);
 
 	public abstract boolean correctCube();
+
 }

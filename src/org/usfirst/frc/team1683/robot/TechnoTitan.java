@@ -30,7 +30,7 @@ public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
 	public static final double WHEEL_RADIUS = 2.8999;
-	public static final double SWITCH_HEIGHT = 340;
+	public static final double SWITCH_HEIGHT = 680; // 20 counts per inch
 
 	Autonomous auto;
 	AutonomousSwitcher autoSwitch;
@@ -94,9 +94,19 @@ public class TechnoTitan extends IterativeRobot {
 		leftFollow2.follow(leftETalonSRX);
 		rightFollow1.follow(rightETalonSRX);
 		rightFollow2.follow(rightETalonSRX);
+		
+		
+		// MARK - Current Limiting
+		leftETalonSRX.setupCurrentLimiting();
+		rightETalonSRX.setupCurrentLimiting();
+		
+		leftFollow1.setupCurrentLimiting();
+		leftFollow2.setupCurrentLimiting();
+		rightFollow1.setupCurrentLimiting();
+		rightFollow2.setupCurrentLimiting();
 
 		drive = new TankDrive(leftETalonSRX, rightETalonSRX, gyro);
-
+		
 		pdp = new PowerDistributionPanel();
 		autoSwitch = new AutonomousSwitcher(drive, elevator, grabberLeft, grabberRight, accel);
 
@@ -110,6 +120,7 @@ public class TechnoTitan extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
+		CameraServer.getInstance().startAutomaticCapture();
 		drive.stop();
 		autoSwitch.getSelected();
 		elevator.getMotor().getEncoder().reset();
