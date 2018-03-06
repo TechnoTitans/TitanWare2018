@@ -2,6 +2,7 @@ package org.usfirst.frc.team1683.scoring;
 
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
+import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 
 public class Elevator {
@@ -13,6 +14,7 @@ public class Elevator {
 	private final double LIFT_RATIO = 0.9;
 	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
+	private InputFilter filter;
 
 	// We start raised
 	private final double START_DISTANCE = 0; // from when we start 55 in
@@ -23,6 +25,7 @@ public class Elevator {
 	private boolean override;
 
 	public Elevator(TalonSRX motorMain, TalonSRX motorFollow, LimitSwitch limitTop, LimitSwitch limitBottom) {
+		filter = new InputFilter(0.99, 0);
 		elevatorMain = motorMain;
 		elevatorMain.getEncoder().reset();
 		elevatorFollow = motorFollow;
@@ -47,10 +50,8 @@ public class Elevator {
 		if (limitBottom.isPressed()) {
 			elevatorMain.stop();
 			elevatorFollow.stop();
-			SmartDashboard.sendData("going down2", false);
 			return true;
 		} else {
-			SmartDashboard.sendData("going down2", Math.random());
 			spin(-0.5);
 			return false;
 		}
@@ -62,7 +63,7 @@ public class Elevator {
 			stop();
 			return true;
 		} else {
-			spin(distLeft > 0 ? 1 : -1);
+			spin(distLeft > 0 ? 1 : -0.5);
 			return false;
 		}
 	}
@@ -81,10 +82,11 @@ public class Elevator {
 		} else if (Math.abs(speed) < 0.09) {
 			stop();
 		} else {
-			elevatorFollow.set(speed * LIFT_SPEED_MAX);
-			elevatorMain.set(LIFT_RATIO * speed * LIFT_SPEED_MAX);
-			SmartDashboard.sendData("Elevator Ratio", LIFT_RATIO * speed * LIFT_SPEED_MAX);
-			SmartDashboard.sendData("Elevator Ratio2", speed * LIFT_SPEED_MAX);
+			double rawSpeed = filter.filterInput(speed * LIFT_SPEED_MAX);
+			elevatorFollow.set(rawSpeed);
+			elevatorMain.set(LIFT_RATIO * rawSpeed);
+			SmartDashboard.sendData("Elevator speed", LIFT_RATIO * rawSpeed);
+			SmartDashboard.sendData("Elevator Ratio2", rawSpeed);
 		}
 	}
 
@@ -92,8 +94,8 @@ public class Elevator {
 		// double error = initEncValue - getHeight();
 		// double correction = kP * error;
 		if (!limitBottom.isPressed()) {
-			elevatorMain.set(0.1);
-			elevatorFollow.set(0.1);
+			elevatorMain.set(filter.filterInput(0.1));
+			elevatorFollow.set(filter.filterInput(0.1));
 		}
 	}
 
