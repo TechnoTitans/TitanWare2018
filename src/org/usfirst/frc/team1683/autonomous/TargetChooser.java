@@ -8,6 +8,7 @@ public class TargetChooser {
 	private List<Target> priorities;
 	private char startingSide;
 
+	
 	public TargetChooser(List<Target> priorities, char startingSide) {
 		this.priorities = priorities;
 		this.startingSide = startingSide;
@@ -28,7 +29,19 @@ public class TargetChooser {
 		}
 		throw new Error("No target works");
 	}
-
+	
+	public boolean isOurs(int switchScale) {
+		return DriverStation.getInstance().getGameSpecificMessage().charAt(switchScale) == startingSide;
+	}
+	
+	public boolean isSwitchOurs() {
+		return isOurs(0);
+	}
+	
+	public boolean isScaleOurs() {
+		return isOurs(1);
+	}
+	
 	public char getPosition() {
 		return startingSide;
 	}

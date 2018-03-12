@@ -184,6 +184,7 @@ public class SingleTarget extends Autonomous {
 			break;
 		case END_CASE:
 			tankDrive.stop();
+			elevator.stop();
 			break;
 		default:
 			break;

@@ -96,6 +96,9 @@ public class Elevator {
 		if (!limitBottom.isPressed()) {
 			elevatorMain.set(filter.filterInput(0.1));
 			elevatorFollow.set(filter.filterInput(0.1));
+		} else {
+			elevatorMain.set(0);
+			elevatorFollow.set(0);
 		}
 	}
 
