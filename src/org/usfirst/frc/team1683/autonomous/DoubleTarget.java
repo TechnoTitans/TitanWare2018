@@ -77,8 +77,6 @@ public class DoubleTarget extends Autonomous {
 				points[i] = points[i].flipX();
 			}
 		}
-		path = new Path(tankDrive, points, 0.4, 0.4);
-		path.setEasing(new LinearEasing(15));
 		SmartDashboard.putString("2nd target", secondTarget.toString());
 	}
 
@@ -98,26 +96,19 @@ public class DoubleTarget extends Autonomous {
 			case LOWER_ELEVATOR:
 				if (elevator.spinDown()) {
 					elevator.stop();
-					forward = new DriveTrainMover(tankDrive, 15, 0.3);
-					grabberTimer.reset();
-					grabberTimer.start();
 					nextState = State.RUN_PATH;
+					double heading = chooser.isScaleOurs() ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
+					path = new Path(tankDrive, points, 0.8, 0.4, heading);
+					path.setEasing(new LinearEasing(15));
 				}
 				break;
 			case RUN_PATH:
 				if (!path.isDone()) {
 					path.run();
 				} else {
+					forward = new DriveTrainMover(tankDrive, 15, 0.3);
 					tankDrive.stop();
-					nextState = State.LIFT_ELEVATOR;
-				}
-				hasReachedEndOfPath = true;
-				if (hasReachedEndOfPath) {
-					if (!elevatorRaised) {
-						elevatorRaised = elevator.spinTo(TechnoTitan.SWITCH_HEIGHT);
-					} else {
-						elevator.stop();
-					}
+					nextState = State.GRAB_CUBE;
 				}
 				break;
 			case LIFT_ELEVATOR:
@@ -128,14 +119,6 @@ public class DoubleTarget extends Autonomous {
 					elevator.stop();
 					grabberTimer.start();
 					nextState = State.RELEASE_CUBE;
-				}
-				break;
-			case RELEASE_CUBE:
-				elevator.stop();
-				grabberLeft.set(1.0);
-				grabberRight.set(1.0);
-				if (grabberTimer.get() > 2) {
-					nextState = State.LOWER_ELEVATOR;
 				}
 				break;
 			case GRAB_CUBE:

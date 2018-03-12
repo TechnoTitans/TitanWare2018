@@ -21,8 +21,9 @@ public class DrivePathPoints extends Autonomous {
 	
 	
 	
-
-	public static PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(7, 0)},
+	public static final double headingScaleDouble = 90,
+							   headingSwitchDouble = 90;
+	public static final PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(7, 0)},
 					// 214.7; turn; 215; turn; 65; turn; 4-6 in
 					LeftSwitchRight = { new PathPoint(0, 220), new PathPoint(235, 0), new PathPoint(0,-65), new PathPoint(-4,0)},
 					// 335.69; turn; ~1 in
