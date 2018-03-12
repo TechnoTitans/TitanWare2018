@@ -20,7 +20,7 @@ public class DoubleTarget extends Autonomous {
 	private SingleTarget single;
 	private PathPoint[] points;
 	private Path path;
-	private Target secondTarget;
+	private boolean secondTarget = false;
 	private TargetChooser chooser;
 	private Elevator elevator;
 	private TalonSRX grabberLeft;
@@ -60,24 +60,15 @@ public class DoubleTarget extends Autonomous {
 		elevatorRaised = false;
 		hasReachedEndOfPath = false;
 		grabberTimer.reset();
-		if (chooser.isScaleOurs()) {
-			if (chooser.isSwitchOurs()) {
-				secondTarget = Target.CLOSE_SWITCH;
-				points = DrivePathPoints.LeftScaleLeftDouble;
-			}
-			else secondTarget = null;
-		} else if (chooser.isSwitchOurs()) {
-			secondTarget = Target.CLOSE_SWITCH;
-			points = DrivePathPoints.LeftSwitchLeftDouble;
-		} else {
-			secondTarget = null;
+		if (chooser.isSwitchOurs()) {
+			secondTarget = true;
 		}
 		if (chooser.getPosition() == 'R') {
 			for (int i = 0; i < points.length; i++) {
 				points[i] = points[i].flipX();
 			}
 		}
-		SmartDashboard.putString("2nd target", secondTarget.toString());
+		SmartDashboard.putBoolean("2nd target", secondTarget);
 	}
 
 	public void run() {
@@ -89,7 +80,7 @@ public class DoubleTarget extends Autonomous {
 			case RUN_SINGLE_TARGET:
 				single.run();
 				if (single.isAtEndCase()) {
-					if (secondTarget == null) nextState = State.END_CASE;
+					if (!secondTarget) nextState = State.END_CASE;
 					else nextState = State.LOWER_ELEVATOR;
 				}
 				break;
@@ -97,7 +88,9 @@ public class DoubleTarget extends Autonomous {
 				if (elevator.spinDown()) {
 					elevator.stop();
 					nextState = State.RUN_PATH;
-					double heading = chooser.isScaleOurs() ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
+					boolean scale = chooser.isScaleOurs();
+					points = scale ? DrivePathPoints.LeftScaleLeftDouble : DrivePathPoints.LeftSwitchLeftDouble;
+					double heading = scale ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
 					path = new Path(tankDrive, points, 0.8, 0.4, heading);
 					path.setEasing(new LinearEasing(15));
 				}
@@ -109,16 +102,6 @@ public class DoubleTarget extends Autonomous {
 					forward = new DriveTrainMover(tankDrive, 15, 0.3);
 					tankDrive.stop();
 					nextState = State.GRAB_CUBE;
-				}
-				break;
-			case LIFT_ELEVATOR:
-				if (!elevatorRaised) {
-					if (elevator.spinTo(TechnoTitan.SWITCH_HEIGHT))
-						elevatorRaised = true;
-				} else {
-					elevator.stop();
-					grabberTimer.start();
-					nextState = State.RELEASE_CUBE;
 				}
 				break;
 			case GRAB_CUBE:
