@@ -71,7 +71,7 @@ public class SingleTarget extends Autonomous {
 				points[i] = points[i].flipX();
 			}
 		}
-		if (target == Target.CLOSE_SWITCH || target == Target.MIDDLE_SWITCH || target == Target.CLOSE_SCALE)
+		if (target == Target.CLOSE_SWITCH || target == Target.MIDDLE_SWITCH)
 			path = new Path(tankDrive, points, 0.5, 0.4);
 		else
 			path = new Path(tankDrive, points, 0.8, 0.26);
