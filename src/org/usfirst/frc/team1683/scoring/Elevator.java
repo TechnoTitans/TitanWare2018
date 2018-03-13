@@ -11,7 +11,7 @@ public class Elevator {
 	private TalonSRX elevatorFollow;
 
 	private final double LIFT_SPEED_MAX = 0.8;
-	private final double LIFT_RATIO = 0.9;
+//	private final double LIFT_RATIO = 0.9;
 	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
 	private InputFilter filter;
@@ -24,11 +24,11 @@ public class Elevator {
 
 	private boolean override;
 
-	public Elevator(TalonSRX motorMain, TalonSRX motorFollow, LimitSwitch limitTop, LimitSwitch limitBottom) {
+	public Elevator(TalonSRX motorMain, LimitSwitch limitTop, LimitSwitch limitBottom) {
 		filter = new InputFilter(0.99, 0);
 		elevatorMain = motorMain;
 		elevatorMain.getEncoder().reset();
-		elevatorFollow = motorFollow;
+//		elevatorFollow = motorFollow;
 
 		this.limitBottom = limitBottom;
 		this.limitTop = limitTop;
@@ -37,8 +37,8 @@ public class Elevator {
 
 	public boolean spinUp() {
 		if (limitTop.isPressed()) {
-			elevatorMain.stop();
-			elevatorFollow.stop();
+			stop();
+//			elevatorFollow.stop();
 			return true;
 		} else {
 			spin(1);
@@ -49,7 +49,7 @@ public class Elevator {
 	public boolean spinDown() {
 		if (limitBottom.isPressed()) {
 			elevatorMain.stop();
-			elevatorFollow.stop();
+//			elevatorFollow.stop();
 			return true;
 		} else {
 			spin(-0.5);
@@ -83,10 +83,10 @@ public class Elevator {
 			stop();
 		} else {
 			double rawSpeed = filter.filterInput(speed * LIFT_SPEED_MAX);
-			elevatorFollow.set(rawSpeed);
-			elevatorMain.set(LIFT_RATIO * rawSpeed);
-			SmartDashboard.sendData("Elevator speed", LIFT_RATIO * rawSpeed);
-			SmartDashboard.sendData("Elevator Ratio2", rawSpeed);
+			elevatorMain.set(rawSpeed);
+//			elevatorMain.set(LIFT_RATIO * rawSpeed);
+//			SmartDashboard.sendData("Elevator speed", LIFT_RATIO * rawSpeed);
+			SmartDashboard.sendData("Elevator speed", rawSpeed);
 		}
 	}
 
@@ -95,10 +95,10 @@ public class Elevator {
 		// double correction = kP * error;
 		if (!limitBottom.isPressed()) {
 			elevatorMain.set(filter.filterInput(0.1));
-			elevatorFollow.set(filter.filterInput(0.1));
+//			elevatorFollow.set(filter.filterInput(0.1));
 		} else {
 			elevatorMain.set(0);
-			elevatorFollow.set(0);
+//			elevatorFollow.set(0);
 		}
 	}
 
