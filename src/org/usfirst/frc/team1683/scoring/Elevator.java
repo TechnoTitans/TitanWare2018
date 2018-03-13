@@ -8,9 +8,9 @@ import org.usfirst.frc.team1683.sensors.LimitSwitch;
 public class Elevator {
 
 	private TalonSRX elevatorMain;
-	private TalonSRX elevatorFollow;
 
-	private final double LIFT_SPEED_MAX = 0.8;
+	private final double LIFT_SPEED_MAX_DOWN = 0.8;
+	private final double LIFT_SPEED_MAX_UP = 1;
 //	private final double LIFT_RATIO = 0.9;
 	private LimitSwitch limitTop;
 	private LimitSwitch limitBottom;
@@ -78,11 +78,10 @@ public class Elevator {
 			elevatorMain.getEncoder().reset();
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0))) {
 			elevatorMain.stop();
-			elevatorFollow.stop();
 		} else if (Math.abs(speed) < 0.09) {
 			stop();
 		} else {
-			double rawSpeed = filter.filterInput(speed * LIFT_SPEED_MAX);
+			double rawSpeed = (speed * (speed > 0 ? LIFT_SPEED_MAX_UP : LIFT_SPEED_MAX_DOWN));
 			elevatorMain.set(rawSpeed);
 //			elevatorMain.set(LIFT_RATIO * rawSpeed);
 //			SmartDashboard.sendData("Elevator speed", LIFT_RATIO * rawSpeed);
