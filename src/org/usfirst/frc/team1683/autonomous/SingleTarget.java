@@ -15,7 +15,7 @@ import org.usfirst.frc.team1683.scoring.Elevator;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
-public class SingleTarget extends Autonomous {
+public class SingleTarget extends Autonomous implements ChoosesTarget {
 	private PathPoint[] points;
 	private Path path;
 	private Target target;
