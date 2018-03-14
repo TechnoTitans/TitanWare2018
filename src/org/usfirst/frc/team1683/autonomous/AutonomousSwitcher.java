@@ -79,9 +79,6 @@ public class AutonomousSwitcher {
 		if (autoSelected instanceof ChoosesTarget) {
 			ChoosesTarget target = (ChoosesTarget) autoSelected;
 			target.setChooser(new TargetChooser(getPriorities(), side.getSelected()));
-		} else if (autoSelected instanceof DoubleTarget) {
-			DoubleTarget target = (DoubleTarget) autoSelected;
-			target.setSide(side.getSelected());
 		}
 		autoSelected.resetAuto();
 	}

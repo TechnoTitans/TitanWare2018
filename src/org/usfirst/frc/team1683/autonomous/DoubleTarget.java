@@ -15,7 +15,7 @@ import org.usfirst.frc.team1683.scoring.Elevator;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class DoubleTarget extends Autonomous {
+public class DoubleTarget extends Autonomous implements ChoosesTarget {
 	private SingleTarget single;
 	private PathPoint[] points;
 	private Path path;
@@ -26,12 +26,11 @@ public class DoubleTarget extends Autonomous {
 	private TalonSRX grabberRight;
 	private Timer grabberTimer;
 	private DriveTrainMover forward;
-
+	private Target target;
+	
 	private boolean hasReachedEndOfPath = false;
 
 	private boolean elevatorRaised = false;
-	
-	private char side;
 
 	public DoubleTarget(SingleTarget single, DriveTrain drive, Elevator elevator, TalonSRX grabberLeft, TalonSRX grabberRight) {
 		super(drive);
@@ -43,23 +42,14 @@ public class DoubleTarget extends Autonomous {
 		grabberTimer = new Timer();
 	}
 
-	public void setSide(char side) {
-		this.side = side;
-	}
-
 	public void init() {
-		List<Target> priorities = new ArrayList<>();
-		// double target has constant priorities
-		priorities.add(Target.CLOSE_SCALE);
-		priorities.add(Target.CLOSE_SWITCH);
-		priorities.add(Target.FAR_SCALE);
-		chooser = new TargetChooser(priorities, side);
+		target = chooser.getCorrectTarget();
 		single.setChooser(chooser);
 		single.run(); // initialize
 		elevatorRaised = false;
 		hasReachedEndOfPath = false;
 		grabberTimer.reset();
-		if (chooser.isSwitchOurs()) {
+		if (chooser.isSwitchOurs() && target.getIsClose()) {
 			secondTarget = true;
 		}
 		if (chooser.getPosition() == 'R') {
@@ -87,7 +77,7 @@ public class DoubleTarget extends Autonomous {
 				if (elevator.spinDown()) {
 					elevator.stop();
 					nextState = State.RUN_PATH;
-					boolean scale = chooser.isScaleOurs();
+					boolean scale = target == Target.CLOSE_SCALE;
 					points = scale ? DrivePathPoints.LeftScaleLeftDouble : DrivePathPoints.LeftSwitchLeftDouble;
 					double heading = scale ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
 					path = new Path(tankDrive, points, 0.8, 0.4, heading);
@@ -136,5 +126,10 @@ public class DoubleTarget extends Autonomous {
 		}
 		presentState = nextState;
 		SmartDashboard.sendData("Auto state", presentState.toString());
+	}
+
+	@Override
+	public void setChooser(TargetChooser chooser) {
+		this.chooser = chooser;
 	}
 }
