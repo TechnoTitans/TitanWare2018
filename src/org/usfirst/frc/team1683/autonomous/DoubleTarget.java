@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1683.autonomous;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;

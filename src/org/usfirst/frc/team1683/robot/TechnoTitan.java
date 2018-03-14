@@ -17,6 +17,7 @@ import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
@@ -143,6 +144,14 @@ public class TechnoTitan extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
+		double matchTime = DriverStation.getInstance().getMatchTime();
+		if (matchTime < 30) {
+			SmartDashboard.flash("Match Time", matchTime);
+		}
+		else {
+			SmartDashboard.sendData("Match Time", matchTime);
+		}
+		
 		if (waitTeleop.get() > 0.2)
 			teleopReady = true;
 		if (teleopReady)
