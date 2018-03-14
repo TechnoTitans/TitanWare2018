@@ -144,13 +144,7 @@ public class TechnoTitan extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		double matchTime = DriverStation.getInstance().getMatchTime();
-		if (matchTime < 30) {
-			SmartDashboard.flash("Match Time", matchTime);
-		}
-		else {
-			SmartDashboard.sendData("Match Time", matchTime);
-		}
+		SmartDashboard.sendData("Match Time", DriverStation.getInstance().getMatchTime());
 		
 		if (waitTeleop.get() > 0.2)
 			teleopReady = true;
