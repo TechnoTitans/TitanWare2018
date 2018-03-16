@@ -136,6 +136,8 @@ public abstract class Controls {
 	public abstract boolean getLowElevButton();
 
 	public abstract double[] drivePower();
+	
+	public abstract boolean holdElevator();
 
 //	public abstract boolean solenoidToggle();
 

@@ -53,9 +53,10 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 		SmartDashboard.sendData("target", target.toString());
 		// default paths assume everything is on left, so multiply by -1 if
 		// otherwise
+		boolean right = !target.isStartMiddle() && chooser.getPosition() == 'R';
 		if (target == Target.MIDDLE_SWITCH) {
-			boolean left = DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L';
-			points = left ? DrivePathPoints.MiddleRightSwitchLeft : DrivePathPoints.MiddleRightSwitchRight;
+			right = DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R';
+			points = DrivePathPoints.MiddleCenterSwitch;
 		} else if (target == Target.CLOSE_SWITCH) {
 			points = DrivePathPoints.LeftSwitchLeft;
 		} else if (target == Target.CLOSE_SCALE) {
@@ -66,15 +67,15 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			points = DrivePathPoints.LeftScaleRight;
 		}
 		SmartDashboard.sendData("chooser pos", chooser.getPosition() + "");
-		if (!target.isStartMiddle() && chooser.getPosition() == 'R') {
+		if (right) {
 			for (int i = 0; i < points.length; i++) {
 				points[i] = points[i].flipX();
 			}
 		}
 		if (target == Target.CLOSE_SWITCH || target == Target.MIDDLE_SWITCH)
-			path = new Path(tankDrive, points, 0.5, 0.4);
+			path = new Path(tankDrive, points, 0.5, 0.26);
 		else
-			path = new Path(tankDrive, points, 0.8, 0.26);
+			path = new Path(tankDrive, points, 0.4, 0.26);
 		path.setEasing(new LinearEasing(15));
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
@@ -91,13 +92,13 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 		case INIT_CASE:
 			init();
 			nextState = State.DROP_GRABBER_1;
-			grabberFall = new DriveTrainMover(tankDrive, 5, 0.5);
+			grabberFall = new DriveTrainMover(tankDrive, 12, 0.5);
 			break;
 		case DROP_GRABBER_1:
 			grabberFall.runIteration();
 			if(grabberFall.areAnyFinished()){
 				tankDrive.stop();
-				grabberFall = new DriveTrainMover(tankDrive, -5, 0.5);
+				grabberFall = new DriveTrainMover(tankDrive, -2, 0.3);
 				nextState = State.DROP_GRABBER_2;
 			}
 			break;
@@ -116,11 +117,11 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			if(grabberTimer.get() > 0.7){
 				grabberLeft.set(0);
 				grabberRight.set(0);
-				nextState = State.LIFT_ALITTLE;
+				nextState = State.LIFT_ALITTLE; //TODO change to lift a little
 			}
 			break;
 		case LIFT_ALITTLE:
-			if (elevator.spinTo(50)) {
+			if (elevator.spinTo(3)) {
 				elevator.stop();
 				nextState = State.RUN_PATH;
 			}
@@ -130,9 +131,9 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 				path.run();
 			} else {
 				tankDrive.stop();
-				nextState = State.END_CASE;
+				nextState = State.LIFT_ELEVATOR;
 			}
-			hasReachedEndOfPath = hasReachedEndOfPath || path.getApproxDistLeft() < 220;
+			hasReachedEndOfPath = hasReachedEndOfPath || path.getApproxDistLeft() < 80;
 			if (hasReachedEndOfPath) {
 				if (!elevatorRaised) {
 					elevatorRaised = spinElevator();

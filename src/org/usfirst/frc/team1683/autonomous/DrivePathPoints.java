@@ -27,10 +27,10 @@ public class DrivePathPoints extends Autonomous {
 					// 214.7; turn; 215; turn; 65; turn; 4-6 in
 					LeftSwitchRight = { new PathPoint(0, 220), new PathPoint(235, 0), new PathPoint(0,-65), new PathPoint(-4,0)},
 					// 335.69; turn; ~1 in
-					LeftScaleLeft = { new PathPoint(0, 176), new PathPoint(15.62, 64.77) },
+					LeftScaleLeft = { new PathPoint(0, 176), },//new PathPoint(15.62, 64.77) },
 					LeftScaleRight = { new PathPoint(0, 218.7), new PathPoint(260, 228, false), 
 										new PathPoint(260, 323, false), new PathPoint(218, 323, false) },
-					LeftScaleLeftDouble = {},
+					LeftScaleLeftDouble = {new PathPoint(-81,0), new PathPoint(26, 26)},
 					LeftSwitchLeftDouble = {},
 //					MiddleSwitchLeft = { new PathPoint(0, 60), new PathPoint(-132, 68, false),
 //										new PathPoint(-132, 168, false), new PathPoint(-76.5, 168, false) },
@@ -46,6 +46,7 @@ public class DrivePathPoints extends Autonomous {
 //					RightScaleRight = { new PathPoint(0, 323), new PathPoint(-41.9, 323, false) },
 //					RightScaleLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
 //										new PathPoint(-260, 323, false), new PathPoint(-218, 323, false) },
+					MiddleCenterSwitch = {new PathPoint(0, 20), new PathPoint(-50, 33), new PathPoint(0, 50)},
 					MiddleRightSwitchRight = { new PathPoint(0, 80) },
 					MiddleRightSwitchLeft = { new PathPoint(0, 25), new PathPoint(-90, 80, false), new PathPoint(-90, 100, false) };
 

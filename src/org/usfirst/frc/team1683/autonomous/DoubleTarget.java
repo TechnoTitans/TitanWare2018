@@ -107,6 +107,14 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 					elevator.stop();
 					grabberTimer.reset();
 					grabberTimer.start();
+					forward = new DriveTrainMover(tankDrive, 10, 0.3);
+					nextState = State.DRIVE_FORWARD_2;
+				}
+				break;
+			case DRIVE_FORWARD_2:
+				forward.runIteration();
+				if (forward.areAnyFinished()) {
+					tankDrive.stop();
 					nextState = State.RELEASE_CUBE_2;
 				}
 				break;

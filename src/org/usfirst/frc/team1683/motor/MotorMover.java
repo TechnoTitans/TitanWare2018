@@ -20,7 +20,7 @@ public class MotorMover implements Runnable {
 
 
 	private final double BASE_OVERSHOOT = 2.5; // overshoot at 20% speed
-//	private final double SPEED_OVERSHOOT = 1.5; // overshoot per 10% speed
+	private final double SPEED_OVERSHOOT = 1.5; // overshoot per 10% speed
 	private LinearEasing easing;
 	/**
 	 * Class for moving a motor a certain distance based on an encoder
@@ -132,7 +132,7 @@ public class MotorMover implements Runnable {
 	}
 	
 	private double getOvershoot() {
-		return BASE_OVERSHOOT; //+ SPEED_OVERSHOOT * (speed - 0.2) * 10;
+		return BASE_OVERSHOOT + SPEED_OVERSHOOT * (speed - 0.2) * 10;
 	}
 
 	/**

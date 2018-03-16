@@ -103,4 +103,10 @@ public class JoystickXBox extends Controls {
 	public boolean getHighElevButton() {
 		return controller.getYButtonPressed();
 	}
+
+	@Override
+	public boolean holdElevator() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
