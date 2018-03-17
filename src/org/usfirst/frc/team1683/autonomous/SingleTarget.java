@@ -27,6 +27,7 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 	private DriveTrainMover forward;
 	private DriveTrainMover backup;
 	private DriveTrainMover grabberFall;
+	private Timer backupTimer = new Timer();
 	
 	private boolean hasReachedEndOfPath = false;
 
@@ -38,6 +39,7 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 		this.grabberLeft = grabberLeft;
 		this.grabberRight = grabberRight;
 		presentState = State.INIT_CASE;
+		backupTimer = new Timer();
 		grabberTimer = new Timer();
 	}
 
@@ -73,9 +75,9 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			}
 		}
 		if (target == Target.CLOSE_SWITCH || target == Target.MIDDLE_SWITCH)
-			path = new Path(tankDrive, points, 0.5, 0.26);
+			path = new Path(tankDrive, points, 0.6, 0.34);
 		else
-			path = new Path(tankDrive, points, 0.4, 0.26);
+			path = new Path(tankDrive, points, 0.5, 0.34);
 		path.setEasing(new LinearEasing(15));
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
@@ -98,13 +100,15 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			grabberFall.runIteration();
 			if(grabberFall.areAnyFinished()){
 				tankDrive.stop();
-				grabberFall = new DriveTrainMover(tankDrive, -2, 0.3);
+				backupTimer.reset();
+				backupTimer.start();
+//				grabberFall = new DriveTrainMover(tankDrive, -5, 0.3);
 				nextState = State.DROP_GRABBER_2;
 			}
 			break;
 		case DROP_GRABBER_2:
-			grabberFall.runIteration();
-			if(grabberFall.areAnyFinished()){
+			tankDrive.set(-0.3);
+			if(backupTimer.get() > 0.6){
 				tankDrive.stop();
 				grabberTimer.reset();
 				grabberTimer.start();
@@ -127,14 +131,16 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			}
 			break;
 		case RUN_PATH:
+			boolean shouldLiftElevator = target != Target.FAR_SWITCH;
 			if (!path.isDone()) {
 				path.run();
 			} else {
 				tankDrive.stop();
-				nextState = State.LIFT_ELEVATOR;
+				if (shouldLiftElevator) nextState = State.LIFT_ELEVATOR;
+				else nextState = State.END_CASE;
 			}
 			hasReachedEndOfPath = hasReachedEndOfPath || path.getApproxDistLeft() < 80;
-			if (hasReachedEndOfPath) {
+			if (hasReachedEndOfPath && shouldLiftElevator) {
 				if (!elevatorRaised) {
 					elevatorRaised = spinElevator();
 				} else {
@@ -157,7 +163,9 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			break;
 		case DRIVE_FORWARD:
 			forward.runIteration();
-			if(forward.areAnyFinished()){
+			SmartDashboard.sendData("Moving forward enc speed", (tankDrive.getLeftEncoder().getSpeed() + tankDrive.getRightEncoder().getSpeed()) / 2);
+			if(forward.areAnyFinished() || DriverStation.getInstance().getMatchTime() <= 2
+					|| (Math.abs(tankDrive.getLeftEncoder().getSpeed()) + Math.abs(tankDrive.getRightEncoder().getSpeed()) < 10 && forward.getAverageDistanceLeft() < 10)){
 				grabberTimer.reset();
 				grabberTimer.start();
 				tankDrive.stop();

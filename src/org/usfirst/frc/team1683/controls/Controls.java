@@ -15,7 +15,7 @@ public abstract class Controls {
 	protected static final double MAX_JOYSTICK_SPEED = 1.0;
 	protected static final double SECOND_JOYSTICK_SPEED = 0.6;
 	protected static final double ELEVATOR_SPEED = 0.5;
-
+	private static final double GRABBER_CORRECTION_RIGHT = 0.9;
 	private InputFilter rightFilter, leftFilter;
 	private DriveTrain drive;
 	private PowerDistributionPanel pdp;
@@ -67,8 +67,9 @@ public abstract class Controls {
 		else if (correctCube()) grabState = Grabber.CORRECTION_OUTTAKE;
 		
 		if(grabState == Grabber.MANUAL){
-			grabberLeft.set(flyWheel());
-			grabberRight.set(flyWheel());
+			double fly = flyWheel();
+			grabberLeft.set(fly);
+			grabberRight.set(fly * GRABBER_CORRECTION_RIGHT);
 			grabCorrection = null;
 		}
 		else if(grabState == Grabber.CORRECTION_OUTTAKE){

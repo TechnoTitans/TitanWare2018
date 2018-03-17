@@ -117,6 +117,7 @@ public class TechnoTitan extends IterativeRobot {
 		SmartDashboard.prefDouble("kP", 0.05);
 		
 		CameraServer.getInstance().startAutomaticCapture();
+		
 	}
 
 	@Override
@@ -156,6 +157,7 @@ public class TechnoTitan extends IterativeRobot {
 		SmartDashboard.sendData("Limit switch top", limitTop.isPressed());
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
 		SmartDashboard.sendData("Elevator encoder", elevator.getMotor().getEncoder().getDistance());
+		SmartDashboard.sendData("Left encoder velocity", drive.getLeftEncoder().getSpeed());
 	}
 
 	@Override
