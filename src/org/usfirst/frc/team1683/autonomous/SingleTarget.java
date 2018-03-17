@@ -75,9 +75,9 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			}
 		}
 		if (target == Target.CLOSE_SWITCH || target == Target.MIDDLE_SWITCH)
-			path = new Path(tankDrive, points, 0.6, 0.34);
+			path = new Path(tankDrive, points, 0.72, 0.4);
 		else
-			path = new Path(tankDrive, points, 0.5, 0.34);
+			path = new Path(tankDrive, points, 0.72, 0.4);
 		path.setEasing(new LinearEasing(15));
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
