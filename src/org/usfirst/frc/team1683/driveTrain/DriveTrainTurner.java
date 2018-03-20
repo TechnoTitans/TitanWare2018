@@ -14,6 +14,7 @@ public class DriveTrainTurner {
 	private double speed;
 	private double angle;
 	private boolean done = false;
+	private LinearEasing easing;
 	// tolerance in degrees / 10% speed
 	private final double ANGLE_TOLERANCE = 3; // original value : 4
 	// tolerance at 20% speed
@@ -42,6 +43,10 @@ public class DriveTrainTurner {
 		this.speed = speed;
 		// If the angle is close to zero, no need to turn, we are already done
 		done = Math.abs(angle) < ANGLE_TOLERANCE;
+	}
+	
+	public void setEasing(LinearEasing easing) {
+		this.easing = easing;
 	}
 
 	/**
@@ -73,7 +78,8 @@ public class DriveTrainTurner {
 		if (!done && Math.abs(heading) <= Math.abs(angle) - getTolerance()) {
 			// If angle > 0, then it should turn counterclockwise so the "right"
 			// parameter should be false
-			driveTrain.turnInPlace(angle < 0, speed);
+			double easingVal = easing == null ? 1 : easing.getSpeed(heading, Math.abs(angle) - getTolerance());
+			driveTrain.turnInPlace(angle < 0, speed * easingVal);
 			SmartDashboard.putNumber("prev angle", heading);
 		} else {
 			driveTrain.set(0);

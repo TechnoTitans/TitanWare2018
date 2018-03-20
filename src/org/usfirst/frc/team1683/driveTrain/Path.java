@@ -19,7 +19,11 @@ public class Path {
 	private boolean stopCondition;
 	private Timer waitTimer;
 	
+	private boolean isInitialized = false;
+	
 	private LinearEasing easing;
+	
+	private LinearEasing turnEasing;
 	
 	private static final double WAIT_TIME = 0.05;
 
@@ -57,9 +61,6 @@ public class Path {
 		this.driveTrain = driveTrain;
 		this.path = path;
 		this.currentHeading = currentHeading;
-		if (path.length > 0) {
-			turner = new DriveTrainTurner(driveTrain, path[0].getAngle() - currentHeading, speed);
-		}
 		this.speed = speed;
 		this.turnSpeed = turnSpeed;
 		setStopCondition(false);
@@ -83,6 +84,10 @@ public class Path {
 	
 	public void setEasing(LinearEasing easing) {
 		this.easing = easing;
+	}
+	
+	public void setTurnEasing(LinearEasing easing) {
+		this.turnEasing = easing;
 	}
 	
 	public LinearEasing getEasing() {
@@ -123,6 +128,11 @@ public class Path {
 			waitTimer.reset();
 			waitTimer.start();
 		}
+		if (!isInitialized) {
+			turner = new DriveTrainTurner(driveTrain, path[0].getAngle() - currentHeading, Math.abs(turnSpeed));
+			turner.setEasing(turnEasing);
+			isInitialized = true;
+		}
 		if (isTurning && waitTimer.get() > WAIT_TIME) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
@@ -143,6 +153,7 @@ public class Path {
 				if (!isDone()) {
 					turner = new DriveTrainTurner(driveTrain, path[pathIndex].getAngle() - currentHeading,
 							Math.abs(turnSpeed));
+					turner.setEasing(easing);
 					isTurning = true;
 					driveTrain.stop();
 					waitTimer.reset();
