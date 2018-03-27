@@ -109,4 +109,12 @@ public class PathPoint {
 	public PathPoint subtract(PathPoint other) {
 		return new PathPoint(x - other.x, y - other.y, true);
 	}
+
+	public static PathPoint inDirection(double angle) {
+		return new PathPoint(0, 0, true) {
+			public double getAngle() {
+				return angle;
+			}
+		};
+	}
 }

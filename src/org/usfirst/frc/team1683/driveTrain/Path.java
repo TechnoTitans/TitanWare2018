@@ -133,7 +133,8 @@ public class Path {
 			turner.setEasing(turnEasing);
 			isInitialized = true;
 		}
-		if (isTurning && waitTimer.get() > WAIT_TIME) {
+		boolean hasWaited = waitTimer.get() > WAIT_TIME;
+		if (isTurning && hasWaited) {
 			if (turner.isDone()) {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
 				mover.setEasing(easing);
@@ -145,7 +146,7 @@ public class Path {
 				turner.run();
 				SmartDashboard.putNumber("degrees left", turner.angleLeft());
 			}
-		} else if (waitTimer.get() > WAIT_TIME){
+		} else if (hasWaited){
 			mover.runIteration();
 			SmartDashboard.putNumber("distance left", mover.getAverageDistanceLeft());
 			if (isMoverDone()) {

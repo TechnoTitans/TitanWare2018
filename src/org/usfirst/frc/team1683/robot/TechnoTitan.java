@@ -9,6 +9,8 @@ import org.usfirst.frc.team1683.controls.JoystickXBox;
 import org.usfirst.frc.team1683.driveTrain.AntiDrift;
 import org.usfirst.frc.team1683.driveTrain.DriveTrainTurner;
 import org.usfirst.frc.team1683.driveTrain.LinearEasing;
+import org.usfirst.frc.team1683.driveTrain.Path;
+import org.usfirst.frc.team1683.driveTrain.PathPoint;
 import org.usfirst.frc.team1683.driveTrain.TankDrive;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
@@ -122,7 +124,7 @@ public class TechnoTitan extends IterativeRobot {
 		
 		CameraServer.getInstance().startAutomaticCapture();
 	}
-
+	private Path path;
 	@Override
 	public void autonomousInit() {
 		CameraServer.getInstance().startAutomaticCapture();
@@ -130,22 +132,22 @@ public class TechnoTitan extends IterativeRobot {
 //		autoSwitch.getSelected();
 //		elevator.getMotor().getEncoder().reset();
 		gyro.reset();
-		turner = new DriveTrainTurner(drive, 90, 0.4);
-//		turner.setEasing(new LinearEasing(45, 45, 0.5));
+		path = new Path(drive, new PathPoint[] {
+				PathPoint.inDirection(180),
+				PathPoint.inDirection(270),
+				PathPoint.inDirection(0),
+				PathPoint.inDirection(90)
+		}, 0.4, 0.3);
+		path.setTurnEasing(new LinearEasing(45, 45, 0.5));
 //		turner.start();
-		turner.enable();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
 //		turner.run();
-		if (turner.isFinished()) {
-			SmartDashboard.sendData("disabled", true);
-//			turner.disable();
-		} else {
-			SmartDashboard.sendData("disabled", false);
-		}
+		path.run();
+		
 //		autoSwitch.run();
 //		mover.runIteration();
 	}
