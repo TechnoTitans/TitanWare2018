@@ -16,7 +16,7 @@ public class DriveTrainTurner {
 	private boolean done = false;
 	private LinearEasing easing;
 	// tolerance in degrees / 10% speed
-	private final double ANGLE_TOLERANCE = 3; // original value : 4
+	private final double ANGLE_TOLERANCE = 7; // original value : 4
 	// tolerance at 20% speed
 	private final double BASE_TOLERANCE = 1;
 
@@ -78,9 +78,12 @@ public class DriveTrainTurner {
 		if (!done && Math.abs(heading) <= Math.abs(angle) - getTolerance()) {
 			// If angle > 0, then it should turn counterclockwise so the "right"
 			// parameter should be false
-			double easingVal = easing == null ? 1 : easing.getSpeed(heading, Math.abs(angle) - getTolerance());
+			double easingVal = easing == null ? 1 : easing.getSpeed(Math.abs(heading), Math.abs(angle) - getTolerance());
 			driveTrain.turnInPlace(angle < 0, speed * easingVal);
 			SmartDashboard.putNumber("prev angle", heading);
+			SmartDashboard.putNumber("easing val", easingVal);
+			SmartDashboard.putNumber("Angle speed", gyro.getRate());
+
 		} else {
 			driveTrain.set(0);
 			driveTrain.stop();
