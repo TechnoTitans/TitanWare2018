@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Scheduler;
 
 /**
  * 
@@ -130,13 +131,21 @@ public class TechnoTitan extends IterativeRobot {
 //		elevator.getMotor().getEncoder().reset();
 		gyro.reset();
 		turner = new DriveTrainTurner(drive, 90, 0.4);
-		turner.setEasing(new LinearEasing(45, 45, 0.5));
+//		turner.setEasing(new LinearEasing(45, 45, 0.5));
+//		turner.start();
+		turner.enable();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
-		turner.run();
+//		turner.run();
+		if (turner.isFinished()) {
+			SmartDashboard.sendData("disabled", true);
+//			turner.disable();
+		} else {
+			SmartDashboard.sendData("disabled", false);
+		}
 //		autoSwitch.run();
 //		mover.runIteration();
 	}

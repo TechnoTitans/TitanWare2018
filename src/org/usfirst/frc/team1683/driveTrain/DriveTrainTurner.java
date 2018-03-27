@@ -3,11 +3,16 @@ package org.usfirst.frc.team1683.driveTrain;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.sensors.Gyro;
 
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.command.PIDCommand;
+
 
 /**
  * Turns robot a certain number of degrees
  */
-public class DriveTrainTurner {
+public class DriveTrainTurner implements PIDOutput {
 	private DriveTrain driveTrain;
 	private double initialHeading;
 	private Gyro gyro;
@@ -19,6 +24,9 @@ public class DriveTrainTurner {
 	private final double ANGLE_TOLERANCE = 7; // original value : 4
 	// tolerance at 20% speed
 	private final double BASE_TOLERANCE = 1;
+	
+	private PIDController controller;
+	Preferences prefs;
 
 	/**
 	 * Creates a DriveTrainTurner
@@ -35,14 +43,19 @@ public class DriveTrainTurner {
 	public DriveTrainTurner(DriveTrain driveTrain, double angle, double speed) {
 		// positive angle = counter clockwise, negative = clockwise
 		this.driveTrain = driveTrain;
+		prefs = Preferences.getInstance();
 		gyro = driveTrain.getGyro();
 		gyro.reset();
+		controller = new PIDController(prefs.getDouble("kP_turn", 0.05), prefs.getDouble("kI_turn", 0), prefs.getDouble("kD_turn", 0.5), gyro, this);
+		controller.setContinuous(false);
+		controller.setOutputRange(-1, 1);
 		initialHeading = gyro.getAngle();
 		angle = normalizeAngle(angle);
 		this.angle = angle;
 		this.speed = speed;
 		// If the angle is close to zero, no need to turn, we are already done
-		done = Math.abs(angle) < ANGLE_TOLERANCE;
+		done = Math.abs(angle) < getTolerance();
+		controller.setSetpoint(angle);
 	}
 	
 	public void setEasing(LinearEasing easing) {
@@ -67,6 +80,15 @@ public class DriveTrainTurner {
 
 	private double getTolerance() {
 		return BASE_TOLERANCE + (speed - 0.2) * ANGLE_TOLERANCE * 10;
+	}
+	
+	public void enable() {
+		controller.enable();
+	}
+	
+	public void disable() {
+		controller.disable();
+		driveTrain.stop();
 	}
 	
 	/**
@@ -113,5 +135,20 @@ public class DriveTrainTurner {
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
+	}
+
+	protected void usePIDOutput(double output) {
+		driveTrain.turnInPlace(angle < 0, Math.abs(output) * speed);
+	}
+
+	public boolean isFinished() {
+		return Math.abs(gyro.getRawAngle()) > Math.abs(angle);
+	}
+
+	@Override
+	public void pidWrite(double output) {
+		double easingVal = easing == null ? 1 : easing.getSpeed(Math.abs(gyro.getRawAngle()), Math.abs(angle));
+		driveTrain.setLeft(output * speed);
+		driveTrain.setRight(-output * speed);
 	}
 }
