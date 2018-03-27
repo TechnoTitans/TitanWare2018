@@ -70,7 +70,7 @@ public class DriveTrainTurner {
 	 * @param angle
 	 * @return An equivalent angle between -180 and 180
 	 */
-	public double normalizeAngle(double angle) {
+	public static double normalizeAngle(double angle) {
 		angle %= 360;
 		if (angle < -180)
 			angle += 360;

@@ -19,6 +19,8 @@ public class Path {
 	private boolean stopCondition;
 	private Timer waitTimer;
 	
+	private boolean canMoveBackwards = false, isMovingBackwards = false;
+	
 	private boolean isInitialized = false;
 	
 	private LinearEasing easing;
@@ -65,6 +67,10 @@ public class Path {
 		this.turnSpeed = turnSpeed;
 		setStopCondition(false);
 		PathPoint.convertAbsoluteToRelative(path);
+	}
+	
+	public void setCanMoveBackwards(boolean can) {
+		canMoveBackwards = can;
 	}
 
 	/**
@@ -129,14 +135,15 @@ public class Path {
 			waitTimer.start();
 		}
 		if (!isInitialized) {
-			turner = new DriveTrainTurner(driveTrain, path[0].getAngle() - currentHeading, Math.abs(turnSpeed));
+			turner = new DriveTrainTurner(driveTrain, calculateTurnAngle(), Math.abs(turnSpeed));
 			turner.setEasing(turnEasing);
 			isInitialized = true;
 		}
 		boolean hasWaited = waitTimer.get() > WAIT_TIME;
 		if (isTurning && hasWaited) {
 			if (turner.isDone()) {
-				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance(), speed);
+				double b = isMovingBackwards ? -1 : 1;
+				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance() * b, speed);
 				mover.setEasing(easing);
 				isTurning = false;
 				currentHeading = path[pathIndex].getAngle();
@@ -152,9 +159,9 @@ public class Path {
 			if (isMoverDone()) {
 				pathIndex++;
 				if (!isDone()) {
-					turner = new DriveTrainTurner(driveTrain, path[pathIndex].getAngle() - currentHeading,
+					turner = new DriveTrainTurner(driveTrain, calculateTurnAngle(),
 							Math.abs(turnSpeed));
-					turner.setEasing(easing);
+					turner.setEasing(turnEasing);
 					isTurning = true;
 					driveTrain.stop();
 					waitTimer.reset();
@@ -162,5 +169,19 @@ public class Path {
 			}
 		}
 		SmartDashboard.putBoolean("isTurning", isTurning);
+	}
+	
+	private double calculateTurnAngle() {
+		double angle = DriveTrainTurner.normalizeAngle(path[pathIndex].getAngle() - currentHeading);
+		if (!canMoveBackwards) return angle;
+		else {
+			isMovingBackwards = angle < -90 || angle > 90;
+			if (angle > 90)
+				return angle - 180;
+			else if (angle < -90)
+				return angle + 180;
+			else
+				return angle;
+		}
 	}
 }
