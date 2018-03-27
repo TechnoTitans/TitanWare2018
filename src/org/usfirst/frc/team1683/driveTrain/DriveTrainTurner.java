@@ -95,8 +95,6 @@ public class DriveTrainTurner {
 			double easingVal = easing == null ? 1 : easing.getSpeed(Math.abs(heading), Math.abs(angle) - getTolerance());
 			driveTrain.turnInPlace(angle < 0, speed * easingVal);
 			SmartDashboard.putNumber("prev angle", heading);
-			SmartDashboard.putNumber("easing val", easingVal);
-			SmartDashboard.putNumber("Angle speed", gyro.getRate());
 
 		} else {
 			driveTrain.set(0);
