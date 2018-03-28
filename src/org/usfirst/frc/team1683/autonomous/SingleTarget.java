@@ -79,6 +79,7 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 		else
 			path = new Path(tankDrive, points, 0.72, 0.4);
 		path.setEasing(new LinearEasing(15));
+		path.setTurnEasing(new LinearEasing(45, 45, 0.5));
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
 

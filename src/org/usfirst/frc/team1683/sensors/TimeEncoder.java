@@ -40,6 +40,7 @@ public class TimeEncoder implements Encoder {
 
 	public void update() {
 		ticks += (time.get() - lastTime) * getSpeed();
+		lastTime = time.get();
 	}
 	
 	@Override

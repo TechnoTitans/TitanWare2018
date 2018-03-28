@@ -65,6 +65,7 @@ public class Elevator {
 
 	public boolean spinTo(double d) {
 		double distLeft = d - getHeight();
+		SmartDashboard.sendData("Elevator height", getHeight());
 		if (Math.abs(distLeft) <= 2) {
 			stop();
 			return true;
@@ -81,7 +82,7 @@ public class Elevator {
 	public void spin(double speed) {
 		double easingSpeed = easing.getSpeed(getHeight(), MAX_DIST);
 		SmartDashboard.sendData("Easing speed", easingSpeed);
-		if (limitBottom.isPressed())
+		if (limitBottom.isPressed() && !override)
 			elevatorMain.getEncoder().reset();
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0))) {
 			elevatorMain.stop();

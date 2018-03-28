@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
+import org.usfirst.frc.team1683.autonomous.DrivePathPoints;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.JoystickXBox;
@@ -19,6 +20,7 @@ import org.usfirst.frc.team1683.sensors.BuiltInAccel;
 import org.usfirst.frc.team1683.sensors.Gyro;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 import org.usfirst.frc.team1683.sensors.QuadEncoder;
+import org.usfirst.frc.team1683.sensors.TimeEncoder;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -66,8 +68,8 @@ public class TechnoTitan extends IterativeRobot {
 //	DriveTrainMover mover;
 
 	boolean teleopReady = false;
-	private DriveTrainTurner turner;
 
+	private TimeEncoder encLeft, encRight, encElev;
 	@Override
 	public void robotInit() {
 		SmartDashboard.initFlashTimer();
@@ -84,15 +86,18 @@ public class TechnoTitan extends IterativeRobot {
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
 		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, false);
-		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 0.7292, true)); // TODO: find wheel radius
+//		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 0.7292, true)); // TODO: find wheel radius
+		elevatorTalon.setEncoder(encElev = new TimeEncoder(elevatorTalon, 5));
 		elevator = new Elevator(elevatorTalon, limitTop, limitBottom);
-
+		elevator.overrideLimit(true);
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
 		leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
 		rightETalonSRX = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_FRONT, RIGHT_REVERSE, right);
-		leftETalonSRX.setEncoder(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS, true));
-		rightETalonSRX.setEncoder(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS, true));
+//		leftETalonSRX.setEncoder(new QuadEncoder(leftETalonSRX, WHEEL_RADIUS, true));
+//		rightETalonSRX.setEncoder(new QuadEncoder(rightETalonSRX, WHEEL_RADIUS, true));
+		leftETalonSRX.setEncoder(encLeft = new TimeEncoder(leftETalonSRX, 100));
+		rightETalonSRX.setEncoder(encRight = new TimeEncoder(rightETalonSRX, 100));
 		TalonSRX leftFollow1 = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_MIDDLE, LEFT_REVERSE),
 				 leftFollow2 = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_BACK, LEFT_REVERSE),
 				 rightFollow1 = new TalonSRX(HWR.RIGHT_DRIVE_TRAIN_MIDDLE, RIGHT_REVERSE),
@@ -129,26 +134,22 @@ public class TechnoTitan extends IterativeRobot {
 	public void autonomousInit() {
 		CameraServer.getInstance().startAutomaticCapture();
 		drive.stop();
-//		autoSwitch.getSelected();
+		autoSwitch.getSelected();
 //		elevator.getMotor().getEncoder().reset();
 		gyro.reset();
-		path = new Path(drive, new PathPoint[] {
-				PathPoint.inDirection(180),
-				PathPoint.inDirection(270),
-				PathPoint.inDirection(0),
-				PathPoint.inDirection(90)
-		}, 0.4, 0.3);
-		path.setTurnEasing(new LinearEasing(45, 45, 0.5));
 //		turner.start();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
+		encLeft.update();
+		encRight.update();
+		encElev.update();
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
 //		turner.run();
-		path.run();
+//		path.run();
 		
-//		autoSwitch.run();
+		autoSwitch.run();
 //		mover.runIteration();
 	}
 
@@ -162,6 +163,9 @@ public class TechnoTitan extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
+		encLeft.update();
+		encRight.update();
+		encElev.update();
 		SmartDashboard.sendData("Match Time", DriverStation.getInstance().getMatchTime());
 		
 		if (waitTeleop.get() > 0.2)
