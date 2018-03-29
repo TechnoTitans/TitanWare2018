@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1683.sensors;
 
+import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.motor.TalonSRX;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -39,6 +40,7 @@ public class TimeEncoder implements Encoder {
 	}
 
 	public void update() {
+		if (timeScale == 5) SmartDashboard.sendData("Elevator encoder update", talon.getPercentSpeed());
 		ticks += (time.get() - lastTime) * getSpeed();
 		lastTime = time.get();
 	}

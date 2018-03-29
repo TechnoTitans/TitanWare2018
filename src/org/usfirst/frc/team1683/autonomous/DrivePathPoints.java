@@ -31,7 +31,7 @@ public class DrivePathPoints extends Autonomous {
 					LeftScaleRight = { new PathPoint(0, 218.7), new PathPoint(260, 228, false), 
 										new PathPoint(260, 323, false), new PathPoint(218, 323, false) },
 					LeftScaleLeftDouble = {new PathPoint(-81,0), new PathPoint(26, 26)},
-					LeftSwitchLeftDouble = {},
+					LeftSwitchLeftDouble = {new PathPoint(0, -50), new PathPoint(50, -33), new PathPoint(0, 10)},
 //					MiddleSwitchLeft = { new PathPoint(0, 60), new PathPoint(-132, 68, false),
 //										new PathPoint(-132, 168, false), new PathPoint(-76.5, 168, false) },
 //					MiddleSwitchRight = { new PathPoint(0, 60), new PathPoint(132, 68, false),

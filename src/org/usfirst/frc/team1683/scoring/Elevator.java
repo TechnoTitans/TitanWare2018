@@ -81,7 +81,7 @@ public class Elevator {
 
 	public void spin(double speed) {
 		double easingSpeed = easing.getSpeed(getHeight(), MAX_DIST);
-		SmartDashboard.sendData("Easing speed", easingSpeed);
+		SmartDashboard.sendData("Override", override);
 		if (limitBottom.isPressed() && !override)
 			elevatorMain.getEncoder().reset();
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0))) {

@@ -136,6 +136,8 @@ public class TechnoTitan extends IterativeRobot {
 		drive.stop();
 		autoSwitch.getSelected();
 //		elevator.getMotor().getEncoder().reset();
+		encElev.reset();
+		elevator.overrideLimit(true);
 		gyro.reset();
 //		turner.start();
 	}

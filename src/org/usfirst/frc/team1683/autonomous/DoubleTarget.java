@@ -49,7 +49,7 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 		elevatorRaised = false;
 		hasReachedEndOfPath = false;
 		grabberTimer.reset();
-		if (chooser.isSwitchOurs() && target.getIsClose()) {
+		if (chooser.getPosition() == 'M' || (chooser.isSwitchOurs() && target.getIsClose())) {
 			secondTarget = true;
 		}
 		if (chooser.getPosition() == 'R') {
