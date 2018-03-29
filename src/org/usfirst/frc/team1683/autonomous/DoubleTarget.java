@@ -54,10 +54,10 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 		elevatorRaised = false;
 		hasReachedEndOfPath = false;
 		grabberTimer.reset();
-		if (chooser.getPosition() == 'M' || (chooser.isSwitchOurs() && target.getIsClose())) {
+		areWeMiddle = target.isStartMiddle();
+		if (areWeMiddle || (chooser.isSwitchOurs() && target.getIsClose())) {
 			secondTarget = true;
 		}
-		areWeMiddle = target.isStartMiddle();
 		SmartDashboard.putBoolean("2nd target", secondTarget);
 	}
 
@@ -93,6 +93,7 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 						}
 					}
 					path = new Path(tankDrive, points, 0.8, 0.4, heading);
+					path.setCanMoveBackwards(true);
 					path.setEasing(new LinearEasing(15));
 				}
 				break;
