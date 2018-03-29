@@ -22,7 +22,9 @@ public class DrivePathPoints extends Autonomous {
 	
 	
 	public static final double headingScaleDouble = 90,
-							   headingSwitchDouble = 90;
+							   headingSwitchDouble = 90,
+							   headingCenterSwitchDouble = 90;
+	
 	public static final PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(7, 0)},
 					// 214.7; turn; 215; turn; 65; turn; 4-6 in
 					LeftSwitchRight = { new PathPoint(0, 200)},//, new PathPoint(235, 0), new PathPoint(0,-45)},//, new PathPoint(-4,0)},
@@ -47,9 +49,10 @@ public class DrivePathPoints extends Autonomous {
 //					RightScaleLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
 //										new PathPoint(-260, 323, false), new PathPoint(-218, 323, false) },
 					MiddleCenterSwitch = {new PathPoint(0, 20), new PathPoint(-50, 33), new PathPoint(0, 50)},
+					MiddleCenterSwitchDouble = {},
 					MiddleRightSwitchRight = { new PathPoint(0, 80) },
 					MiddleRightSwitchLeft = { new PathPoint(0, 25), new PathPoint(-90, 80, false), new PathPoint(-90, 100, false) };
-
+	
 	private Path path;
 
 	public DrivePathPoints(DriveTrain tankDrive) {

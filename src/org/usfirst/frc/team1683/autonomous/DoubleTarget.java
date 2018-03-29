@@ -3,6 +3,7 @@ package org.usfirst.frc.team1683.autonomous;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.usfirst.frc.team1683.autonomous.Autonomous.State;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driveTrain.DriveTrainMover;
 import org.usfirst.frc.team1683.driveTrain.LinearEasing;
@@ -13,6 +14,7 @@ import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.robot.TechnoTitan;
 import org.usfirst.frc.team1683.scoring.Elevator;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
 public class DoubleTarget extends Autonomous implements ChoosesTarget {
@@ -26,11 +28,14 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 	private TalonSRX grabberRight;
 	private Timer grabberTimer;
 	private DriveTrainMover forward;
+	private DriveTrainMover backward;
 	private Target target;
 	
 	private boolean hasReachedEndOfPath = false;
 
 	private boolean elevatorRaised = false;
+	
+	private boolean areWeMiddle = false;
 
 	public DoubleTarget(SingleTarget single, DriveTrain drive, Elevator elevator, TalonSRX grabberLeft, TalonSRX grabberRight) {
 		super(drive);
@@ -52,11 +57,7 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 		if (chooser.isSwitchOurs() && target.getIsClose()) {
 			secondTarget = true;
 		}
-		if (chooser.getPosition() == 'R') {
-			for (int i = 0; i < points.length; i++) {
-				points[i] = points[i].flipX();
-			}
-		}
+		areWeMiddle = target.isStartMiddle();
 		SmartDashboard.putBoolean("2nd target", secondTarget);
 	}
 
@@ -78,8 +79,19 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 					elevator.stop();
 					nextState = State.RUN_PATH;
 					boolean scale = target == Target.CLOSE_SCALE;
-					points = scale ? DrivePathPoints.LeftScaleLeftDouble : DrivePathPoints.LeftSwitchLeftDouble;
-					double heading = scale ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
+					double heading;
+					if(areWeMiddle) { // presumably this means that we started in the middle + we have already finished a single middle switch auto
+						points = DrivePathPoints.MiddleCenterSwitchDouble; // these points should back up the robot and return it to the original middle starting position
+						heading = DrivePathPoints.headingCenterSwitchDouble; // TODO get actual value
+					} else {
+						points = scale ? DrivePathPoints.LeftScaleLeftDouble : DrivePathPoints.LeftSwitchLeftDouble;	
+						heading = scale ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
+					}
+					if (chooser.getPosition() == 'R' || (areWeMiddle && DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R')) {
+						for (int i = 0; i < points.length; i++) {
+							points[i] = points[i].flipX();
+						}
+					}
 					path = new Path(tankDrive, points, 0.8, 0.4, heading);
 					path.setEasing(new LinearEasing(15));
 				}
@@ -90,7 +102,13 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				} else {
 					forward = new DriveTrainMover(tankDrive, 15, 0.3);
 					tankDrive.stop();
-					nextState = State.GRAB_CUBE;
+					if(areWeMiddle) {
+						forward = new DriveTrainMover(tankDrive, 10, 0.3); // TODO find actual distance to drive to instead of 10
+						nextState = State.GRAB_CUBE_2;// we are in initial middle state (as if we haven't moved), so we need to drive forward and hopefully grab a cube (this part is reallly sketch)
+					} else {
+						nextState = State.GRAB_CUBE;
+					}
+					
 				}
 				break;
 			case GRAB_CUBE:
@@ -99,7 +117,7 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				grabberRight.set(-0.5);
 				if (forward.areAnyFinished()) {
 					tankDrive.stop();
-					nextState = State.LIFT_ELEVATOR_2;
+					nextState = State.LIFT_ELEVATOR_2;	
 				}
 				break;
 			case LIFT_ELEVATOR_2:
@@ -126,6 +144,32 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 					nextState = State.END_CASE;
 				}
 				break;
+			case DRIVE_FORWARD_3:
+				forward.runIteration();
+				if(forward.areAnyFinished()) {
+					tankDrive.stop(); // now we need to grab a cube
+					nextState = State.GRAB_CUBE_2;
+				}
+				break;
+			case GRAB_CUBE_2:
+				forward.runIteration();
+				grabberLeft.set(-0.5);
+				grabberRight.set(-0.5);
+				if (forward.areAnyFinished()) {
+					tankDrive.stop();
+					nextState = State.BACKUP; // we have finished grabbing cube, so now we gotta backup
+				}
+				break;
+			case BACKUP:
+				grabberLeft.set(0);
+				grabberRight.set(0);
+				elevator.stop();
+				backward.runIteration();
+				if(backward.areAnyFinished()){
+					tankDrive.stop(); // now we have backed up, we gotta do the same auto again.
+					
+					nextState = State.RUN_SINGLE_TARGET; // this should run one iteration of the same thing
+				}
 			case END_CASE:
 				tankDrive.stop();
 				
