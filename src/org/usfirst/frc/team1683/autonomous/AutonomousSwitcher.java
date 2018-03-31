@@ -50,7 +50,7 @@ public class AutonomousSwitcher {
 
 		side = new SendableChooser<Character>();
 		side.addDefault("Left", 'L');
-		side.addObject("Middle Right", 'M');
+		side.addObject("Middle", 'M');
 		side.addObject("Right", 'R');
 		SmartDashboard.putData("Side", side);
 	}

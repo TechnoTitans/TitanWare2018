@@ -51,7 +51,8 @@ public class DrivePathPoints extends Autonomous {
 					MiddleCenterSwitch = {new PathPoint(0, 20), new PathPoint(-50, 33), new PathPoint(0, 50)},
 					MiddleCenterSwitchDouble = {},
 					MiddleRightSwitchRight = { new PathPoint(0, 80) },
-					MiddleRightSwitchLeft = { new PathPoint(0, 25), new PathPoint(-90, 80, false), new PathPoint(-90, 100, false) };
+					MiddleRightSwitchLeft = { new PathPoint(0, 25), new PathPoint(-90, 80, false), new PathPoint(-90, 100, false) },
+					MiddleDoubleCubeToSwitch = {};
 	
 	private Path path;
 

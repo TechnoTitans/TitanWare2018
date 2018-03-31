@@ -78,14 +78,16 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				if (elevator.spinDown()) {
 					elevator.stop();
 					nextState = State.RUN_PATH;
-					boolean scale = target == Target.CLOSE_SCALE;
 					double heading;
 					if(areWeMiddle) { // presumably this means that we started in the middle + we have already finished a single middle switch auto
 						points = DrivePathPoints.MiddleCenterSwitchDouble; // these points should back up the robot and return it to the original middle starting position
 						heading = DrivePathPoints.headingCenterSwitchDouble; // TODO get actual value
+					} else if (target == Target.CLOSE_SCALE) {
+						points = DrivePathPoints.LeftScaleLeftDouble;	
+						heading = DrivePathPoints.headingScaleDouble;
 					} else {
-						points = scale ? DrivePathPoints.LeftScaleLeftDouble : DrivePathPoints.LeftSwitchLeftDouble;	
-						heading = scale ? DrivePathPoints.headingScaleDouble : DrivePathPoints.headingSwitchDouble;
+						points = DrivePathPoints.LeftSwitchLeftDouble;	
+						heading = DrivePathPoints.headingSwitchDouble;
 					}
 					if (chooser.getPosition() == 'R' || (areWeMiddle && DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R')) {
 						for (int i = 0; i < points.length; i++) {
@@ -100,15 +102,9 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				if (!path.isDone()) {
 					path.run();
 				} else {
-					forward = new DriveTrainMover(tankDrive, 15, 0.3);
 					tankDrive.stop();
-					if(areWeMiddle) {
-						forward = new DriveTrainMover(tankDrive, 10, 0.3); // TODO find actual distance to drive to instead of 10
-						nextState = State.GRAB_CUBE_2;// we are in initial middle state (as if we haven't moved), so we need to drive forward and hopefully grab a cube (this part is reallly sketch)
-					} else {
-						nextState = State.GRAB_CUBE;
-					}
-					
+					forward = new DriveTrainMover(tankDrive, 10, 0.3); // TODO find actual distance to drive to instead of 10
+					nextState = State.GRAB_CUBE;
 				}
 				break;
 			case GRAB_CUBE:
@@ -117,14 +113,21 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				grabberRight.set(-0.5);
 				if (forward.areAnyFinished()) {
 					tankDrive.stop();
-					nextState = State.LIFT_ELEVATOR_2;	
+					double heading;
+					if (areWeMiddle) {
+					}
+					nextState = State.RUN_PATH_2;
 				}
 				break;
+			case RUN_PATH_2:
+				if (!path.isDone()) {
+					path.run();
+				} else {
+					tankDrive.stop();
+				}
 			case LIFT_ELEVATOR_2:
 				if (elevator.spinTo(TechnoTitan.SWITCH_HEIGHT)) {
 					elevator.stop();
-					grabberTimer.reset();
-					grabberTimer.start();
 					forward = new DriveTrainMover(tankDrive, 10, 0.3);
 					nextState = State.DRIVE_FORWARD_2;
 				}
@@ -132,6 +135,8 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 			case DRIVE_FORWARD_2:
 				forward.runIteration();
 				if (forward.areAnyFinished()) {
+					grabberTimer.reset();
+					grabberTimer.start();
 					tankDrive.stop();
 					nextState = State.RELEASE_CUBE_2;
 				}
@@ -144,35 +149,9 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 					nextState = State.END_CASE;
 				}
 				break;
-			case DRIVE_FORWARD_3:
-				forward.runIteration();
-				if(forward.areAnyFinished()) {
-					tankDrive.stop(); // now we need to grab a cube
-					nextState = State.GRAB_CUBE_2;
-				}
-				break;
-			case GRAB_CUBE_2:
-				forward.runIteration();
-				grabberLeft.set(-0.5);
-				grabberRight.set(-0.5);
-				if (forward.areAnyFinished()) {
-					tankDrive.stop();
-					nextState = State.BACKUP; // we have finished grabbing cube, so now we gotta backup
-				}
-				break;
-			case BACKUP:
-				grabberLeft.set(0);
-				grabberRight.set(0);
-				elevator.stop();
-				backward.runIteration();
-				if(backward.areAnyFinished()){
-					tankDrive.stop(); // now we have backed up, we gotta do the same auto again.
-					
-					nextState = State.RUN_SINGLE_TARGET; // this should run one iteration of the same thing
-				}
 			case END_CASE:
 				tankDrive.stop();
-				
+				break;
 			default:
 				break;
 		}
