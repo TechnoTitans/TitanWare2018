@@ -139,6 +139,13 @@ public class TechnoTitan extends IterativeRobot {
 		encElev.reset();
 		elevator.overrideLimit(true);
 		gyro.reset();
+		path = new Path(drive, new PathPoint[] {
+				new PathPoint(0, 50),
+				new PathPoint(-50, -50),
+				new PathPoint(0, 50)
+		}, 0.6, 0.4);
+		path.setCanMoveBackwards(true);
+//		path.setEasing(new LinearEasing(15));
 //		turner.start();
 	}
 
@@ -149,9 +156,9 @@ public class TechnoTitan extends IterativeRobot {
 		encElev.update();
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
 //		turner.run();
-//		path.run();
+		path.run();
 		
-		autoSwitch.run();
+//		autoSwitch.run();
 //		mover.runIteration();
 	}
 
