@@ -151,7 +151,7 @@ public class Path {
 				waitTimer.reset();
 			} else {
 				turner.run();
-				SmartDashboard.putNumber("degrees left", turner.angleLeft());
+				SmartDashboard.putNumber("angle", turner.getAngle());
 			}
 		} else if (hasWaited){
 			mover.runIteration();
@@ -169,6 +169,8 @@ public class Path {
 			}
 		}
 		SmartDashboard.putBoolean("isTurning", isTurning);
+		SmartDashboard.putBoolean("isBackwards", isMovingBackwards);
+		
 	}
 	
 	private double calculateTurnAngle() {

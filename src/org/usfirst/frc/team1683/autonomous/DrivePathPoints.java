@@ -22,8 +22,10 @@ public class DrivePathPoints extends Autonomous {
 	
 	
 	public static final double headingScaleDouble = 90,
-							   headingSwitchDouble = 90,
-							   headingCenterSwitchDouble = 90;
+							   headingSwitchDouble = 0,
+							   headingCenterSwitchDouble = 90,
+							   headingCenterSwitchDoubleCube = 90,
+							   headingLeftSwitchDoubleCube = -90;
 	
 	public static final PathPoint[] LeftSwitchLeft = {new PathPoint(0, 148), new PathPoint(7, 0)},
 					// 214.7; turn; 215; turn; 65; turn; 4-6 in
@@ -49,10 +51,15 @@ public class DrivePathPoints extends Autonomous {
 //					RightScaleLeft = { new PathPoint(0, 228), new PathPoint(-260, 228, false),
 //										new PathPoint(-260, 323, false), new PathPoint(-218, 323, false) },
 					MiddleCenterSwitch = {new PathPoint(0, 20), new PathPoint(-50, 33), new PathPoint(0, 50)},
-					MiddleCenterSwitchDouble = {new PathPoint(0, -20), new PathPoint(50, -33), new PathPoint(0, 10)},
+					// from switch to cube
+					MiddleCenterSwitchDouble = {new PathPoint(0, -50), new PathPoint(50, -33), new PathPoint(0, 10)},
+					// next 2 unused
 					MiddleRightSwitchRight = { new PathPoint(0, 80) },
 					MiddleRightSwitchLeft = { new PathPoint(0, 25), new PathPoint(-90, 80, false), new PathPoint(-90, 100, false) },
-					MiddleDoubleCubeToSwitch = {};
+					// from cube back to switch
+					MiddleDoubleCubeToSwitch = {
+							new PathPoint(0, -10), new PathPoint(-50, 33), new PathPoint(0, 50)
+					};
 	
 	private Path path;
 

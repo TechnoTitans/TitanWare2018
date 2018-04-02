@@ -32,6 +32,7 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 	private boolean hasReachedEndOfPath = false;
 
 	private boolean elevatorRaised = false;
+	private DriveAndDropCube driveNDrop;
 
 	public SingleTarget(DriveTrain drive, Elevator elevator, TalonSRX grabberLeft, TalonSRX grabberRight) {
 		super(drive);
@@ -119,75 +120,13 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			if(grabberTimer.get() > 0.7){
 				grabberLeft.set(0);
 				grabberRight.set(0);
-				nextState = State.LIFT_ALITTLE; //TODO change to lift a little
+				nextState = State.DRIVENDROP;
+				driveNDrop = new DriveAndDropCube(tankDrive, path, chooser.getCorrectTarget(), elevator, grabberLeft, grabberRight);
 			}
 			break;
-		case LIFT_ALITTLE:
-			if (elevator.spinTo(3)) {
-				elevator.stop();
-				nextState = State.RUN_PATH;
-			}
-			break;
-		case RUN_PATH:
-			boolean shouldLiftElevator = target != Target.FAR_SWITCH;
-			if (!path.isDone()) {
-				path.run();
-			} else {
-				tankDrive.stop();
-				if (shouldLiftElevator) nextState = State.LIFT_ELEVATOR;
-				else nextState = State.END_CASE;
-			}
-			hasReachedEndOfPath = hasReachedEndOfPath || path.getApproxDistLeft() < 80;
-			if (hasReachedEndOfPath && shouldLiftElevator) {
-				if (!elevatorRaised) {
-					elevatorRaised = spinElevator();
-				} else {
-					elevator.stop();
-				}
-			} else {
-				elevator.stop();
-			}
-			break;
-		case LIFT_ELEVATOR:
-			if (!elevatorRaised) {
-				if (spinElevator())
-					elevatorRaised = true;
-			} else {
-				elevator.stop();
-				forward = new DriveTrainMover(tankDrive, 20, 0.4);
-				forward.setEasing(new LinearEasing(10));
-				nextState = State.DRIVE_FORWARD;
-			}
-			break;
-		case DRIVE_FORWARD:
-			forward.runIteration();
-			SmartDashboard.sendData("Moving forward enc speed", (tankDrive.getLeftEncoder().getSpeed() + tankDrive.getRightEncoder().getSpeed()) / 2);
-			if(forward.areAnyFinished() || DriverStation.getInstance().getMatchTime() <= 2
-					|| (Math.abs(tankDrive.getLeftEncoder().getSpeed()) + Math.abs(tankDrive.getRightEncoder().getSpeed()) < 10 && forward.getAverageDistanceLeft() < 10)){
-				grabberTimer.reset();
-				grabberTimer.start();
-				tankDrive.stop();
-				nextState = State.RELEASE_CUBE; //target == Target.FAR_SWITCH ? State.END_CASE : State.RELEASE_CUBE;
-			}
-			break;
-		case RELEASE_CUBE:
-			elevator.stop();
-			grabberLeft.set(0.5);
-			grabberRight.set(0.5);
-			if(grabberTimer.get() > 1){
-				backup = new DriveTrainMover(tankDrive, -20, 0.3);
-				nextState = State.BACKUP;
-			}
-			break;
-		case BACKUP:
-			grabberLeft.set(0);
-			grabberRight.set(0);
-			elevator.stop();
-			backup.runIteration();
-			if(backup.areAnyFinished()){
-				tankDrive.stop();
-				nextState = State.END_CASE;
-			}
+		case DRIVENDROP:
+			driveNDrop.run();
+			if (driveNDrop.isAtEndCase()) nextState = State.END_CASE;
 			break;
 		case END_CASE:
 			tankDrive.stop();

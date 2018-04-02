@@ -3,7 +3,9 @@ package org.usfirst.frc.team1683.robot;
 
 import org.usfirst.frc.team1683.autonomous.Autonomous;
 import org.usfirst.frc.team1683.autonomous.AutonomousSwitcher;
+import org.usfirst.frc.team1683.autonomous.DriveAndDropCube;
 import org.usfirst.frc.team1683.autonomous.DrivePathPoints;
+import org.usfirst.frc.team1683.autonomous.Target;
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.controls.Controls;
 import org.usfirst.frc.team1683.controls.JoystickXBox;
@@ -130,6 +132,7 @@ public class TechnoTitan extends IterativeRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 	}
 	private Path path;
+//	private DriveAndDropCube driveNDrop;
 	@Override
 	public void autonomousInit() {
 		CameraServer.getInstance().startAutomaticCapture();
@@ -139,13 +142,6 @@ public class TechnoTitan extends IterativeRobot {
 		encElev.reset();
 		elevator.overrideLimit(true);
 		gyro.reset();
-		path = new Path(drive, new PathPoint[] {
-				new PathPoint(0, 50),
-				new PathPoint(-50, -50),
-				new PathPoint(0, 50)
-		}, 0.6, 0.4);
-		path.setCanMoveBackwards(true);
-//		path.setEasing(new LinearEasing(15));
 //		turner.start();
 	}
 
@@ -155,10 +151,9 @@ public class TechnoTitan extends IterativeRobot {
 		encRight.update();
 		encElev.update();
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
+		SmartDashboard.sendData("Elevevator encoder", encElev.getDistance());
 //		turner.run();
-		path.run();
-		
-//		autoSwitch.run();
+		autoSwitch.run();
 //		mover.runIteration();
 	}
 

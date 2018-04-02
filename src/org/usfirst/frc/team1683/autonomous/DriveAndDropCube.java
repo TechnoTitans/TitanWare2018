@@ -104,6 +104,8 @@ public class DriveAndDropCube extends Autonomous {
 				nextState = State.END_CASE;
 			}
 			break;
+		case END_CASE:
+			break;
 		default:
 			break;
 		}

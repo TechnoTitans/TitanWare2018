@@ -132,7 +132,7 @@ public class MotorMover implements Runnable {
 	}
 	
 	private double getOvershoot() {
-		return BASE_OVERSHOOT + SPEED_OVERSHOOT * (speed - 0.2) * 10;
+		return BASE_OVERSHOOT + SPEED_OVERSHOOT * (Math.abs(speed) - 0.2) * 10;
 	}
 
 	/**

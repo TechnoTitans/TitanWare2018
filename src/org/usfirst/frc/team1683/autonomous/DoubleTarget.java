@@ -36,6 +36,7 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 	private boolean elevatorRaised = false;
 	
 	private boolean areWeMiddle = false;
+	private DriveAndDropCube driveNDrop;
 
 	public DoubleTarget(SingleTarget single, DriveTrain drive, Elevator elevator, TalonSRX grabberLeft, TalonSRX grabberRight) {
 		super(drive);
@@ -61,6 +62,14 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 		SmartDashboard.putBoolean("2nd target", secondTarget);
 	}
 
+	private void flipIfRight() {
+		if (chooser.getPosition() == 'R' || (areWeMiddle && DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R')) {
+			for (int i = 0; i < points.length; i++) {
+				points[i] = points[i].flipX();
+			}
+		}
+	}
+	
 	public void run() {
 		switch (presentState) {
 			case INIT_CASE:
@@ -75,7 +84,9 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				}
 				break;
 			case LOWER_ELEVATOR:
-				if (elevator.spinDown()) {
+//				boolean isLowered = elevator.spinDown(); 
+				boolean isLowered = elevator.spinTo(0);
+				if (isLowered) {
 					elevator.stop();
 					nextState = State.RUN_PATH;
 					double heading;
@@ -89,12 +100,10 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 						points = DrivePathPoints.LeftSwitchLeftDouble;	
 						heading = DrivePathPoints.headingSwitchDouble;
 					}
-					if (chooser.getPosition() == 'R' || (areWeMiddle && DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R')) {
-						for (int i = 0; i < points.length; i++) {
-							points[i] = points[i].flipX();
-						}
-					}
-					path = new Path(tankDrive, points, 0.6, 0.4, heading);
+					flipIfRight();
+					path = new Path(tankDrive, points, 0.72, 0.4, heading);
+					path.setEasing(new LinearEasing(15));
+					path.setTurnEasing(new LinearEasing(45, 45, 0.5));
 					path.setCanMoveBackwards(true);
 //					path.setEasing(new LinearEasing(15));
 				}
@@ -115,39 +124,29 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				if (forward.areAnyFinished()) {
 					tankDrive.stop();
 					double heading;
+					
 					if (areWeMiddle) {
+						heading = DrivePathPoints.headingCenterSwitchDoubleCube;
+						points = DrivePathPoints.MiddleDoubleCubeToSwitch;
+					} else {
+						heading = DrivePathPoints.headingLeftSwitchDoubleCube;
 					}
-					nextState = State.RUN_PATH_2;
+					flipIfRight();
+					path = new Path(tankDrive, points, 0.72, 0.4, heading);
+					path.setEasing(new LinearEasing(15));
+					path.setTurnEasing(new LinearEasing(45, 45, 0.5));
+					path.setCanMoveBackwards(true);
+					driveNDrop = new DriveAndDropCube(tankDrive, path, target, elevator, grabberLeft, grabberRight);
+					nextState = State.DRIVENDROP;
+					
 				}
 				break;
-			case RUN_PATH_2:
-				if (!path.isDone()) {
-					path.run();
+			case DRIVENDROP:
+				if (!driveNDrop.isAtEndCase()) {
+					driveNDrop.run();
 				} else {
 					tankDrive.stop();
-				}
-			case LIFT_ELEVATOR_2:
-				if (elevator.spinTo(TechnoTitan.SWITCH_HEIGHT)) {
-					elevator.stop();
-					forward = new DriveTrainMover(tankDrive, 10, 0.3);
-					nextState = State.DRIVE_FORWARD_2;
-				}
-				break;
-			case DRIVE_FORWARD_2:
-				forward.runIteration();
-				if (forward.areAnyFinished()) {
-					grabberTimer.reset();
-					grabberTimer.start();
-					tankDrive.stop();
-					nextState = State.RELEASE_CUBE_2;
-				}
-				break;
-			case RELEASE_CUBE_2:
-				elevator.stop();
-				grabberLeft.set(1.0);
-				grabberRight.set(1.0);
-				if (grabberTimer.get() > 2) {
-					nextState = State.END_CASE;
+					nextState = State.LOWER_ELEVATOR;
 				}
 				break;
 			case END_CASE:
