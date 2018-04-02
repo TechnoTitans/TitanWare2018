@@ -94,9 +94,9 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 							points[i] = points[i].flipX();
 						}
 					}
-					path = new Path(tankDrive, points, 0.8, 0.4, heading);
+					path = new Path(tankDrive, points, 0.6, 0.4, heading);
 					path.setCanMoveBackwards(true);
-					path.setEasing(new LinearEasing(15));
+//					path.setEasing(new LinearEasing(15));
 				}
 				break;
 			case RUN_PATH:

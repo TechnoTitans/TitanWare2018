@@ -146,7 +146,7 @@ public class Path {
 				mover = new DriveTrainMover(driveTrain, path[pathIndex].getDistance() * b, speed);
 				mover.setEasing(easing);
 				isTurning = false;
-				currentHeading = path[pathIndex].getAngle();
+				currentHeading += turner.getAngle();
 				driveTrain.stop();
 				waitTimer.reset();
 			} else {

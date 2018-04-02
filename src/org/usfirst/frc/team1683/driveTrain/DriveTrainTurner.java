@@ -127,6 +127,10 @@ public class DriveTrainTurner {
 		this.speed = speed;
 	}
 
+	public double getAngle() {
+		return angle;
+	}
+
 //	@Override
 //	public void pidWrite(double output) {
 //		double easingVal = easing == null ? 1 : easing.getSpeed(Math.abs(gyro.getRawAngle()), Math.abs(angle));
