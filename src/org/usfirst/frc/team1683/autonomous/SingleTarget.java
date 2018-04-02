@@ -74,10 +74,7 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 				points[i] = points[i].flipX();
 			}
 		}
-		if (target == Target.CLOSE_SWITCH || target == Target.MIDDLE_SWITCH)
-			path = new Path(tankDrive, points, 0.72, 0.4);
-		else
-			path = new Path(tankDrive, points, 0.72, 0.4);
+		path = new Path(tankDrive, points, 0.72, 0.4);
 		path.setEasing(new LinearEasing(15));
 		path.setTurnEasing(new LinearEasing(45, 45, 0.5));
 		SmartDashboard.putString("path points", Arrays.toString(points));
@@ -200,8 +197,6 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			break;
 		}
 		presentState = nextState;
-		SmartDashboard.sendData("Auto state", presentState.toString());
-		SmartDashboard.sendData("Auto Path", presentState.toString());
-		SmartDashboard.putString("path points", Arrays.toString(points));
+		SmartDashboard.sendData("Auto state (single)", presentState.toString());
 	}
 }
