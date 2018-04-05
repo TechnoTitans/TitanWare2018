@@ -84,8 +84,8 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 				}
 				break;
 			case LOWER_ELEVATOR:
-//				boolean isLowered = elevator.spinDown(); 
-				boolean isLowered = elevator.spinTo(0);
+				boolean isLowered = elevator.spinDown(); 
+//				boolean isLowered = elevator.spinTo(0);
 				if (isLowered) {
 					elevator.stop();
 					nextState = State.RUN_PATH;
