@@ -34,8 +34,7 @@ public class Elevator {
 	public Elevator(TalonSRX motorMain, LimitSwitch limitTop, LimitSwitch limitBottom) {
 		filter = new InputFilter(0.8, 0);
 		elevatorMain = motorMain;
-		elevatorMain.getEncoder().reset();
-//		elevatorFollow = motorFollow;
+//		elevatorFollow = motorFollow; getEncoder()
 
 		this.limitBottom = limitBottom;
 		this.limitTop = limitTop;
@@ -101,16 +100,13 @@ public class Elevator {
 	}
 
 	public void spin(double speed) {
-		double easingSpeed = easing.getSpeed(getHeight(), MAX_DIST);
 		SmartDashboard.sendData("Override", override);
-		if (limitBottom.isPressed() && !override)
-			elevatorMain.getEncoder().reset();
 		if (!override && ((limitTop.isPressed() && speed > 0) || (limitBottom.isPressed() && speed < 0))) {
 			elevatorMain.stop();
 		} else if (Math.abs(speed) < 0.09) {
 			stop();
 		} else {
-			double rawSpeed = Math.min(easingSpeed, Math.abs(speed)) * (speed > 0 ? LIFT_SPEED_MAX_UP : -LIFT_SPEED_MAX_DOWN);
+			double rawSpeed = Math.abs(speed) * (speed > 0 ? LIFT_SPEED_MAX_UP : -LIFT_SPEED_MAX_DOWN);
 			elevatorMain.set(rawSpeed);
 //			elevatorMain.set(LIFT_RATIO * rawSpeed);
 //			SmartDashboard.sendData("Elevator speed", LIFT_RATIO * rawSpeed);
@@ -133,21 +129,8 @@ public class Elevator {
 		}
 	}
 
-	/*
-	 * public boolean spinDown() { if (limitBottom.isPressed()) {
-	 * elevatorMain.getEncoder().reset(); elevatorMain.brake(); distance =
-	 * MAX_DISTANCE; // we have hit the bottom so reset return true; } else {
-	 * double distLeft = MAX_DISTANCE -
-	 * Math.abs(elevatorMain.getEncoder().getDistance());
-	 * spin(-getLiftSpeed(distLeft)); return false; } }
-	 */
-
 	public TalonSRX getMotor() {
 		return elevatorMain;
-	}
-
-	protected double getHeight() {
-		return distance + elevatorMain.getEncoder().getDistance();
 	}
 
 }

@@ -136,7 +136,6 @@ public class TechnoTitan extends IterativeRobot {
 		CameraServer.getInstance().startAutomaticCapture();
 		drive.stop();
 		autoSwitch.getSelected();
-		elevator.getMotor().getEncoder().reset();
 //		encElev.reset();
 //		elevator.overrideLimit(true);
 		gyro.reset();
@@ -154,7 +153,6 @@ public class TechnoTitan extends IterativeRobot {
 	@Override
 	public void teleopInit() {
 		drive.stop();
-		elevator.getMotor().getEncoder().reset();
 		waitTeleop.start();
 		drive.resetEncoders();
 	}
@@ -172,7 +170,6 @@ public class TechnoTitan extends IterativeRobot {
 		SmartDashboard.sendData("Limit Switch bottom", limitBottom.isPressed());
 		SmartDashboard.sendData("Limit switch top", limitTop.isPressed());
 		SmartDashboard.sendData("Gyro", gyro.getAngle());
-		SmartDashboard.sendData("Elevator encoder", elevator.getMotor().getEncoder().getDistance());
 		SmartDashboard.sendData("Left encoder velocity", drive.getLeftEncoder().getSpeed());
 	}
 
