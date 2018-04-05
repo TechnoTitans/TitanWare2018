@@ -22,6 +22,8 @@ public class DriveAndDropCube extends Autonomous {
 	private DriveTrainMover forward, backup;
 	private Timer grabberTimer;
 	private TalonSRX grabberLeft, grabberRight;
+	
+	private boolean elevatorLowered = false, loweringElevator = false;
 	public DriveAndDropCube(DriveTrain drive, Path path, Target target, Elevator elev, TalonSRX grabberLeft, TalonSRX grabberRight) {
 		super(drive);
 		this.path = path;
@@ -109,8 +111,29 @@ public class DriveAndDropCube extends Autonomous {
 			grabberRight.set(0);
 			elevator.stop();
 			backup.runIteration();
+			if (backup.getAverageDistanceLeft() <= 10 && !loweringElevator) {
+				elevator.resetTimer();
+				loweringElevator = true;
+			}
+			if (loweringElevator) {
+				if (!elevatorLowered) {
+					if (elevator.spinDown())
+						elevatorLowered = true;
+				} else {
+					elevator.stop();
+				}
+				
+			}
 			if(backup.areAnyFinished()){
 				tankDrive.stop();
+				nextState = State.LOWER_ELEVATOR;
+			}
+			break;
+		case LOWER_ELEVATOR:
+			if (!elevatorLowered) {
+				if (elevator.spinDown())
+					elevatorLowered = true;
+			} else {
 				nextState = State.END_CASE;
 			}
 			break;

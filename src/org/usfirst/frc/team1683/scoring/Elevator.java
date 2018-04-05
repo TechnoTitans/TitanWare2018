@@ -89,7 +89,7 @@ public class Elevator {
 			stop();
 			return true;
 		} else {
-			spin(up ? 1 : -0.5);
+			spin(up ? 1 : -0.8);
 			return false;
 		}
 	}
