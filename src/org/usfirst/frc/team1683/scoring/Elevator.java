@@ -19,7 +19,6 @@ public class Elevator {
 	private LimitSwitch limitBottom;
 	private InputFilter filter;
 	
-	private LinearEasing easing;
 
 	// We start raised
 	private final double START_DISTANCE = 0; // from when we start 55 in
@@ -40,7 +39,6 @@ public class Elevator {
 		this.limitTop = limitTop;
 		this.override = false;
 		
-		easing = new LinearEasing(MAX_DIST / 5, MAX_DIST / 5, 1);
 		
 		elevatorTimer = new Timer();
 		elevatorTimer.start();
@@ -86,6 +84,7 @@ public class Elevator {
 //	}
 	
 	public boolean spinFor(boolean up, double time) {
+		SmartDashboard.sendData("elevator timer", elevatorTimer.get());
 		if (elevatorTimer.get() > time) {
 			stop();
 			return true;
@@ -117,9 +116,10 @@ public class Elevator {
 	public void stop() {
 		// double error = initEncValue - getHeight();
 		// double correction = kP * error;
-		SmartDashboard.sendData("StopRunning", Math.random() + ", " + (!limitBottom.isPressed()));
-		if (!limitBottom.isPressed()) {
-			SmartDashboard.sendData("IsRunningHold", Math.random());
+		boolean isNotAtBottom = !limitBottom.isPressed();
+		SmartDashboard.sendData("StopRunning", Math.random() + ", " + isNotAtBottom);
+		if (isNotAtBottom) {
+			SmartDashboard.sendData("IsRunningHold", true);
 			elevatorMain.set(0.1);//filter.filterInput(0.1));
 //			elevatorFollow.set(filter.filterInput(0.1));
 		} else {

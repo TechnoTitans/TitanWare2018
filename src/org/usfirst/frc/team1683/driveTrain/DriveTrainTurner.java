@@ -42,7 +42,7 @@ public class DriveTrainTurner {
 	 */
 	public DriveTrainTurner(DriveTrain driveTrain, double angle, double speed) {
 		BASE_TOLERANCE = prefs.getDouble("BASE_TOLERANCE", 1);
-		ANGLE_TOLERANCE = prefs.getDouble("ANGLE_TOLERANCE", 7);
+		ANGLE_TOLERANCE = prefs.getDouble("ANGLE_TOLERANCE", 3);
 		// positive angle = counter clockwise, negative = clockwise
 		this.driveTrain = driveTrain;
 		gyro = driveTrain.getGyro();

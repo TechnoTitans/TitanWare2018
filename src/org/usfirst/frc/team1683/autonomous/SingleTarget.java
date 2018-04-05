@@ -108,8 +108,8 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 			}
 			break;
 		case WAIT_GRABBER:
-			grabberLeft.set(-0.5);
-			grabberRight.set(-0.5);
+			grabberLeft.set(-0.7);
+			grabberRight.set(-0.7);
 			if(grabberTimer.get() > 0.7){
 				grabberLeft.set(0);
 				grabberRight.set(0);

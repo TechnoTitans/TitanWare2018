@@ -15,7 +15,7 @@ public abstract class Controls {
 	protected static final double MAX_JOYSTICK_SPEED = 1.0;
 	protected static final double SECOND_JOYSTICK_SPEED = 0.6;
 	protected static final double ELEVATOR_SPEED = 0.5;
-	private static final double GRABBER_CORRECTION_RIGHT = 0.9;
+	private static final double GRABBER_CORRECTION_RIGHT = 1;
 	private InputFilter rightFilter, leftFilter;
 	private DriveTrain drive;
 	private PowerDistributionPanel pdp;

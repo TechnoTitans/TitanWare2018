@@ -113,7 +113,7 @@ public class DoubleTarget extends Autonomous implements ChoosesTarget {
 					path.run();
 				} else {
 					tankDrive.stop();
-					forward = new DriveTrainMover(tankDrive, 10, 0.3); // TODO find actual distance to drive to instead of 10
+					forward = new DriveTrainMover(tankDrive, 30, 0.3); // TODO find actual distance to drive to instead of 10
 					nextState = State.GRAB_CUBE;
 				}
 				break;

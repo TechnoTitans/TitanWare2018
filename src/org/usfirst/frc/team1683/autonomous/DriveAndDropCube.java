@@ -97,8 +97,8 @@ public class DriveAndDropCube extends Autonomous {
 			break;
 		case RELEASE_CUBE:
 			elevator.stop();
-			grabberLeft.set(0.5);
-			grabberRight.set(0.5);
+			grabberLeft.set(0.7);
+			grabberRight.set(0.7);
 			if(grabberTimer.get() > 1){
 				backup = new DriveTrainMover(tankDrive, -20, 0.3);
 				nextState = State.BACKUP;
