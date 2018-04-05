@@ -36,9 +36,10 @@ public class DriveAndDropCube extends Autonomous {
 		switch (presentState) {
 		case INIT_CASE:
 			nextState = State.LIFT_ALITTLE;
+			elevator.resetTimer();
 			break;
 		case LIFT_ALITTLE:
-			if (elevator.spinTo(3)) {
+			if (elevator.spinFor(true, 0.2)) {
 				elevator.stop();
 				nextState = State.RUN_PATH;
 			}
@@ -49,10 +50,19 @@ public class DriveAndDropCube extends Autonomous {
 				path.run();
 			} else {
 				tankDrive.stop();
-				if (shouldLiftElevator) nextState = State.LIFT_ELEVATOR;
+				if (shouldLiftElevator) {
+					elevator.resetTimer();
+					nextState = State.LIFT_ELEVATOR;
+				}
 				else nextState = State.END_CASE;
 			}
-			hasReachedEndOfPath = hasReachedEndOfPath || path.getApproxDistLeft() < 80;
+			boolean shouldStartRaise = path.getApproxDistLeft() < 80;
+			SmartDashboard.sendData("should start raise", shouldStartRaise);
+			SmartDashboard.sendData("has reached end", hasReachedEndOfPath);
+			if (shouldStartRaise && !hasReachedEndOfPath) {
+				hasReachedEndOfPath = true;
+				elevator.resetTimer();
+			}
 			if (hasReachedEndOfPath && shouldLiftElevator) {
 				if (!elevatorRaised ) {
 					elevatorRaised = spinElevator();
@@ -115,7 +125,7 @@ public class DriveAndDropCube extends Autonomous {
 
 	private boolean spinElevator() {
 		if (target == Target.CLOSE_SWITCH || target == Target.FAR_SWITCH || target == Target.MIDDLE_SWITCH)
-			return elevator.spinTo(TechnoTitan.SWITCH_HEIGHT);
+			return elevator.spinFor(true, TechnoTitan.SWITCH_HEIGHT);
 		else
 			return elevator.spinUp();
 	}

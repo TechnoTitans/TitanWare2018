@@ -81,13 +81,6 @@ public class SingleTarget extends Autonomous implements ChoosesTarget {
 		SmartDashboard.putString("path points", Arrays.toString(points));
 	}
 
-	private boolean spinElevator() {
-		if (target == Target.CLOSE_SWITCH || target == Target.FAR_SWITCH || target == Target.MIDDLE_SWITCH)
-			return elevator.spinTo(TechnoTitan.SWITCH_HEIGHT);
-		else
-			return elevator.spinUp();
-	}
-
 	public void run() {
 		switch (presentState) {
 		case INIT_CASE:

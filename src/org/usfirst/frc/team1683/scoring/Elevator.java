@@ -6,6 +6,8 @@ import org.usfirst.frc.team1683.motor.TalonSRX;
 import org.usfirst.frc.team1683.robot.InputFilter;
 import org.usfirst.frc.team1683.sensors.LimitSwitch;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Elevator {
 
 	private TalonSRX elevatorMain;
@@ -28,6 +30,7 @@ public class Elevator {
 
 	private boolean override;
 
+	private Timer elevatorTimer;
 	public Elevator(TalonSRX motorMain, LimitSwitch limitTop, LimitSwitch limitBottom) {
 		filter = new InputFilter(0.8, 0);
 		elevatorMain = motorMain;
@@ -39,6 +42,9 @@ public class Elevator {
 		this.override = false;
 		
 		easing = new LinearEasing(MAX_DIST / 5, MAX_DIST / 5, 1);
+		
+		elevatorTimer = new Timer();
+		elevatorTimer.start();
 	}
 
 	public boolean spinUp() {
@@ -63,14 +69,29 @@ public class Elevator {
 		}
 	}
 
-	public boolean spinTo(double d) {
-		double distLeft = d - getHeight();
-		SmartDashboard.sendData("Elevator height", getHeight());
-		if (Math.abs(distLeft) <= 2) {
+	public void resetTimer() {
+		elevatorTimer.reset();
+		elevatorTimer.start();
+	}
+	
+//	public boolean spinTo(double d) {
+//		double distLeft = d - getHeight();
+//		SmartDashboard.sendData("Elevator height", getHeight());
+//		if (Math.abs(distLeft) <= 2) {
+//			stop();
+//			return true;
+//		} else {
+//			spin(distLeft > 0 ? 1 : -0.5);
+//			return false;
+//		}
+//	}
+	
+	public boolean spinFor(boolean up, double time) {
+		if (elevatorTimer.get() > time) {
 			stop();
 			return true;
 		} else {
-			spin(distLeft > 0 ? 1 : -0.5);
+			spin(up ? 1 : -0.5);
 			return false;
 		}
 	}

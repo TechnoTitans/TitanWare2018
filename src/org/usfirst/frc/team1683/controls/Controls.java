@@ -110,7 +110,10 @@ public abstract class Controls {
 		
 		double elevSpeed = elevator();
 		if (Math.abs(elevSpeed) > 0.1) elevTarget = ElevTarget.MANUAL;
-		else if (getMidElevButton()) elevTarget = ElevTarget.MID;
+		else if (getMidElevButton()) {
+			elevator.resetTimer();
+			elevTarget = ElevTarget.MID;
+		}
 		else if (getHighElevButton()) elevTarget = ElevTarget.TOP;
 		else if (getLowElevButton()) elevTarget = ElevTarget.BOTTOM;
 
@@ -118,7 +121,7 @@ public abstract class Controls {
 			elevator.spin(elevSpeed);
 			elevator.overrideLimit(overrideElevatorLimit());
 		} else if (elevTarget == ElevTarget.MID) {
-			elevator.spinTo(TechnoTitan.SWITCH_HEIGHT);
+			elevator.spinFor(true, TechnoTitan.SWITCH_HEIGHT);
 		} else if (elevTarget == ElevTarget.TOP) {
 			if (elevator.spinUp()) elevTarget = ElevTarget.MANUAL;
 		} else if (elevTarget == ElevTarget.BOTTOM){

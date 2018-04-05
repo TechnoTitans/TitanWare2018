@@ -39,7 +39,7 @@ public class TechnoTitan extends IterativeRobot {
 	public static final boolean LEFT_REVERSE = false;
 	public static final boolean RIGHT_REVERSE = true;
 	public static final double WHEEL_RADIUS = 2.8999;
-	public static final double SWITCH_HEIGHT = 30;
+	public static final double SWITCH_HEIGHT = 1.5;
 
 	Autonomous auto;
 	AutonomousSwitcher autoSwitch;
@@ -87,10 +87,9 @@ public class TechnoTitan extends IterativeRobot {
 		grabberRight = new TalonSRX(HWR.GRABBER_RIGHT, false);
 		
 		TalonSRX elevatorTalon = new TalonSRX(HWR.ELEVATOR_MAIN, false);
-		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 0.7292, true)); // TODO: find wheel radius
+//		elevatorTalon.setEncoder(new QuadEncoder(elevatorTalon, 0.7292, true)); // TODO: find wheel radius
 //		elevatorTalon.setEncoder(encElev = new TimeEncoder(elevatorTalon, 5));
 		elevator = new Elevator(elevatorTalon, limitTop, limitBottom);
-		elevator.overrideLimit(true);
 		AntiDrift left = new AntiDrift(gyro, -1);
 		AntiDrift right = new AntiDrift(gyro, 1);
 		leftETalonSRX = new TalonSRX(HWR.LEFT_DRIVE_TRAIN_FRONT, LEFT_REVERSE, left);
