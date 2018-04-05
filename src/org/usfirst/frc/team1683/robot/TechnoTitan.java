@@ -130,7 +130,7 @@ public class TechnoTitan extends IterativeRobot {
 		
 		CameraServer.getInstance().startAutomaticCapture();
 	}
-	private Path path;
+//	private Path path;
 //	private DriveAndDropCube driveNDrop;
 	@Override
 	public void autonomousInit() {
